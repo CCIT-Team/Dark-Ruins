@@ -13,7 +13,7 @@ public class CharacterMovement : MonoBehaviour
     private float currentSpeed;
 
     // 점프
-    public float jumpForce = 3900f;
+    [SerializeField] private float jumpForce = 30f;
     private bool isGrounded;
     private Rigidbody rb;
 
