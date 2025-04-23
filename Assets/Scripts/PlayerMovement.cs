@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 10f;          // 이동 속도
-    [SerializeField] private float runSpeed = 20f;          // 달리기 조정 변수
+    [SerializeField] private float moveSpeed = 7f;          // 이동 속도
+    [SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
     [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
     
     // 현재 이동속도
@@ -20,17 +20,16 @@ public class CharacterMovement : MonoBehaviour
     void Start()
     {
         currentSpeed = moveSpeed;                    // 기본 속도를 걷기 속도로 설정
-        rb = GetComponent<Rigidbody>();              // 리기디바디  
+        rb = GetComponent<Rigidbody>();              // 리기디바디
     }
 
     void Update()
     {
         // 수평, 수직 입력 받아오기 (WASD 또는 방향키)
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
         Vector3 inputVector = new Vector3(horizontal, 0f, vertical);
 
-        // 입력 벡터의 크기를 통해 Blend Tree의 Speed 파라미터에 전달할 값 계산
         // (입력 벡터의 크기가 0이면 idle, 작으면 walk, 크면 run 등으로 처리)
         float speedValue = inputVector.magnitude;
 
@@ -46,7 +45,7 @@ public class CharacterMovement : MonoBehaviour
             // 캐릭터 이동 (현재 forward 방향을 따라 currentSpeed 속도로 이동)
             rb.velocity = new Vector3(moveDirection.x * currentSpeed, rb.velocity.y, moveDirection.z * currentSpeed);
         }
-        
+
         // Shift 달리기 적용
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -57,7 +56,7 @@ public class CharacterMovement : MonoBehaviour
             currentSpeed = moveSpeed;
         }
 
-        // C 점프
+        // 점프
         if (isGrounded && Input.GetKeyDown(KeyCode.Space))
         {
             Jump();
@@ -65,7 +64,7 @@ public class CharacterMovement : MonoBehaviour
 
         if (!isGrounded) // 공중에 있을 때만 추가 중력 적용
         {
-            rb.velocity += Vector3.down * 80f * Time.deltaTime; // 10f 값을 더 높이면 더 빨리 떨어짐
+            rb.velocity += Vector3.down * 100f * Time.deltaTime; // 10f 값을 더 높이면 더 빨리 떨어짐
         }
     }
 

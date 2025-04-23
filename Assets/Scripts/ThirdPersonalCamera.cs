@@ -4,7 +4,8 @@ public class ThirdPersonCamera : MonoBehaviour
 {
     [Header("Target & Base Offset")]
     [SerializeField] private Transform target;                         
-    [SerializeField] private Vector3 offset = new Vector3(-3f, 5f, 0f);
+    [SerializeField] private Vector3 offset = new Vector3(0f, 5f, -10f);
+    
 
     [Header("Movement Settings")]
     [SerializeField] private float smoothSpeed = 5f;
