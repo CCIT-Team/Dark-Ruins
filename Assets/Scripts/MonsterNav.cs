@@ -160,7 +160,6 @@ public class Monster : MonoBehaviour
       ChangeState(State.CHASE);
    }
 
-   // Update is called once per frame
    void Update()
    {
       if (target == null) return;
