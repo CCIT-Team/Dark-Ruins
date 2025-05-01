@@ -12,6 +12,7 @@ public class Monster : MonoBehaviour
 
    bool isStunned = false;
    float HP = 0;
+   
    public float lostDistance;
 
    enum State
