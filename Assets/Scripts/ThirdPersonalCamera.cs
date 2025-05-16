@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ThirdPersonCamera : MonoBehaviour
+public class ThirdPersonalCamera : MonoBehaviour
 {
     [Header("Target & Base Offset")]
     [SerializeField] private Transform target;                         

@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class Monster : MonoBehaviour
+public class MonsterNav : MonoBehaviour
 {
    public Transform target;
    NavMeshAgent nmAgent;
