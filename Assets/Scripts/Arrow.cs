@@ -11,8 +11,16 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("플레이어 맞음!" + other.name);
+        if (other.CompareTag("Player"))
+        {
+            PlayerRespawn respawn = other.GetComponent<PlayerRespawn>();
+            if (respawn != null)
+            {
+                Debug.Log("플레이어 맞음!" + other.name);
 
-        Destroy(gameObject); // 충돌 시 제거
+                Destroy(gameObject); // 충돌 시 제거
+                respawn.Die();
+            }
+        }
     }
 }

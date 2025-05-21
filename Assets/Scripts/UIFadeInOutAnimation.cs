@@ -9,7 +9,7 @@ public class UIFadeInOutAnimation : MonoBehaviour
     public float animationSpeed = 1.0f;
     Color baseColor;
     
-    WaitForSeconds waitForSeconds = new WaitForSeconds(0.5f);
+    WaitForSeconds waitForSeconds = new WaitForSeconds(2.5f);
     WaitForEndOfFrame waitForEndOfFrame = new WaitForEndOfFrame();
     // Awake is called
     void Awake()
@@ -24,7 +24,7 @@ public class UIFadeInOutAnimation : MonoBehaviour
         baseColor = animationImage.color;      
     }
    
-   public IEnumerator FadeIn()
+    public IEnumerator FadeIn()
     {
         float alphaValue = 1.0f;
         graphicRaycaster.enabled = true;

@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;          // 이동 속도
     [SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
     [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
+    
+    // 리스폰 컴포넌트
+    private PlayerRespawn respawn;
     
     // 현재 이동속도
     private float currentSpeed;
@@ -18,12 +21,17 @@ public class CharacterMovement : MonoBehaviour
 
     void Start()
     {
+        respawn = GetComponent<PlayerRespawn>();       // 리스폰 컴포넌트 가져오기
+        
         currentSpeed = moveSpeed;                    // 기본 속도를 걷기 속도로 설정
         rb = GetComponent<Rigidbody>();              // 리기디바디
     }
 
     void Update()
     {
+        // 죽은 상태면 조작 불가
+        if (respawn != null && respawn.isDead)
+            return;
         // 수평, 수직 입력 받아오기 (WASD 또는 방향키)
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
