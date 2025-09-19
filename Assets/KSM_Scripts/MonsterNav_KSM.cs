@@ -19,7 +19,6 @@ public class MonsterNav_KSM : MonoBehaviour
       IDLE,
       CHASE,
       ATTACK,
-      Stunned
    }
 
    State state;
