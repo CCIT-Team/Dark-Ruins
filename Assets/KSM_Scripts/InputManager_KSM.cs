@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KSM_Test : MonoBehaviour
+public class KSM_InputManager_KSM : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()

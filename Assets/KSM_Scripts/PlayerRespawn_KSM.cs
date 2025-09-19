@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerRespawn : MonoBehaviour
+public class PlayerRespawn_KSM : MonoBehaviour
 {
     public Transform checkpoint;
     public UIFadeInOutAnimation fadeUI;
