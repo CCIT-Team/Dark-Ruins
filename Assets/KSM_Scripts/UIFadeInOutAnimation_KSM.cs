@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIFadeInOutAnimation : MonoBehaviour
+public class UIFadeInOutAnimation_KSM : MonoBehaviour
 {
     public GraphicRaycaster graphicRaycaster;
     public Image animationImage;

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArrowTrap : MonoBehaviour
+public class ArrowTrap_KSM : MonoBehaviour
 {
     public GameObject ArrowPrefab;
     public Transform shootPoint;        // 화살 발사 위치

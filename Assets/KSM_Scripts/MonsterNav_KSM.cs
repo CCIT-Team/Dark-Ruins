@@ -4,13 +4,12 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-public class MonsterNav : MonoBehaviour
+public class MonsterNav_KSM : MonoBehaviour
 {
    public Transform target;
    NavMeshAgent nmAgent;
    Animator anim;
 
-   bool isStunned = false;
    float HP = 0;
    
    public float lostDistance;
@@ -121,27 +120,6 @@ public class MonsterNav : MonoBehaviour
          // 공격 animation 의 두 배만큼 대기
          // 이 대기 시간을 이용해 공격 간격을 조절할 수 있음.
          yield return new WaitForSeconds(curAnimStateInfo.length * 2f);
-   }
-
-   public IEnumerator Stunned()
-   {
-      Debug.Log("Stunned!");
-
-      // anim.Play("StunnedAnim", 0, 0); // 스턴 애니메이션 (없으면 생략 가능)
-      nmAgent.isStopped = true;       // 이동 중지
-
-      yield return new WaitForSeconds(2.5f); // 스턴 지속 시간
-
-      nmAgent.isStopped = false;      // 다시 움직이게
-      ChangeState(State.IDLE);        // 상태 초기화
-
-      isStunned = false;
-   }
-
-   public void OnStunned()
-   {
-      isStunned = true;
-      ChangeState(State.Stunned);
    }
 
    void ChangeState(State newState)
