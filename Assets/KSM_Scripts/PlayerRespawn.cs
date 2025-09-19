@@ -15,8 +15,6 @@ public class PlayerRespawn : MonoBehaviour
 
             Debug.Log("Player has died.");
 
-            FindObjectOfType<PlayerDeathCamera>().SwitchToCaptureCam();
-
             StartCoroutine(RespawnRoutine());
         }
     }
@@ -26,8 +24,6 @@ public class PlayerRespawn : MonoBehaviour
         // 어두워지기
         yield return StartCoroutine(fadeUI.FadeOut());
         
-        FindObjectOfType<PlayerDeathCamera>().SwitchToMainCam();
-
         // 플레이어 위치 이동
         transform.position = checkpoint.position;
 
