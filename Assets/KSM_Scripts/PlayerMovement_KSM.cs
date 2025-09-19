@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement_KSM : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;          // 이동 속도
     [SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Arrow : MonoBehaviour
+public class Arrow_KSM : MonoBehaviour
 {
     public float lifeTime = 9f;
 

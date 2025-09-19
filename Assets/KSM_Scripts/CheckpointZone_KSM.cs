@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CheckpointZone : MonoBehaviour
+public class CheckpointZone_KSM : MonoBehaviour
 {
     public Transform newCheckpoint;
 
