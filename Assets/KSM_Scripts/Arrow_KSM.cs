@@ -13,7 +13,7 @@ public class Arrow_KSM : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerRespawn respawn = other.GetComponent<PlayerRespawn>();
+            PlayerRespawn_KSM respawn = other.GetComponent<PlayerRespawn_KSM>();
             if (respawn != null)
             {
                 Debug.Log("플레이어 맞음!" + other.name);

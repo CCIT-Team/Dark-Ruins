@@ -8,7 +8,7 @@ public class CheckpointZone_KSM : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            PlayerRespawn playerRespawn = other.GetComponent<PlayerRespawn>();
+            PlayerRespawn_KSM playerRespawn = other.GetComponent<PlayerRespawn_KSM>();
             if (playerRespawn != null)
             {
                 playerRespawn.checkpoint = newCheckpoint;

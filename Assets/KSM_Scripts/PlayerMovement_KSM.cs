@@ -9,7 +9,7 @@ public class PlayerMovement_KSM : MonoBehaviour
     [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
     
     // 리스폰 컴포넌트
-    private PlayerRespawn respawn;
+    private PlayerRespawn_KSM respawn;
     
     // 현재 이동속도
     private float currentSpeed;
@@ -21,7 +21,7 @@ public class PlayerMovement_KSM : MonoBehaviour
 
     void Start()
     {
-        respawn = GetComponent<PlayerRespawn>();       // 리스폰 컴포넌트 가져오기
+        respawn = GetComponent<PlayerRespawn_KSM>();       // 리스폰 컴포넌트 가져오기
         
         currentSpeed = moveSpeed;                    // 기본 속도를 걷기 속도로 설정
         rb = GetComponent<Rigidbody>();              // 리기디바디

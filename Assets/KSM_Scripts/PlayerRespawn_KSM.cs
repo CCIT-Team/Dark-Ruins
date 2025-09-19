@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerRespawn_KSM : MonoBehaviour
 {
     public Transform checkpoint;
-    public UIFadeInOutAnimation fadeUI;
+    public UIFadeInOutAnimation_KSM fadeUI;
     public bool isDead = false;
     public void Die()
     {
