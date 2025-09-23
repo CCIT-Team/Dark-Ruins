@@ -7,22 +7,22 @@ public class PlayerMovement_KSM : MonoBehaviour
     [SerializeField] private float moveSpeed = 7f;          // 이동 속도
     [SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
     [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
-    
+
     // 리스폰 컴포넌트
     private PlayerRespawn_KSM respawn;
-    
+
     // 현재 이동속도
     private float currentSpeed;
 
     // 점프
-    [SerializeField] private float jumpForce = 30f;
-    private bool isGrounded;
+    //[SerializeField] private float jumpForce = 30f;
+    //private bool isGrounded;
     private Rigidbody rb;
 
     void Start()
     {
         respawn = GetComponent<PlayerRespawn_KSM>();       // 리스폰 컴포넌트 가져오기
-        
+
         currentSpeed = moveSpeed;                    // 기본 속도를 걷기 속도로 설정
         rb = GetComponent<Rigidbody>();              // 리기디바디
     }
@@ -62,41 +62,43 @@ public class PlayerMovement_KSM : MonoBehaviour
         {
             currentSpeed = moveSpeed;
         }
-
-        // 점프
-        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
-        {
-            Jump();
-        }
-
-        if (!isGrounded) // 공중에 있을 때만 추가 중력 적용
-        {
-            rb.velocity += Vector3.down * 100f * Time.deltaTime; // 10f 값을 더 높이면 더 빨리 떨어짐
-        }
-    }
-
-    // 점프 함수 호출
-    void Jump()
-    {
-        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // 기존 y 속도 초기화 (더블 점프 방지)
-        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // 위쪽으로 힘을 가함
-        isGrounded = false; // 점프했으므로 false
-    }
-
-    // 점프 땅에 닿아 있는지 체크
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground")) // Ground 태그와 충돌하면
-        {
-            isGrounded = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Ground")) // "Ground"에서 떨어지면
-        {
-            isGrounded = false; // 공중 상태
-        }
     }
 }
+
+//        // 점프
+//        if (isGrounded && Input.GetKeyDown(KeyCode.Space))
+//        {
+//            Jump();
+//        }
+
+//        if (!isGrounded) // 공중에 있을 때만 추가 중력 적용
+//        {
+//            rb.velocity += Vector3.down * 100f * Time.deltaTime; // 10f 값을 더 높이면 더 빨리 떨어짐
+//        }
+//    }
+
+//    // 점프 함수 호출
+//    void Jump()
+//    {
+//        rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z); // 기존 y 속도 초기화 (더블 점프 방지)
+//        rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // 위쪽으로 힘을 가함
+//        isGrounded = false; // 점프했으므로 false
+//    }
+
+//    // 점프 땅에 닿아 있는지 체크
+//    private void OnCollisionEnter(Collision collision)
+//    {
+//        if (collision.gameObject.CompareTag("Ground")) // Ground 태그와 충돌하면
+//        {
+//            isGrounded = true;
+//        }
+//    }
+
+//    private void OnCollisionExit(Collision collision)
+//    {
+//        if (collision.gameObject.CompareTag("Ground")) // "Ground"에서 떨어지면
+//        {
+//            isGrounded = false; // 공중 상태
+//        }
+//    }
+//}
