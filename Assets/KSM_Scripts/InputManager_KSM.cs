@@ -6,7 +6,7 @@ using UnityEngine;
 public class InputManager_KSM
 {
     // Delegate 
-    public Action keyaction = null;
+    public Action KeyAction = null;
 
     // InputMangers will detect inputs in OnUdate()
     public void OnUpdate()
@@ -15,9 +15,9 @@ public class InputManager_KSM
         if (Input.anyKey == false) return;
 
         // 어떤 키가 들어왔다면, keyaction에서 이벤트가 발생했음을 전파. 
-        if (keyaction != null)
+        if (KeyAction != null)
         {
-            keyaction.Invoke();
+            KeyAction.Invoke();
 
         }
     }

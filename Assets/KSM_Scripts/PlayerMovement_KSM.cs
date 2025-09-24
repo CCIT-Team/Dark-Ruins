@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerMovement_KSM : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 7f;          // 이동 속도
-    [SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
+    //[SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
     [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
 
     // 리스폰 컴포넌트
@@ -14,7 +15,7 @@ public class PlayerMovement_KSM : MonoBehaviour
     // 현재 이동속도
     private float currentSpeed;
 
-    // 점프
+    //// 점프
     //[SerializeField] private float jumpForce = 30f;
     //private bool isGrounded;
     private Rigidbody rb;
@@ -22,9 +23,65 @@ public class PlayerMovement_KSM : MonoBehaviour
     void Start()
     {
         respawn = GetComponent<PlayerRespawn_KSM>();       // 리스폰 컴포넌트 가져오기
-
         currentSpeed = moveSpeed;                    // 기본 속도를 걷기 속도로 설정
         rb = GetComponent<Rigidbody>();              // 리기디바디
+
+        Managers_KSM.Input.KeyAction -= OnKeyBoard;
+        Managers_KSM.Input.KeyAction += OnKeyBoard;
+    }
+    void OnKeyBoard()
+    {
+        Vector3 moveDirection = Vector3.zero;
+
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
+        //    transform.position += Vector3.forward * Time.deltaTime * moveSpeed;
+        //}
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
+        //    transform.position += Vector3.left * Time.deltaTime * moveSpeed;
+        //}
+        //if (Input.GetKey(KeyCode.S))
+        //{
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
+        //    transform.position += Vector3.back * Time.deltaTime * moveSpeed;
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
+        //    transform.position += Vector3.right * Time.deltaTime * moveSpeed;
+        //}
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            moveDirection += Vector3.forward;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            moveDirection += Vector3.back;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            moveDirection += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            moveDirection += Vector3.right;
+        }
+
+
+        if (moveDirection != Vector3.zero)
+        {
+            Vector3 normalizedDirection = moveDirection.normalized;
+
+            transform.position += normalizedDirection * moveSpeed * Time.deltaTime;
+
+            Quaternion targetRotation = Quaternion.LookRotation(normalizedDirection);
+
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        }
     }
 
     void Update()
@@ -32,37 +89,37 @@ public class PlayerMovement_KSM : MonoBehaviour
         // 죽은 상태면 조작 불가
         if (respawn != null && respawn.isDead)
             return;
-        // 수평, 수직 입력 받아오기 (WASD 또는 방향키)
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        Vector3 inputVector = new Vector3(horizontal, 0f, vertical);
+        //// 수평, 수직 입력 받아오기 (WASD 또는 방향키)
+        //float horizontal = Input.GetAxisRaw("Horizontal");
+        //float vertical = Input.GetAxisRaw("Vertical");
+        //Vector3 inputVector = new Vector3(horizontal, 0f, vertical);
 
-        // (입력 벡터의 크기가 0이면 idle, 작으면 walk, 크면 run 등으로 처리)
-        float speedValue = inputVector.magnitude;
+        //// (입력 벡터의 크기가 0이면 idle, 작으면 walk, 크면 run 등으로 처리)
+        //float speedValue = inputVector.magnitude;
 
-        // 입력 벡터가 0보다 크면(즉, 이동 중이면) 이동 방향 계산 및 회전
-        if (speedValue > 0.1f)
-        {
-            // 이동 방향 (정규화된 입력 벡터)
-            Vector3 moveDirection = inputVector.normalized;
-            // 목표 회전(이동 방향을 바라보도록)
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            // 부드럽게 회전
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-            // 캐릭터 이동 (현재 forward 방향을 따라 currentSpeed 속도로 이동)
-            rb.velocity = new Vector3(moveDirection.x * currentSpeed, rb.velocity.y, moveDirection.z * currentSpeed);
-        }
+        //// 입력 벡터가 0보다 크면(즉, 이동 중이면) 이동 방향 계산 및 회전
+        //if (speedValue > 0.1f)
+        //{
+        //    // 이동 방향 (정규화된 입력 벡터)
+        //    Vector3 moveDirection = inputVector.normalized;
+        //    // 목표 회전(이동 방향을 바라보도록)
+        //    Quaternion targetRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
+        //    // 부드럽게 회전
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+        //    // 캐릭터 이동 (현재 forward 방향을 따라 currentSpeed 속도로 이동)
+        //    rb.velocity = new Vector3(moveDirection.x * currentSpeed, rb.velocity.y, moveDirection.z * currentSpeed);
+    }
 
         // Shift 달리기 적용
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            currentSpeed = runSpeed;
-        }
-        else // shift를 떼면 걷기 적용
-        {
-            currentSpeed = moveSpeed;
-        }
-    }
+    //    if (Input.GetKey(KeyCode.LeftShift))
+    //    {
+    //        currentSpeed = runSpeed;
+    //    }
+    //    else // shift를 떼면 걷기 적용
+    //    {
+    //        currentSpeed = moveSpeed;
+    //    }
+    //}
 }
 
 //        // 점프
