@@ -3,14 +3,9 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class InputManager_KSM : MonoBehaviour
+public class InputManager_KSM
 {
-    public static InputManager_KSM Instance { get; private set; }
-
-    [DllImport("user32.dll")]
-    private static extern short GetAsyncKeyState(int vKey);
-
-    public static event Action<List<KeyCode>> OnKeysHeld;
+    public event Action<List<KeyCode>> OnKeysHeld;
 
     private KeyCode[] interestedKeys = new KeyCode[]
     {
@@ -25,28 +20,13 @@ public class InputManager_KSM : MonoBehaviour
     };
 
     private List<KeyCode> _pressedKeys = new List<KeyCode>();
-
-    void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject); // ¾ÀÀÌ ¹Ù²î¾îµµ ÆÄ±«µÇÁö ¾Ê°Ô ¼³Á¤
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-
-    void Update()
+    public void OnUpdate()
     {
         _pressedKeys.Clear();
 
         foreach (KeyCode key in interestedKeys)
         {
-            short state = GetAsyncKeyState((int)key);
-            if ((state & 0x8000) != 0)
+            if(Input.GetKey(key))
             {
                 _pressedKeys.Add(key);
             }

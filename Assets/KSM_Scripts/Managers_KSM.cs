@@ -18,22 +18,27 @@ public class Managers_KSM : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        _input.OnUpdate();
+    }
 
+    void OnDisable()
+    {
+        _input = null;
     }
 
     static void Init()
     {
-        if (s_instance == null) // Àü¿ªº¯¼ö·Î ¼±¾ðµÈ Manager°¡ ÀÖ´ÂÁö
+        if (s_instance == null) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Managerï¿½ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½
         {
-            GameObject go = GameObject.Find("@Managers"); // Manager ÄÚµå¸¦ ´ãÀ» °´Ã¼¸¦ Ã£´Â´Ù
-            if (go == null) // ¾øÀ¸¸é Manager ½ºÅ©¸³Æ®¸¦ ºÙÀÎ ¿ÀºêÁ§Æ®¸¦ ¸¸µç´Ù.
+            GameObject go = GameObject.Find("@Managers"); // Manager ï¿½Úµå¸¦ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ Ã£ï¿½Â´ï¿½
+            if (go == null) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Manager ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½.
             {
                 go = new GameObject { name = "@Managers" };
                 go.AddComponent<Managers_KSM>();
             }
-            DontDestroyOnLoad(go); // ¾À ¹Ù²¸µµ ¾È»ç¶óÁü
+            DontDestroyOnLoad(go); // ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ ï¿½È»ï¿½ï¿½ï¿½ï¿½
             s_instance = go.GetComponent<Managers_KSM>();
-            // »ý¼ºÇÑ °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ÄÄÆ÷³ÍÆ®·Î ºÙÀº Managers ¸¦ °¡Á®¿Â´Ù.
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Managers ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Â´ï¿½.
         }
     }
 }
