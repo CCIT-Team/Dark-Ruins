@@ -12,7 +12,7 @@ public class PlayerMovement_KSM : MonoBehaviour
 
     void OnEnable()
     {
-        InputManager_KSM.OnKeysHeld += HandleKeysHeld;
+        Managers_KSM.Input.OnKeysHeld += HandleKeysHeld;
     }
 
     void OnDisable()
