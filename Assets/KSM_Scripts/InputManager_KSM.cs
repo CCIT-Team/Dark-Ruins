@@ -16,6 +16,7 @@ public class InputManager_KSM
         KeyCode.Space,
         KeyCode.LeftShift,
         KeyCode.I,
+        KeyCode.E,
         KeyCode.Mouse0,
     };
 

@@ -6,16 +6,18 @@ public class Managers_KSM : MonoBehaviour
 {
     static Managers_KSM s_instance;
     static Managers_KSM Instance { get { return s_instance; } }
+
     InputManager_KSM _input = new InputManager_KSM();
+    // InputManager_KSM _input = new InputManager_KSM();
+    // InputManager_KSM _input = new InputManager_KSM();
+    // InputManager_KSM _input = new InputManager_KSM();
+
     public static InputManager_KSM Input { get { Init(); return Instance._input; } }
+    // public static InputManager_KSM Input { get { Init(); return Instance._input; } }
+    // public static InputManager_KSM Input { get { Init(); return Instance._input; } }
+    // public static InputManager_KSM Input { get { Init(); return Instance._input; } }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Init();
-    }
 
-    // Update is called once per frame
     void Update()
     {
         _input.OnUpdate();
