@@ -5,7 +5,10 @@ using UnityEngine;
 
 public class InputManager_KSM
 {
+    //Å°¾×¼Ç
+    public Action KeyAction;
     public event Action<List<KeyCode>> OnKeysHeld;
+    private List<KeyCode> _pressedKeys = new List<KeyCode>();
 
     private KeyCode[] interestedKeys = new KeyCode[]
     {
@@ -20,7 +23,7 @@ public class InputManager_KSM
         KeyCode.Mouse0,
     };
 
-    private List<KeyCode> _pressedKeys = new List<KeyCode>();
+
     public void OnUpdate()
     {
         if (Input.anyKey == false) return;

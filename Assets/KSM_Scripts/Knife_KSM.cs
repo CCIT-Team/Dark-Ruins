@@ -5,16 +5,16 @@ using UnityEngine;
 
 public class Knife_KSM : MonoBehaviour
 {
-    public enum Type { Melee, Range };
-    public Type type;
-    public int damage;
-    public float rate;
-    public BoxCollider meleeArea;
-    public TrailRenderer trailEffect;
+    //public enum Type { Knife, Range };
+    //public Type type;
+    //public int damage;
+    //public float rate;
+    //public BoxCollider knifeArea;
+    //public TrailRenderer trailEffect;
 
     //public void Use()
     //{
-    //    if (type == Type.Melee)
+    //    if (type == Type.Knife)
     //    {
     //        StopCoroutine("Swing");
     //        StartCoroutine("Swing");
@@ -23,7 +23,7 @@ public class Knife_KSM : MonoBehaviour
 
     //public void Use()
     //{
-    //    if (type == Type.Melee)
+    //    if (type == Type.Knife)
     //    {
     //        StopCoroutine("Swing");
     //        StartCoroutine("Swing");
@@ -34,21 +34,7 @@ public class Knife_KSM : MonoBehaviour
     //{
     //    //1
     //    yield return new WaitForSeconds(0.1f);//0.1f 대기
-    //    meleeArea.enabled = true;
-    //    trailEffect.enabled = true;
-    //    //2
-    //    yield return new WaitForSeconds(0.3f);//0.3f 대기
-    //    meleeArea.enabled = false;
-    //    //3
-    //    yield return new WaitForSeconds(0.3f);//0.3f 대기
-    //    trailEffect.enabled = false;
-    //}
-
-    //IEnumerator Swing()
-    //{
-    //    //1
-    //    yield return new WaitForSeconds(0.1f);//0.1f 대기
-    //    meleeArea.enabled = true;
+    //    knifeArea.enabled = true;
     //    trailEffect.enabled = true;
     //    //2
     //    yield return new WaitForSeconds(0.3f);//0.3f 대기

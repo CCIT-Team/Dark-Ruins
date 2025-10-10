@@ -1,14 +1,21 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class PlayerMovement_KSM : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 7f;          // 이동 속도
-    //[SerializeField] private float runSpeed = 12f;          // 달리기 조정 변수
-    [SerializeField] private float rotationSpeed = 10f;     // 회전 속도
+    [Header("마우스 민감도")]
+    [SerializeField] private float mouseSpeed = 5f;
+
+    [Header("플레이어 이동")]
+    [SerializeField] private float moveSpeed = 7f;
+    [SerializeField] private float runSpeed = 12f; 
+
+    private float mouseX;
+    private PlayerRespawn_KSM respawn;
 
     void OnEnable()
     {
@@ -17,95 +24,44 @@ public class PlayerMovement_KSM : MonoBehaviour
 
     void OnDisable()
     {
-        
+        // 조건문 추가해서 코드 감싸기 (빨간색 쳐내기 뛰발)
+        if (Managers_KSM.Instance != null)
+        {
+            Managers_KSM.Input.OnKeysHeld -= HandleKeysHeld;
+        }
     }
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
-        Vector3 moveDirection = Vector3.zero;
+        Vector3 direction = Vector3.zero;
+        if (heldKeys.Contains(KeyCode.W)) direction += Vector3.forward;
+        if (heldKeys.Contains(KeyCode.S)) direction += Vector3.back;
+        if (heldKeys.Contains(KeyCode.A)) direction += Vector3.left;
+        if (heldKeys.Contains(KeyCode.D)) direction += Vector3.right;
 
-        if (heldKeys.Contains(KeyCode.W))
+        if (direction != Vector3.zero)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
-            transform.position += Vector3.forward * Time.deltaTime * moveSpeed;
-        }
-        if (heldKeys.Contains(KeyCode.A))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
-            transform.position += Vector3.left * Time.deltaTime * moveSpeed;
-        }
-        if (heldKeys.Contains(KeyCode.S))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
-            transform.position += Vector3.back * Time.deltaTime * moveSpeed;
-        }
-        if (heldKeys.Contains(KeyCode.D))
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
-            transform.position += Vector3.right * Time.deltaTime * moveSpeed;
-        }
+            Vector3 worldDirection = transform.TransformDirection(direction.normalized);
 
-        if (moveDirection != Vector3.zero)
-        {
-            Vector3 normalizedDirection = moveDirection.normalized;
+            transform.position += worldDirection * moveSpeed * Time.deltaTime;
 
-            transform.position += normalizedDirection * moveSpeed * Time.deltaTime;
-
-            Quaternion targetRotation = Quaternion.LookRotation(normalizedDirection);
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            if(heldKeys.Contains(KeyCode.LeftShift))
+            {
+                transform.position += worldDirection * runSpeed * Time.deltaTime;
+            }
         }
     }
 
-    // 리스폰 컴포넌트
-    private PlayerRespawn_KSM respawn;
-
-    // 현재 이동속도
-    private float currentSpeed;
-
-    //// 점프
-    //[SerializeField] private float jumpForce = 30f;
-    //private bool isGrounded;
-
-    private Rigidbody rb;
-
     void Update()
     {
-        //if (respawn != null && respawn.isDead)
-        //    return;
+        // 마우스 회전
+        mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
+        transform.localEulerAngles = new Vector3(0, mouseX, 0);
 
-        //Vector3 moveDirection = Vector3.zero;
-
-        //if (Input.GetKey(KeyCode.W))
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.forward), 0.2f);
-        //    transform.position += Vector3.forward * Time.deltaTime * moveSpeed;
-        //}
-        //if (Input.GetKey(KeyCode.A))
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
-        //    transform.position += Vector3.left * Time.deltaTime * moveSpeed;
-        //}
-        //if (Input.GetKey(KeyCode.S))
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.back), 0.2f);
-        //    transform.position += Vector3.back * Time.deltaTime * moveSpeed;
-        //}
-        //if (Input.GetKey(KeyCode.D))
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
-        //    transform.position += Vector3.right * Time.deltaTime * moveSpeed;
-        //}
-
-        //if (moveDirection != Vector3.zero)
-        //{
-        //    Vector3 normalizedDirection = moveDirection.normalized;
-
-        //    transform.position += normalizedDirection * moveSpeed * Time.deltaTime;
-
-        //    Quaternion targetRotation = Quaternion.LookRotation(normalizedDirection);
-
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        //}
+        // 사망 체크
+        if (respawn != null && respawn.isDead)
+        {
+            return;
+        }
     }
 }
