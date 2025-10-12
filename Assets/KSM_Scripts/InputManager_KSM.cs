@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class InputManager_KSM
 {
-    //Å°¾×¼Ç
     public Action KeyAction;
     public event Action<List<KeyCode>> OnKeysHeld;
     private List<KeyCode> _pressedKeys = new List<KeyCode>();
