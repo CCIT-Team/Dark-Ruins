@@ -17,6 +17,18 @@ public class PlayerMovement_KSM : MonoBehaviour
     private float mouseX;
     private PlayerRespawn_KSM respawn;
 
+    private Animator anim;
+
+    bool isFireReady = true;
+
+    Knife_KSM equipWeapon;
+    float fireDelay;
+
+    private void Awake()
+    {
+        equipWeapon = GetComponent<Knife_KSM>();
+    }
+
     void OnEnable()
     {
         Managers_KSM.Input.OnKeysHeld += HandleKeysHeld;
@@ -50,6 +62,14 @@ public class PlayerMovement_KSM : MonoBehaviour
                 transform.position += worldDirection * runSpeed * Time.deltaTime;
             }
         }
+
+
+        if (heldKeys.Contains(KeyCode.Mouse0) && isFireReady)
+        {
+            equipWeapon.Use();
+            anim.SetTrigger("doSwing");
+            fireDelay = 0;
+        }
     }
 
     void Update()
@@ -63,5 +83,17 @@ public class PlayerMovement_KSM : MonoBehaviour
         {
             return;
         }
+
+        FireDelayCalc();
+    }
+
+    void FireDelayCalc()
+    {
+        if (equipWeapon == null)
+        {
+            return;
+        }
+        fireDelay += Time.deltaTime;
+        isFireReady = equipWeapon.rate < fireDelay;
     }
 }
