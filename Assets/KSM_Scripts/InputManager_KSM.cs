@@ -22,7 +22,6 @@ public class InputManager_KSM
         KeyCode.Mouse0,
     };
 
-
     public void OnUpdate()
     {
         if (Input.anyKey == false) return;

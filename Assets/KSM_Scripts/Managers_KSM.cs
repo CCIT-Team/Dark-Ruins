@@ -11,24 +11,14 @@ public class Managers_KSM : MonoBehaviour
     #region Contents
     InputManager_KSM _input = new InputManager_KSM();
 
-
-    public static InputManager_KSM Input { get { Init(); return Instance._input; } }
-
+    public static InputManager_KSM Input { get { Init(); return Instance?._input; } }
     #endregion
 
-    #region inputManager
     void Update()
     {
-        _input.OnUpdate();
+        if (_input != null)
+            _input.OnUpdate();
     }
-
-    void OnDisable()
-    {
-        _input = null;
-        s_instance = null;
-    }
-
-    #endregion
 
     public static void Init()
     {
@@ -45,4 +35,9 @@ public class Managers_KSM : MonoBehaviour
             s_instance = go.GetComponent<Managers_KSM>();
         }
     }
+
+    //public static void Clear()
+    //{
+        
+    //}
 }
