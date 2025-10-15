@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class Knife_KSM : MonoBehaviour
 {
-    public enum Type { Knife, Gun };
     public Type type;
+    public enum Type { Knife, Gun };
     public int damage = 3;
     public float rate = 4f;
+
     public BoxCollider knifeArea;
     public TrailRenderer trailEffect;
+    public ParticleSystem hitEffect;
 
     public void Use()
     {

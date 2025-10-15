@@ -9,6 +9,7 @@ public class InputManager_KSM
     public event Action<List<KeyCode>> OnKeysHeld;
     private List<KeyCode> _pressedKeys = new List<KeyCode>();
 
+    #region KeyCodes
     private KeyCode[] interestedKeys = new KeyCode[]
     {
         KeyCode.W,
@@ -21,6 +22,7 @@ public class InputManager_KSM
         KeyCode.E,
         KeyCode.Mouse0,
     };
+    #endregion
 
     public void OnUpdate()
     {
