@@ -11,13 +11,12 @@ public class Monster_KSM : MonoBehaviour
     public float lostDistance = 5f;
     public Transform target;
 
-    public Animator anim;
-    public Rigidbody rb;
     public NavMeshAgent nmAgent;
     public SphereCollider sphereCollider;
 
-    private int dir = Random.Range(0f, 1f) > 0.5f ? 1 : -1;
-    private float lookSpeed = Random.Range(25f, 40f);
+    private Animator anim;
+    private Rigidbody rb;
+    
     
     enum State
     {
@@ -72,6 +71,9 @@ public class Monster_KSM : MonoBehaviour
             yield return null;
         }
 
+        int dir = Random.Range(0f, 1f) > 0.5f ? 1 : -1;
+        float lookSpeed = Random.Range(25f, 40f);
+
         for (float i = 0; i < curAnimStateInfo.length; i += Time.deltaTime)
         {
             transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y + (dir) * Time.deltaTime * lookSpeed, 0f);
@@ -120,6 +122,10 @@ public class Monster_KSM : MonoBehaviour
         }
     }
 
+    IEnumerator OnDamage()
+    {
+        yield return null;
+    }
     public IEnumerator CHASE()
     {
         var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
