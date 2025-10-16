@@ -3,22 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
 public class Monster_KSM : MonoBehaviour
 {
-    public int MaxHealth;
+    [Header("능력치")]
+    public int maxHealth = 100;
     public int currentHealth;
-    public float lostDistance = 5f;
+
+    [Header("AI 설정")]
     public Transform target;
+    public float patrolRadius = 10f;
+    public float chaseDistance = 15f;
+    public float attackDistance = 2f;
+    public float lostDistance = 20f;
 
-    public NavMeshAgent nmAgent;
-    public SphereCollider sphereCollider;
-
+    public SphereCollider detectionCollider;
+    public Collider hitCollider;
+    private NavMeshAgent nmAgent;
     private Animator anim;
-    private Rigidbody rb;
-    
-    
-    enum State
+
+    public enum State
     {
         IDLE,
         PATROL,
@@ -26,177 +29,154 @@ public class Monster_KSM : MonoBehaviour
         ATTACK,
         DIE,
     }
-
-    State state;
+    public State currentState;
 
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody>();
         nmAgent = GetComponent<NavMeshAgent>();
-        sphereCollider = GetComponent<SphereCollider>();
     }
 
-    void Start()
-    { 
-        MaxHealth = 10;
-        state = State.IDLE;
-
-        StartCoroutine(StateMachine());
-    }
-
-    void Update()
+    private void Start()
     {
-        if (target == null) return;
+        currentHealth = maxHealth;
 
-        nmAgent.SetDestination(target.position);
-    }
-
-    IEnumerator StateMachine()
-    {
-        while (currentHealth > 0)
+        if (detectionCollider != null)
         {
-            yield return StartCoroutine(state.ToString());
+            detectionCollider.radius = chaseDistance;
+            detectionCollider.isTrigger = true;
+        }
+
+        nmAgent.stoppingDistance = attackDistance;
+        ChangeState(State.IDLE);
+    }
+
+    private void ChangeState(State newState)
+    {
+        StopAllCoroutines();
+        currentState = newState;
+        StartCoroutine(currentState.ToString());
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (currentState == State.DIE) return;
+
+        currentHealth -= damage;
+        Debug.Log("Monster Health: " + currentHealth);
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            ChangeState(State.DIE);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player") && target == null)
+        {
+            target = other.transform;
+            ChangeState(State.CHASE);
         }
     }
 
     public IEnumerator IDLE()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        if (curAnimStateInfo.IsName("IdleNormal") == false)
-        {
-            anim.Play("IdleNormal", 0, 0);
-
-            yield return null;
-        }
-
-        int dir = Random.Range(0f, 1f) > 0.5f ? 1 : -1;
-        float lookSpeed = Random.Range(25f, 40f);
-
-        for (float i = 0; i < curAnimStateInfo.length; i += Time.deltaTime)
-        {
-            transform.localEulerAngles = new Vector3(0f, transform.localEulerAngles.y + (dir) * Time.deltaTime * lookSpeed, 0f);
-
-            yield return null;
-        }
-
-        if (currentHealth <= 0)
-        {
-            ChangeState(State.DIE);
-        }
+        anim.SetTrigger("Idle");
+        nmAgent.isStopped = true;
+        yield return new WaitForSeconds(Random.Range(2f, 4f));
+        ChangeState(State.PATROL);
     }
 
     public IEnumerator PATROL()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        anim.SetTrigger("Patrol");
+        nmAgent.isStopped = false;
 
-        if (curAnimStateInfo.IsName("PATROL") == false)
+        Vector3 randomPos = Random.insideUnitSphere * patrolRadius;
+        randomPos += transform.position;
+
+        NavMeshHit hit;
+        NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1);
+        nmAgent.SetDestination(hit.position);
+
+        while (nmAgent.pathPending || nmAgent.remainingDistance > nmAgent.stoppingDistance)
         {
-            anim.Play("PATROL", 0, 0);
-
             yield return null;
         }
 
-        if (currentHealth <= 0)
-        {
-            ChangeState(State.DIE);
-        }
+        ChangeState(State.IDLE);
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.name != "Player") return;
-
-        target = other.transform;
-        nmAgent.SetDestination(target.position);
-
-        ChangeState(State.CHASE);
-
-        if (other.tag == "Knife")
-        {
-            Knife_KSM knife = other.GetComponent<Knife_KSM>();
-            currentHealth -= knife.damage;
-
-            Debug.Log("Monster Health: " + currentHealth);
-        }
-    }
-
-    IEnumerator OnDamage()
-    {
-        yield return null;
-    }
     public IEnumerator CHASE()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        anim.SetTrigger("Chase");
+        nmAgent.isStopped = false;
 
-        if (curAnimStateInfo.IsName("WalkFWD") == false)
+        while (target != null)
         {
-            anim.Play("WalkFWD", 0, 0);
+            nmAgent.SetDestination(target.position);
+            float distance = Vector3.Distance(transform.position, target.position);
 
-            yield return null;
+            if (distance <= attackDistance)
+            {
+                ChangeState(State.ATTACK);
+                yield break;
+            }
+            else if (distance > lostDistance)
+            {
+                target = null;
+                ChangeState(State.PATROL);
+                yield break;
+            }
+            yield return new WaitForSeconds(0.2f);
         }
 
-        if (nmAgent.remainingDistance > lostDistance)
+        if (target == null)
         {
-            target = null;
-            nmAgent.SetDestination(transform.position);
-
-            yield return null;
-
-            ChangeState(State.IDLE);
-        }
-        else if (nmAgent.remainingDistance <= nmAgent.stoppingDistance)
-        {
-            ChangeState(State.ATTACK);
-        }
-        else if (currentHealth <= 0)
-        {
-            ChangeState(State.DIE);
-        }
-        else
-        {
-            yield return new WaitForSeconds(curAnimStateInfo.length);
+            ChangeState(State.PATROL);
         }
     }
 
     public IEnumerator ATTACK()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
-
-        if (curAnimStateInfo.IsName("Attack01") == false)
+        nmAgent.isStopped = true;
+        if (target != null)
         {
-            anim.Play("Attack01", 0, 0);
-
-            yield return null;
+            transform.LookAt(target.position);
         }
+        anim.SetTrigger("Attack");
 
-        if (nmAgent.remainingDistance > nmAgent.stoppingDistance)
+        yield return new WaitForSeconds(1.5f);
+
+        if (target != null)
         {
-            ChangeState(State.CHASE);
-        }
-        else if (currentHealth <=0)
-        {
-            ChangeState(State.DIE);
+            float distance = Vector3.Distance(transform.position, target.position);
+            if (distance <= attackDistance)
+            {
+                ChangeState(State.ATTACK);
+            }
+            else
+            {
+                ChangeState(State.CHASE);
+            }
         }
         else
-            yield return new WaitForSeconds(curAnimStateInfo.length * 2f);
+        {
+            ChangeState(State.PATROL);
+        }
     }
 
     public IEnumerator DIE()
     {
-        var curAnimStateInfo = anim.GetCurrentAnimatorStateInfo(0);
+        nmAgent.isStopped = true;
+        anim.SetTrigger("Die");
 
-        if (curAnimStateInfo.IsName("DIE") == false)
-        {
-            anim.Play("Die", 0, 0);
-            
-            yield return null;
-        }
-    }
+        if (hitCollider != null) hitCollider.enabled = false;
+        if (detectionCollider != null) detectionCollider.enabled = false;
 
-    void ChangeState(State newState)
-    {
-        state = newState;
+        yield return new WaitForSeconds(4f);
+        Destroy(gameObject);
     }
 }
