@@ -5,21 +5,26 @@ using UnityEngine.AI;
 
 public class Monster_KSM : MonoBehaviour
 {
-    [Header("능력치")]
+    [Header("몬스터 능력치")]
     public int maxHealth = 100;
     public int currentHealth;
 
-    [Header("AI 설정")]
+    [Header("범위 설정")]
     public Transform target;
     public float patrolRadius = 10f;
     public float chaseDistance = 15f;
     public float attackDistance = 2f;
     public float lostDistance = 20f;
 
+    [Header("콜라이더 설정")]
+    [Tooltip("감지 콜라이더")]
     public SphereCollider detectionCollider;
+    [Tooltip("피격 콜라이더")]
     public Collider hitCollider;
+    
     private NavMeshAgent nmAgent;
     private Animator anim;
+    private Vector3 patrolOrigin;
 
     public enum State
     {
@@ -40,25 +45,24 @@ public class Monster_KSM : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-
-        if (detectionCollider != null)
-        {
-            detectionCollider.radius = chaseDistance;
-            detectionCollider.isTrigger = true;
-        }
+        patrolOrigin = transform.position;
 
         nmAgent.stoppingDistance = attackDistance;
+
         ChangeState(State.IDLE);
     }
 
     private void ChangeState(State newState)
     {
+        if (currentState == State.DIE) return;
+
         StopAllCoroutines();
         currentState = newState;
+
         StartCoroutine(currentState.ToString());
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, Transform attacker)
     {
         if (currentState == State.DIE) return;
 
@@ -70,11 +74,18 @@ public class Monster_KSM : MonoBehaviour
             currentHealth = 0;
             ChangeState(State.DIE);
         }
+        else
+        {
+            if (target == null && attacker != null)
+            {
+                target = attacker;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && target == null)
+        if (currentState != State.DIE && other.CompareTag("Player") && target == null)
         {
             target = other.transform;
             ChangeState(State.CHASE);
@@ -83,25 +94,34 @@ public class Monster_KSM : MonoBehaviour
 
     public IEnumerator IDLE()
     {
-        anim.SetTrigger("Idle");
+        //anim.SetTrigger("Idle");
         nmAgent.isStopped = true;
+
         yield return new WaitForSeconds(Random.Range(2f, 4f));
+
         ChangeState(State.PATROL);
     }
 
     public IEnumerator PATROL()
     {
-        anim.SetTrigger("Patrol");
+        //anim.SetTrigger("Patrol");
         nmAgent.isStopped = false;
 
         Vector3 randomPos = Random.insideUnitSphere * patrolRadius;
-        randomPos += transform.position;
+        randomPos += patrolOrigin;
 
         NavMeshHit hit;
-        NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1);
-        nmAgent.SetDestination(hit.position);
+        if (NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1))
+        {
+            nmAgent.SetDestination(hit.position);
+        }
+        else
+        {
+            ChangeState(State.IDLE);
+            yield break;
+        }
 
-        while (nmAgent.pathPending || nmAgent.remainingDistance > nmAgent.stoppingDistance)
+        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance && !nmAgent.isPathStale))
         {
             yield return null;
         }
@@ -111,7 +131,7 @@ public class Monster_KSM : MonoBehaviour
 
     public IEnumerator CHASE()
     {
-        anim.SetTrigger("Chase");
+        //anim.SetTrigger("Chase");
         nmAgent.isStopped = false;
 
         while (target != null)
@@ -122,14 +142,17 @@ public class Monster_KSM : MonoBehaviour
             if (distance <= attackDistance)
             {
                 ChangeState(State.ATTACK);
+
                 yield break;
             }
             else if (distance > lostDistance)
             {
                 target = null;
                 ChangeState(State.PATROL);
+
                 yield break;
             }
+
             yield return new WaitForSeconds(0.2f);
         }
 
@@ -142,24 +165,32 @@ public class Monster_KSM : MonoBehaviour
     public IEnumerator ATTACK()
     {
         nmAgent.isStopped = true;
+
         if (target != null)
         {
             transform.LookAt(target.position);
         }
-        anim.SetTrigger("Attack");
 
-        yield return new WaitForSeconds(1.5f);
+        //anim.SetTrigger("Attack");
+
+        yield return new WaitForSeconds(0.5f);
 
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
+
             if (distance <= attackDistance)
             {
                 ChangeState(State.ATTACK);
             }
-            else
+            else if (distance <= lostDistance)
             {
                 ChangeState(State.CHASE);
+            }
+            else
+            {
+                target = null;
+                ChangeState(State.PATROL);
             }
         }
         else
@@ -171,12 +202,14 @@ public class Monster_KSM : MonoBehaviour
     public IEnumerator DIE()
     {
         nmAgent.isStopped = true;
-        anim.SetTrigger("Die");
+
+        //anim.SetTrigger("Die");
 
         if (hitCollider != null) hitCollider.enabled = false;
         if (detectionCollider != null) detectionCollider.enabled = false;
 
         yield return new WaitForSeconds(4f);
+
         Destroy(gameObject);
     }
 }

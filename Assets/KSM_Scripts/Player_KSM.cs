@@ -20,7 +20,6 @@ public class Player_KSM : MonoBehaviour
 
     private Animator anim;
     private Knife_KSM knife;
-    private PlayerRespawn_KSM respawn;
 
     private float mouseX;
     private float fireDelay;
@@ -37,12 +36,6 @@ public class Player_KSM : MonoBehaviour
         // 마우스 회전
         mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
         transform.localEulerAngles = new Vector3(0, mouseX, 0);
-
-        // 사망 체크
-        if (respawn != null && respawn.isDead)
-        {
-            return;
-        }
 
         if (!isFireReady)
         {

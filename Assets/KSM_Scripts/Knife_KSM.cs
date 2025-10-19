@@ -11,7 +11,6 @@ public class Knife_KSM : MonoBehaviour
     public float rate = 4f;
 
     public BoxCollider knifeArea;
-    public TrailRenderer trailEffect;
     public ParticleSystem hitEffect;
 
     public void Use()
@@ -25,13 +24,28 @@ public class Knife_KSM : MonoBehaviour
 
     IEnumerator Swing()
     {
-        //1
-        yield return new WaitForSeconds(0.1f);//0.1f 대기
+        yield return new WaitForSeconds(0.1f);
         knifeArea.enabled = true;
-        //2
-        yield return new WaitForSeconds(0.3f);//0.3f 대기
+
+        yield return new WaitForSeconds(0.3f);
         knifeArea.enabled = false;
-        //3
-        yield return new WaitForSeconds(0.3f);//0.3f 대기
+
+        yield return new WaitForSeconds(0.3f);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Monster_KSM monster = other.GetComponent<Monster_KSM>();
+
+        if (monster != null && other == monster.hitCollider)
+        {
+            monster.TakeDamage(damage, transform.root);
+
+            //if (hitEffect != null)
+            //{
+            //    hitEffect.transform.position = other.ClosestPoint(transform.position);
+            //    hitEffect.Play();
+            //}
+        }
     }
 }
