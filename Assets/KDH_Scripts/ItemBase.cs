@@ -8,6 +8,7 @@ public abstract class ItemBase : MonoBehaviour
     public int Max { get { return _max; } }
     private int _count;
     public int Count { get { return _count; } }
+    public int Length;
     public void GetItem(int value)
     {
         _max += value;
@@ -36,5 +37,18 @@ public abstract class ItemBase : MonoBehaviour
     public void DestroySelf()
     {
         Destroy(this.gameObject);
+    }
+    private void OnTriggerEnter(Collider collider)
+    {
+        if (collider.CompareTag("Player"))
+        {
+            //int value = collider.GetComponent<Inventory>().TryItemGet(this);
+            //if(value<0)
+            //{
+            //    return;
+            //}
+
+
+        }
     }
 }

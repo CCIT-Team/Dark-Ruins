@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class FiredBullet : ItemBase
+public class FiredBullet : MonoBehaviour
 {
     public Vector3 _axis, startPos;
     private bool _isFire;
@@ -32,10 +32,7 @@ public class FiredBullet : ItemBase
         }
 
     }
-    public override void ItemUse(List<KeyCode> keys = default(List<KeyCode>)) //일단... 얘는 키입력 안받긴 한데...
-    {
 
-    }
     private void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject.CompareTag("Monster"))
