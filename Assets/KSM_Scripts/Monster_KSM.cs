@@ -8,6 +8,7 @@ public class Monster_KSM : MonoBehaviour
     [Header("몬스터 능력치")]
     public int maxHealth = 100;
     public int currentHealth;
+    public int attackDamage = 10;
 
     [Header("범위 설정")]
     public Transform target;

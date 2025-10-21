@@ -8,34 +8,40 @@ using UnityEngine.EventSystems;
 
 public class Player_KSM : MonoBehaviour
 {
-    public int HealthMax;
-    public int currentHealth;
-
     [Header("마우스 민감도")]
+    [SerializeField] private Camera playerCamera;
     [SerializeField] private float mouseSpeed = 5f;
 
     [Header("플레이어 이동")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
+    public int HealthMax;
+    public int currentHealth;
+
     private Animator anim;
     private Knife_KSM knife;
 
     private float mouseX;
+    private float mouseY;
     private float fireDelay;
     private bool isFireReady = true;
 
     private void Awake()
     {
+        if (playerCamera == null)
+            playerCamera = GetComponentInChildren<Camera>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
         anim = GetComponent<Animator>();
         knife = GetComponent<Knife_KSM>();
     }
 
     void Update()
     {
-        // 마우스 회전
-        mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
-        transform.localEulerAngles = new Vector3(0, mouseX, 0);
+        MouseLook();
 
         if (!isFireReady)
         {
@@ -63,7 +69,6 @@ public class Player_KSM : MonoBehaviour
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
-        //Move
         Vector3 direction = Vector3.zero;
         if (heldKeys.Contains(KeyCode.W)) direction += Vector3.forward;
         if (heldKeys.Contains(KeyCode.S)) direction += Vector3.back;
@@ -80,11 +85,23 @@ public class Player_KSM : MonoBehaviour
             transform.position += worldDirection * currentSpeed * Time.deltaTime;
         }
 
-        //Attack
         if (heldKeys.Contains(KeyCode.Mouse0))
         {
             KnifeAttack();
         }
+    }
+    private void MouseLook()
+    {
+        if (playerCamera == null) return;
+
+        mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
+        mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
+
+        mouseY = Mathf.Clamp(mouseY, -90f, 90f);
+
+        transform.localEulerAngles = new Vector3(0, mouseX, 0);
+
+        playerCamera.transform.localEulerAngles = new Vector3(-mouseY, 0, 0);
     }
 
     void KnifeAttack()

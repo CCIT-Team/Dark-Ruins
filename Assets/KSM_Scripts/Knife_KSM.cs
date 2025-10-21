@@ -11,7 +11,14 @@ public class Knife_KSM : MonoBehaviour
     public float rate = 4f;
 
     public BoxCollider knifeArea;
-    public ParticleSystem hitEffect;
+    public ParticleSystem[] hitEffect;
+
+    private List<Collider> hitList;
+
+    private void Awake()
+    {
+        hitList = new List<Collider>();
+    }
 
     public void Use()
     {
@@ -25,6 +32,7 @@ public class Knife_KSM : MonoBehaviour
     IEnumerator Swing()
     {
         yield return new WaitForSeconds(0.1f);
+        hitList.Clear();
         knifeArea.enabled = true;
 
         yield return new WaitForSeconds(0.3f);
@@ -35,17 +43,28 @@ public class Knife_KSM : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (hitList.Contains(other))
+        {
+            return;
+        }
+
         Monster_KSM monster = other.GetComponent<Monster_KSM>();
 
         if (monster != null && other == monster.hitCollider)
         {
             monster.TakeDamage(damage, transform.root);
 
-            //if (hitEffect != null)
-            //{
-            //    hitEffect.transform.position = other.ClosestPoint(transform.position);
-            //    hitEffect.Play();
-            //}
+            hitList.Add(other);
+
+            HitParticles();
+        }
+    }
+
+    public void HitParticles()
+    {
+        foreach (ParticleSystem ps in hitEffect)
+        {
+            ps.Play();
         }
     }
 }
