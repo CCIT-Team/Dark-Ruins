@@ -9,6 +9,7 @@ public class Monster_KSM : MonoBehaviour
     public int maxHealth = 100;
     public int currentHealth;
     public int attackDamage = 10;
+    public float weakPointMultiplier = 2f;
 
     [Header("범위 설정")]
     public Transform target;
@@ -22,7 +23,9 @@ public class Monster_KSM : MonoBehaviour
     public SphereCollider detectionCollider;
     [Tooltip("피격 콜라이더")]
     public Collider hitCollider;
-    
+    [Tooltip("약점 피격 콜라이더")]
+    public Collider weakPointCollider;
+
     private NavMeshAgent nmAgent;
     private Animator anim;
     private Vector3 patrolOrigin;
@@ -63,11 +66,22 @@ public class Monster_KSM : MonoBehaviour
         StartCoroutine(currentState.ToString());
     }
 
-    public void TakeDamage(int damage, Transform attacker)
+    public void TakeDamage(int damage, Transform attacker, bool isWeakPoint)
     {
         if (currentState == State.DIE) return;
 
-        currentHealth -= damage;
+        int finalDamage = damage;
+        if (isWeakPoint)
+        {
+            finalDamage = (int)(damage * weakPointMultiplier);
+            Debug.Log("약점 피격 데미지: " + finalDamage);
+        }
+        else
+        {
+            Debug.Log("일반 피격 데미지: " + finalDamage);
+        }
+
+        currentHealth -= finalDamage;
         Debug.Log("Monster Health: " + currentHealth);
 
         if (currentHealth <= 0)
@@ -80,6 +94,10 @@ public class Monster_KSM : MonoBehaviour
             if (target == null && attacker != null)
             {
                 target = attacker;
+            }
+            if (currentState != State.CHASE && currentState != State.ATTACK)
+            {
+                ChangeState(State.CHASE);
             }
         }
     }

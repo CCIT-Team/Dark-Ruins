@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Knife_KSM : MonoBehaviour
 {
@@ -13,11 +14,12 @@ public class Knife_KSM : MonoBehaviour
     public BoxCollider knifeArea;
     public ParticleSystem[] hitEffect;
 
-    private List<Collider> hitList;
+    private bool hasPlayedHitEffectThisSwing;
+    private List<Monster_KSM> hitMonstersList;
 
     private void Awake()
     {
-        hitList = new List<Collider>();
+        hitMonstersList = new List<Monster_KSM>();
     }
 
     public void Use()
@@ -32,7 +34,8 @@ public class Knife_KSM : MonoBehaviour
     IEnumerator Swing()
     {
         yield return new WaitForSeconds(0.1f);
-        hitList.Clear();
+        hitMonstersList.Clear();
+        hasPlayedHitEffectThisSwing = false;
         knifeArea.enabled = true;
 
         yield return new WaitForSeconds(0.3f);
@@ -43,28 +46,54 @@ public class Knife_KSM : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (hitList.Contains(other))
+        Monster_KSM monster = other.GetComponentInParent<Monster_KSM>();
+
+        if (monster == null || hitMonstersList.Contains(monster))
         {
             return;
         }
 
-        Monster_KSM monster = other.GetComponent<Monster_KSM>();
-
-        if (monster != null && other == monster.hitCollider)
+        if (monster != null)
         {
-            monster.TakeDamage(damage, transform.root);
+            bool hitRegistered = false;
+            bool isWeakPoint = false;
 
-            hitList.Add(other);
+            if (other == monster.weakPointCollider)
+            {
+                isWeakPoint = true;
+                hitRegistered = true;
+            }
+            else if (other == monster.hitCollider)
+            {
+                isWeakPoint = false;
+                hitRegistered = true;
+            }
 
-            HitParticles();
+            if (hitRegistered)
+            {
+                monster.TakeDamage(damage, transform.root, isWeakPoint);
+                hitMonstersList.Add(monster);
+
+                if (!hasPlayedHitEffectThisSwing)
+                {
+                    Vector3 hitPoint = other.ClosestPoint(transform.position);
+                    HitParticles(hitPoint);
+                    hasPlayedHitEffectThisSwing = true;
+                }
+            }
         }
     }
 
-    public void HitParticles()
+    public void HitParticles(Vector3 position)
     {
         foreach (ParticleSystem ps in hitEffect)
         {
-            ps.Play();
+            if (ps != null)
+            {
+                ps.transform.position = position;
+
+                ps.Play();
+            }
         }
     }
 }
