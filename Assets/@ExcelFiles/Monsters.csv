@@ -1,0 +1,5 @@
+﻿ID,Name,HP,ATK,DEF,MoveSpeed,DropItem
+1,Slime,30,5,1,2,Potion
+2,Goblin,50,10,2,2.5,IronSword
+3,Orc,120,25,8,1.5,LeatherArmor
+4,FireSpirit,80,18,3,3,FireWand
