@@ -8,7 +8,7 @@ public abstract class ItemBase : MonoBehaviour
     public int Max { get { return _max; } }
     private int _count;
     public int Count { get { return _count; } }
-    public int Length;
+    public int Length=1;
     public void GetItem(int value)
     {
         _max += value;

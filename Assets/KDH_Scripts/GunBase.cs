@@ -9,11 +9,12 @@ public class GunBase : ItemBase
     private float _fireCooltimeSet=0.5f;
     private bool _zoomOuted = true;
     protected BulletsPool _bulletsPool;
-    private readonly Vector3 _up = new Vector3(0, 1.3f, 0);
+    [SerializeField]
+    private readonly Vector3 _up = new Vector3(0, 1.0f, 0);
     private void Awake()
     {
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
-        Managers_KSM.Input.OnKeysHeld += ItemUse;
+        //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }
     public void FixedUpdate()
     {
@@ -42,7 +43,7 @@ public class GunBase : ItemBase
     }
     public void Fire()
     {
-        _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+_up+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
     }
     public void Reload()
     {

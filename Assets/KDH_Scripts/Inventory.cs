@@ -2,94 +2,193 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class Inventory
+public class Inventory :MonoBehaviour
 {
-    public static Slot[] InventorySlot=new Slot[9];
+    public static Slot[] InventorySlot=new Slot[25];
     private int _index, _inventoryCapacity;
     public Action _itemUsing;
-    private Inventory()
+    private bool _inventoryOpened = false,_drag=false;
+    private Transform _inventoryView,_dragItem;
+    private float _inventoryCooltime = 0.0f,_dragCooltime=0.0f;
+    private Camera cam;
+    //private Inventory()
+    //{
+    //    Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
+    //}
+#if UNITY_EDITOR
+    private void TestSample()
+    {
+
+        foreach(Transform t in _inventoryView)
+        {
+            int n = int.Parse(t.name.Substring(t.name.LastIndexOf('_') + 1));
+            InventorySlot[n] =t.GetComponent<Slot>();
+            InventorySlot[n].SetIndex(n);
+        }
+    }
+#endif
+    private void Awake()
     {
         Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
+        _inventoryView = GameObject.Find("InventoryView").transform;
+        cam = GetComponentInChildren<Camera>();
+#if UNITY_EDITOR
+        TestSample();
+#endif
     }
-    //public int TryItemGet(ItemBase item)
-    //{
-    //    //인벤토리 공간 꽉차거나, 아이템 개수 꽉찼을 때?
-    //    if(item is null)
-    //    {
-    //        return -1;
-    //    }
-    //    int index = Array.LastIndexOf(_inventory, item);
-    //    if (index!=-1)
-    //    {
-    //        if()
-    //        {
-    //            return item.Count;
-    //        }
-    //        else
-    //        {
-                
-    //        }
-    //    }
-    //    else
-    //    {
-    //        _inventory[++_index] = item;
-    //    }
-    //}
-
+    public void FixedUpdate()
+    {
+        if (_inventoryCooltime > 0)
+        {
+            _inventoryCooltime -= Time.fixedDeltaTime;
+        }
+        if(_dragCooltime>0)
+        {
+            _dragCooltime -= Time.fixedDeltaTime;
+        }
+    }
     public void OnKeyPressed(List<KeyCode> keys)
     {
-        //단축키
+        if(_inventoryCooltime<=0&&keys.Contains(KeyCode.I))
+        {
+            _inventoryCooltime = 2.0f;
+            OpenOrCloseInventory();
+        }
+        if(_inventoryView==true&& _dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
+        {
+            _dragCooltime = 1.0f;
+            DragItem();
+        }
+        //단축키 및 아이템 사용
+    }
+    private void DragItem()
+    {
+        if (_drag==false)
+        {
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
+            {
+                _dragItem = slot.Item.transform;
+                ClickItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+                _drag = true;
+                StartCoroutine(SubCriber());
+                //_dragItem.GetComponent<Collider>().enabled = false;
+            }
+        }
+        else
+        {
+            if(Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot))
+            {
+                SetItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+            }
+        }
+    }
+    IEnumerator SubCriber()
+    {
+        yield return new WaitForSeconds(1.0f);
+        _dragItem.GetComponent<ItemBase>().Subscribe();
+    }
+    public void OpenOrCloseInventory()
+    {
+        if(_inventoryOpened==true)
+        {
+            _inventoryOpened = false;
+            _inventoryView.position = this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
+            _inventoryView.gameObject.SetActive(true);
+        }
+        else
+        {
+            _inventoryOpened = true;
+            _inventoryView.gameObject.SetActive(false);
+        }
     }
     public void ClickItem(int mainIndex)//무엇을 어떻게? 상호작용 어케함 우리? 일단 해두는데 트리거가 없는;;
     {
-        ItemBase item = InventorySlot[mainIndex].Item;
+        _dragItem.SetParent(this.transform.Find("Main Camera"), false);
+        _dragItem.localPosition =new Vector3(0,-0.3f,1.3f);
+        _dragItem.localRotation = Quaternion.identity;
+
         //아무튼 저장해두었다가 드래그든 뭐든 옮긴다면 SetItem 호출해서 되면 거기로 옮겨가고 안되면 복귀
     }
-    public void SetItem(ItemBase item, int mainIndex,bool xy) //직접 수집이나 그런거 외로도 획득 경로 있을까봐 빼둠
+    public void SetItem(int mainIndex,bool xy=true) //직접 수집이나 그런거 외로도 획득 경로 있을까봐 빼둠, 일단 가로형만
     {
-        if(Check(mainIndex,item,xy)==false)
+        ItemBase item=_dragItem.GetComponent<ItemBase>();
+        if (Check(mainIndex,item,xy)==false)
         {
             return;
         }
         InventorySlot[mainIndex].SetItem(item);
-        switch (xy)
+        _dragItem.SetParent(InventorySlot[mainIndex].transform, false);
+        _dragItem.localPosition = new Vector3(0, 0.65f, 0);
+        _dragItem.localRotation=Quaternion.identity;
+        item.Unsubscribe();
+        _drag = false;
+        if(xy==true)
         {
-            case true:
-                for (int i = mainIndex; i < item.Length; i++)
-                {
-                    InventorySlot[i].SetIndex(mainIndex);
-                }
-                break;
-                
-            case false:
-                for (int i = mainIndex; i < item.Length; i += 3)
-                {
-                    InventorySlot[i].SetIndex(mainIndex);
-                }
-                break;
+            for (int i = mainIndex; i < mainIndex + item.Length; i++)
+            {
+                InventorySlot[i].SetIndex(mainIndex);
+                //_dragItem.GetComponent<Collider>().enabled = true;
+            }
         }
+        else
+        {
+            for (int i = mainIndex; i < mainIndex + item.Length; i += 3)
+            {
+                InventorySlot[i].SetIndex(mainIndex);
+                //_dragItem.GetComponent<Collider>().enabled = true;
+            }
+        }
+        _dragItem = null;
     }
     private bool Check(int mainIndex, ItemBase item,bool xy) //bool xy의 경우 true면 ㅡ false면 ㅣ모양
     {
-        switch(xy)
+        if(xy==true)
         {
-            case true:
-                for (int i = mainIndex; i <item.Length;i++)
-                    if (i/3!=mainIndex/3 &&InventorySlot[i].Item is not null)
-                    {
-                        return false;
-                    }
-                return true;
-            case false:
-                for (int i = mainIndex; i < item.Length; i+=3)
-                    if (i>8 && InventorySlot[i].Item is not null)
-                    {
-                        return false;
-                    }
-                return true;
+            for (int i = mainIndex; i < mainIndex + item.Length; i++)
+            {
+                if (i / 5 != mainIndex / 5 && InventorySlot[i].Item is not null)
+                {
+                    return false;
+                }
+            }
         }
+        else
+        {
+            for (int i = mainIndex; i < mainIndex + item.Length; i += 5)
+            {
+                if (i > 24 && InventorySlot[i].Item is not null)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+        //switch (xy)
+        //{
+        //    case true:
+        //        for (int i = mainIndex; i < mainIndex + item.Length; i++)
+        //        {
+        //            if (i / 5 != mainIndex / 5 && InventorySlot[i].Item is not null)
+        //            {
+        //                return false;
+        //            }
+        //        }
+
+        //        return true;
+        //    case false:
+        //        for (int i = mainIndex; i < mainIndex + item.Length; i += 5)
+        //        {
+        //            if (i > 24 && InventorySlot[i].Item is not null)
+        //            {
+        //                return false;
+        //            }
+        //        }
+        //        return true;
+        //}
     }
     private void ItemUse()
     {
