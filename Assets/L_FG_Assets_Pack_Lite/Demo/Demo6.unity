@@ -20857,8 +20857,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca59648acce4ff54e8b4339349bd9301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCamera: {fileID: 0}
   mouseSpeed: 8
+  playerCamera: {fileID: 0}
   moveSpeed: 7
   runSpeed: 12
   HealthMax: 100
@@ -20894,7 +20894,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710792610}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 2
   m_Drag: 10
   m_AngularDrag: 1
   m_CenterOfMass: {x: 0, y: 0, z: 0}

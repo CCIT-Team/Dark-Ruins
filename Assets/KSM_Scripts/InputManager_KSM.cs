@@ -27,8 +27,6 @@ public class InputManager_KSM
 
     public void OnUpdate()
     {
-        if (Input.anyKey == false) return;
-
         if (KeyAction != null)
         {
             KeyAction.Invoke();
@@ -42,10 +40,6 @@ public class InputManager_KSM
                 _pressedKeys.Add(key);
             }
         }
-
-        if (_pressedKeys.Count > 0)
-        {
-            OnKeysHeld?.Invoke(new List<KeyCode>(_pressedKeys));
-        }
+        OnKeysHeld?.Invoke(new List<KeyCode>(_pressedKeys));
     }
 }

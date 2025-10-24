@@ -9,8 +9,8 @@ using UnityEngine.EventSystems;
 public class Player_KSM : MonoBehaviour
 {
     [Header("마우스 민감도")]
-    [SerializeField] private Camera playerCamera;
     [SerializeField] private float mouseSpeed = 5f;
+    [SerializeField] private Camera playerCamera;
 
     [Header("플레이어 이동")]
     [SerializeField] private float moveSpeed = 7f;
@@ -21,6 +21,8 @@ public class Player_KSM : MonoBehaviour
 
     private Animator anim;
     private Knife_KSM knife;
+    private Rigidbody rb;
+    private Vector3 targetVelocity = Vector3.zero;
 
     private float mouseX;
     private float mouseY;
@@ -37,6 +39,7 @@ public class Player_KSM : MonoBehaviour
 
         anim = GetComponent<Animator>();
         knife = GetComponent<Knife_KSM>();
+        rb = GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -69,6 +72,11 @@ public class Player_KSM : MonoBehaviour
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
+        float currentSpeed = moveSpeed;
+        if (heldKeys.Contains(KeyCode.LeftShift))
+        {
+            currentSpeed = runSpeed;
+        }
         Vector3 direction = Vector3.zero;
         if (heldKeys.Contains(KeyCode.W)) direction += Vector3.forward;
         if (heldKeys.Contains(KeyCode.S)) direction += Vector3.back;
@@ -77,12 +85,11 @@ public class Player_KSM : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Vector3 worldDirection = transform.TransformDirection(direction.normalized);
-            float currentSpeed = moveSpeed;
-            if (heldKeys.Contains(KeyCode.LeftShift))
-            {
-                currentSpeed = runSpeed;
-            }
-            transform.position += worldDirection * currentSpeed * Time.deltaTime;
+            targetVelocity = worldDirection * currentSpeed;
+        }
+        else
+        {
+            targetVelocity = Vector3.zero;
         }
 
         if (heldKeys.Contains(KeyCode.Mouse0))
@@ -90,6 +97,12 @@ public class Player_KSM : MonoBehaviour
             KnifeAttack();
         }
     }
+
+    private void FixedUpdate()
+    {
+        rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+    }
+
     private void MouseLook()
     {
         if (playerCamera == null) return;
