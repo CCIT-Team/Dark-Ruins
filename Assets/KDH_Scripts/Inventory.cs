@@ -64,18 +64,21 @@ public class Inventory :MonoBehaviour
             DragItem();
         }
         //단축키 및 아이템 사용
+        ItemUse(keys);
     }
     private void DragItem()
     {
         if (_drag==false)
         {
+            //바닥에서 줍기도? 아니다, 분할하자
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
             {
                 _dragItem = slot.Item.transform;
                 ClickItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
                 _drag = true;
                 StartCoroutine(SubCriber());
-                //_dragItem.GetComponent<Collider>().enabled = false;
+
+                _dragItem.GetComponent<Collider>().enabled = false;
             }
         }
         else
@@ -190,8 +193,8 @@ public class Inventory :MonoBehaviour
         //        return true;
         //}
     }
-    private void ItemUse()
+    private void ItemUse(List<KeyCode> keys)
     {
-        
+        _itemUsing?.Invoke();
     }
 }
