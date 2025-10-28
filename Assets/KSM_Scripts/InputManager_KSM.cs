@@ -21,6 +21,7 @@ public class InputManager_KSM
         KeyCode.LeftShift,
         KeyCode.I,
         KeyCode.E,
+        KeyCode.F,
         KeyCode.Mouse0,
     };
     #endregion

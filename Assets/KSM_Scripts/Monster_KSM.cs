@@ -13,18 +13,23 @@ public class Monster_KSM : MonoBehaviour
 
     [Header("범위 설정")]
     public Transform target;
-    public float patrolRadius = 10f;
-    public float chaseDistance = 15f;
-    public float attackDistance = 2f;
-    public float lostDistance = 20f;
+    public float patrolRadius = 8f;
+    public float attackDistance = 3f;
+    public float lostDistance = 12f;
+    public float proximityRadius = 6f;
+    public float viewAngle = 90f;
 
     [Header("콜라이더 설정")]
-    [Tooltip("감지 콜라이더")]
+    [Tooltip("주변 감지 콜라이더")]
     public SphereCollider detectionCollider;
+    [Tooltip("시야각 벽 설정")]
+    public LayerMask obstacleMask;
     [Tooltip("피격 콜라이더")]
     public Collider hitCollider;
     [Tooltip("약점 피격 콜라이더")]
     public Collider weakPointCollider;
+
+    public State currentState;
 
     private NavMeshAgent nmAgent;
     private Animator anim;
@@ -38,7 +43,6 @@ public class Monster_KSM : MonoBehaviour
         ATTACK,
         DIE,
     }
-    public State currentState;
 
     private void Awake()
     {
@@ -102,12 +106,43 @@ public class Monster_KSM : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
-        if (currentState != State.DIE && other.CompareTag("Player") && target == null)
+        if (!other.CompareTag("Player") || target != null || currentState == State.DIE)
+        {
+            return;
+        }
+
+        float distance = Vector3.Distance(transform.position, other.transform.position);
+
+        if (distance <= proximityRadius)
         {
             target = other.transform;
             ChangeState(State.CHASE);
+            Debug.Log("근처 감지");
+            return;
+        }
+
+        Vector3 selfPos = transform.position;
+        Vector3 playerPos = other.transform.position;
+        selfPos.y = 0;
+        playerPos.y = 0;
+
+        Vector3 directionToPlayer = (playerPos - selfPos).normalized;
+
+        float angle = Vector3.Angle(transform.forward, directionToPlayer);
+
+        if (angle < viewAngle / 2f)
+        {
+            Vector3 rayStartPoint = transform.position + Vector3.up * 1f;
+            Vector3 directionToPlayerWithHeight = (other.transform.position - rayStartPoint).normalized;
+
+            if (!Physics.Raycast(rayStartPoint, directionToPlayerWithHeight, distance, obstacleMask))
+            {
+                target = other.transform;
+                ChangeState(State.CHASE);
+                Debug.Log("원거리 시야각 감지");
+            }
         }
     }
 
