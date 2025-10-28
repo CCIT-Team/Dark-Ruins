@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class BulletItem : ItemBase
 {
-    public override void ItemUse(List<KeyCode> keys)
+    public override void ItemUse(List<KeyCode> keys=null)
     {
-
+        _count--;
     }
 
 }

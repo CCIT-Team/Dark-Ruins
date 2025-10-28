@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GunBase : ItemBase
 {
-    private int _loadedBullet = 0;
+    private int _loadedBullet = 0, _maxBullet=6;
     private float _fireCooltime = 0f;
     private float _fireCooltimeSet=0.5f;
     private bool _zoomOuted = true;
@@ -26,7 +26,7 @@ public class GunBase : ItemBase
     public override void ItemUse(List<KeyCode> keys)
     {
 
-        if (_fireCooltime <= 0.0f && keys.Contains(KeyCode.Mouse0))
+        if (_fireCooltime <= 0.0f &&_loadedBullet>0&& keys.Contains(KeyCode.Mouse0))
         {
             _fireCooltime = _fireCooltimeSet;
             Fire();
@@ -39,6 +39,13 @@ public class GunBase : ItemBase
         {
             Zoom(false);
         }
+        if (keys.Contains(KeyCode.R))
+        {
+            if(_loadedBullet<_maxBullet)
+            {
+                Reload();
+            }
+        }
 
     }
     public void Fire()
@@ -47,7 +54,26 @@ public class GunBase : ItemBase
     }
     public void Reload()
     {
-        //_loadedBullet +=;
+        BulletItem b=(BulletItem)GetComponent<Inventory>().CheckItem<BulletItem>();
+        if ( b is null)
+        {
+            return;
+        }
+        else
+        {
+            for (int i=_loadedBullet; i<_maxBullet;i++)
+            {
+                if (b.Count > 0)
+                {
+                    b.ItemUse();
+                    _loadedBullet++;
+                }
+                else 
+                { 
+                    return;
+                }
+            }
+        }
         //인벤토리에서 총알 소모도 추가
     }
     public void Zoom(bool b)

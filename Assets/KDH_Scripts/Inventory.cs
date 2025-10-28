@@ -193,6 +193,17 @@ public class Inventory :MonoBehaviour
         //        return true;
         //}
     }
+    public ItemBase CheckItem<T>()
+    {
+        foreach(Slot s in InventorySlot)
+        {
+            if (s.Item is T)
+            {
+                return s.Item;
+            }
+        }
+        return null;
+    }
     private void ItemUse(List<KeyCode> keys)
     {
         _itemUsing?.Invoke();

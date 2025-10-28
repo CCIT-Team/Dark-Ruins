@@ -6,7 +6,7 @@ public abstract class ItemBase : MonoBehaviour
 {
     private int _max;
     public int Max { get { return _max; } }
-    private int _count;
+    protected int _count=0;
     public int Count { get { return _count; } }
     public int Length=1;
     public void GetItem(int value)
