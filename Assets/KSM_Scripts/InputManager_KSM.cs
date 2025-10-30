@@ -7,6 +7,7 @@ public class InputManager_KSM
 {
     public Action KeyAction;
     public event Action<List<KeyCode>> OnKeysHeld;
+    public event Action<KeyCode> OnKeysPressed;
 
     private List<KeyCode> _pressedKeys = new List<KeyCode>();
 
@@ -41,6 +42,7 @@ public class InputManager_KSM
                 _pressedKeys.Add(key);
             }
         }
+
         OnKeysHeld?.Invoke(new List<KeyCode>(_pressedKeys));
     }
 }

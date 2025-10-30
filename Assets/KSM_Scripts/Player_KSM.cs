@@ -20,8 +20,9 @@ public class Player_KSM : MonoBehaviour
     public int currentHealth;
 
     private Animator anim;
-    private Knife_KSM knife;
     private Rigidbody rb;
+    private Knife_KSM knife;
+    //private Flashlight_KSM flashlight;
     private Vector3 targetVelocity = Vector3.zero;
 
     private float mouseX;
@@ -38,8 +39,9 @@ public class Player_KSM : MonoBehaviour
         Cursor.visible = false;
 
         anim = GetComponent<Animator>();
-        knife = GetComponent<Knife_KSM>();
         rb = GetComponent<Rigidbody>();
+        knife = GetComponent<Knife_KSM>();
+        //flashlight = GetComponent<Flashlight_KSM>(); 
     }
 
     void Update()
@@ -59,6 +61,7 @@ public class Player_KSM : MonoBehaviour
     void OnEnable()
     {
         Managers_KSM.Input.OnKeysHeld += HandleKeysHeld;
+        Managers_KSM.Input.OnKeysPressed += HandleKeysPressed;
     }
 
     void OnDisable()
@@ -67,6 +70,15 @@ public class Player_KSM : MonoBehaviour
         if (Managers_KSM.Instance != null)
         {
             Managers_KSM.Input.OnKeysHeld -= HandleKeysHeld;
+            Managers_KSM.Input.OnKeysPressed -= HandleKeysPressed;
+        }
+    }
+
+    private void HandleKeysPressed(KeyCode key)
+    {
+        if (key == KeyCode.F)
+        {
+            //UVflash();
         }
     }
 
@@ -116,6 +128,13 @@ public class Player_KSM : MonoBehaviour
 
         playerCamera.transform.localEulerAngles = new Vector3(-mouseY, 0, 0);
     }
+    //void UVflash()
+    //{
+    //    if (flashlight != null)
+    //    {
+    //        flashlight.ToggleFlashlight();
+    //    }
+    //}
 
     void KnifeAttack()
     {
