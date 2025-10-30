@@ -8,7 +8,20 @@ public abstract class ItemBase : MonoBehaviour
     public int Max { get { return _max; } }
     protected int _count=0;
     public int Count { get { return _count; } }
-    public int Length=1;
+    public int Length;
+    public bool _dropped = false;
+    
+    public void Drop()
+    {
+        if(_dropped==true)
+        {
+            Inventory.InventoryOpened = false;
+            _dropped = false;
+#if UNITY_EDITOR
+            Debug.Log("이거나타났움");
+#endif
+        }
+    }
     public void GetItem(int value)
     {
         _max += value;

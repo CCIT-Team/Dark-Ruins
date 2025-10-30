@@ -13,6 +13,7 @@ public class GunBase : ItemBase
     private readonly Vector3 _up = new Vector3(0, 1.0f, 0);
     private void Awake()
     {
+        Length = 2; //나중에 기획 나오면 적용하면 됨 ㅇㅇ
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
         //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }

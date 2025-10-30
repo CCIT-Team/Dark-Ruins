@@ -15,12 +15,17 @@ public class NewBehaviourScript : MonoBehaviour
 #if UNITY_EDITOR
         Debug.Log("소환");
 #endif
-        if (item.TryGetComponent<ItemBase>(out _)==false)
+        if (item.TryGetComponent<ItemBase>(out ItemBase iB)==false)
         {
 #if UNITY_EDITOR
             Debug.Log("삭제");
 #endif
             Destroy(item);
         }
+        item.GetComponent<Collider>().enabled = true;
+        item.transform.localScale /= 0.3f;
+        iB._dropped = true;
+        iB.Drop();
+        
     }
 }

@@ -9,9 +9,10 @@ using UnityEngine.UIElements;
 public class Inventory :MonoBehaviour
 {
     public static Slot[] InventorySlot=new Slot[25];
-    private int _index, _inventoryCapacity;
+    //private int _index, _inventoryCapacity; //나중에 쓰게 될 것
     public Action _itemUsing;
-    private bool _inventoryOpened = false,_drag=false;
+    private bool _drag=false;
+    public static bool InventoryOpened = false;
     private Transform _inventoryView,_dragItem;
     private float _inventoryCooltime = 0.0f,_dragCooltime=0.0f;
     private Camera cam;
@@ -20,7 +21,7 @@ public class Inventory :MonoBehaviour
     //    Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
     //}
 #if UNITY_EDITOR
-    private void TestSample()
+    private void BindSlots()
     {
 
         foreach(Transform t in _inventoryView)
@@ -36,9 +37,7 @@ public class Inventory :MonoBehaviour
         Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
         _inventoryView = GameObject.Find("InventoryView").transform;
         cam = GetComponentInChildren<Camera>();
-#if UNITY_EDITOR
-        TestSample();
-#endif
+        BindSlots();
     }
     public void FixedUpdate()
     {
@@ -58,53 +57,82 @@ public class Inventory :MonoBehaviour
             _inventoryCooltime = 2.0f;
             OpenOrCloseInventory();
         }
-        if(_inventoryView==true&& _dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
+        if(InventoryOpened==false&& _dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
         {
             _dragCooltime = 1.0f;
-            DragItem();
+            if (DragItem() == false && _drag == false)
+            {
+                PickUp();
+            }
         }
         //단축키 및 아이템 사용
         ItemUse(keys);
     }
-    private void DragItem()
+    public void PickUp() //필드에서 줍기
     {
-        if (_drag==false)
+#if UNITY_EDITOR
+        Debug.Log("쐈움");
+#endif
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit)&&hit.transform.TryGetComponent<ItemBase>(out ItemBase item))
+        {
+#if UNITY_EDITOR
+            Debug.Log("주울 수 있움");
+#endif
+            _dragItem = item.transform;
+            _dragItem.SetParent(this.transform.Find("Main Camera"), false);
+            _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+            _dragItem.localRotation = Quaternion.identity;
+            _drag = true;
+            StartCoroutine(SubCriber());
+            _dragItem.GetComponent<Collider>().enabled = false;
+        }
+    }
+    private bool DragItem() 
+    {
+        if (_drag==false) //인벤토리에서 꺼내기
         {
             //바닥에서 줍기도? 아니다, 분할하자
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
             {
                 _dragItem = slot.Item.transform;
-                ClickItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+                ClickItem(Inventory.InventorySlot[int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1))].MainIndex);
+                //ClickItem();
                 _drag = true;
                 StartCoroutine(SubCriber());
 
                 _dragItem.GetComponent<Collider>().enabled = false;
+                return true;
             }
         }
-        else
+        else //인벤토리에 집어넣기
         {
             if(Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot))
             {
                 SetItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+                return true;
             }
         }
+        return false;
     }
     IEnumerator SubCriber()
     {
         yield return new WaitForSeconds(1.0f);
-        _dragItem.GetComponent<ItemBase>().Subscribe();
+        if(_dragItem !=null)
+        {
+            _dragItem.GetComponent<ItemBase>().Subscribe();
+        }
     }
     public void OpenOrCloseInventory()
     {
-        if(_inventoryOpened==true)
+        if(InventoryOpened==true)
         {
-            _inventoryOpened = false;
+            InventoryOpened = false;
             _inventoryView.position = this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
             _inventoryView.gameObject.SetActive(true);
         }
         else
         {
-            _inventoryOpened = true;
+            InventoryOpened = true;
             _inventoryView.gameObject.SetActive(false);
         }
     }
@@ -113,7 +141,7 @@ public class Inventory :MonoBehaviour
         _dragItem.SetParent(this.transform.Find("Main Camera"), false);
         _dragItem.localPosition =new Vector3(0,-0.3f,1.3f);
         _dragItem.localRotation = Quaternion.identity;
-
+        InventorySlot[mainIndex].Clears();
         //아무튼 저장해두었다가 드래그든 뭐든 옮긴다면 SetItem 호출해서 되면 거기로 옮겨가고 안되면 복귀
     }
     public void SetItem(int mainIndex,bool xy=true) //직접 수집이나 그런거 외로도 획득 경로 있을까봐 빼둠, 일단 가로형만
@@ -139,7 +167,7 @@ public class Inventory :MonoBehaviour
         }
         else
         {
-            for (int i = mainIndex; i < mainIndex + item.Length; i += 3)
+            for (int i = mainIndex; i < mainIndex + item.Length*5; i += 5)
             {
                 InventorySlot[i].SetIndex(mainIndex);
                 //_dragItem.GetComponent<Collider>().enabled = true;
@@ -149,11 +177,18 @@ public class Inventory :MonoBehaviour
     }
     private bool Check(int mainIndex, ItemBase item,bool xy) //bool xy의 경우 true면 ㅡ false면 ㅣ모양
     {
-        if(xy==true)
+        if (xy==true)
         {
+            if (mainIndex%5+item.Length>5)
+            {
+                return false;
+            }
             for (int i = mainIndex; i < mainIndex + item.Length; i++)
             {
-                if (i / 5 != mainIndex / 5 && InventorySlot[i].Item is not null)
+#if UNITY_EDITOR
+                Debug.Log(InventorySlot[i].Item);
+#endif
+                if (InventorySlot[i].Item !=default(ItemBase))
                 {
                     return false;
                 }
@@ -161,9 +196,13 @@ public class Inventory :MonoBehaviour
         }
         else
         {
+            if (mainIndex+item.Length*5>24)
+            {
+                return false;
+            }
             for (int i = mainIndex; i < mainIndex + item.Length; i += 5)
             {
-                if (i > 24 && InventorySlot[i].Item is not null)
+                if (InventorySlot[i].Item != default(ItemBase))
                 {
                     return false;
                 }
