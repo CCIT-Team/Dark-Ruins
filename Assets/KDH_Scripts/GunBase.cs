@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class GunBase : ItemBase
 {
-    private int _loadedBullet = 0;
+    private int _loadedBullet = 0, _maxBullet=6;
     private float _fireCooltime = 0f;
     private float _fireCooltimeSet=0.5f;
     private bool _zoomOuted = true;
     protected BulletsPool _bulletsPool;
-    private readonly Vector3 _up = new Vector3(0, 1.3f, 0);
+    [SerializeField]
+    private readonly Vector3 _up = new Vector3(0, 1.0f, 0);
     private void Awake()
     {
+        Length = 2; //나중에 기획 나오면 적용하면 됨 ㅇㅇ
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
-        Managers_KSM.Input.OnKeysHeld += ItemUse;
+        //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }
     public void FixedUpdate()
     {
@@ -25,7 +27,7 @@ public class GunBase : ItemBase
     public override void ItemUse(List<KeyCode> keys)
     {
 
-        if (_fireCooltime <= 0.0f && keys.Contains(KeyCode.Mouse0))
+        if (_fireCooltime <= 0.0f &&_loadedBullet>0&& keys.Contains(KeyCode.Mouse0))
         {
             _fireCooltime = _fireCooltimeSet;
             Fire();
@@ -38,15 +40,41 @@ public class GunBase : ItemBase
         {
             Zoom(false);
         }
+        if (keys.Contains(KeyCode.R))
+        {
+            if(_loadedBullet<_maxBullet)
+            {
+                Reload();
+            }
+        }
 
     }
     public void Fire()
     {
-        _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+_up+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
     }
     public void Reload()
     {
-        //_loadedBullet +=;
+        BulletItem b=(BulletItem)GetComponent<Inventory>().CheckItem<BulletItem>();
+        if ( b is null)
+        {
+            return;
+        }
+        else
+        {
+            for (int i=_loadedBullet; i<_maxBullet;i++)
+            {
+                if (b.Count > 0)
+                {
+                    b.ItemUse();
+                    _loadedBullet++;
+                }
+                else 
+                { 
+                    return;
+                }
+            }
+        }
         //인벤토리에서 총알 소모도 추가
     }
     public void Zoom(bool b)

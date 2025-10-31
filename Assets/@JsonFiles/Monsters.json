@@ -1,0 +1,38 @@
+[
+  {
+    "ID": "1",
+    "Name": "Slime",
+    "HP": "30",
+    "ATK": "5",
+    "DEF": "1",
+    "MoveSpeed": "2",
+    "DropItem": "Potion"
+  },
+  {
+    "ID": "2",
+    "Name": "Goblin",
+    "HP": "50",
+    "ATK": "10",
+    "DEF": "2",
+    "MoveSpeed": "2.5",
+    "DropItem": "IronSword"
+  },
+  {
+    "ID": "3",
+    "Name": "Orc",
+    "HP": "120",
+    "ATK": "25",
+    "DEF": "8",
+    "MoveSpeed": "1.5",
+    "DropItem": "LeatherArmor"
+  },
+  {
+    "ID": "4",
+    "Name": "FireSpirit",
+    "HP": "80",
+    "ATK": "18",
+    "DEF": "3",
+    "MoveSpeed": "3",
+    "DropItem": "FireWand"
+  }
+]
