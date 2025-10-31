@@ -48,10 +48,7 @@ public class Knife_KSM : MonoBehaviour
     {
         Monster_KSM monster = other.GetComponentInParent<Monster_KSM>();
 
-        if (monster == null || hitMonstersList.Contains(monster))
-        {
-            return;
-        }
+        if (monster == null || hitMonstersList.Contains(monster)) return;
 
         if (monster != null)
         {

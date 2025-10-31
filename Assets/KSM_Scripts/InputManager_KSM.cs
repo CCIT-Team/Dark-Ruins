@@ -41,6 +41,11 @@ public class InputManager_KSM
             {
                 _pressedKeys.Add(key);
             }
+
+            if (Input.GetKeyDown(key))
+            {
+                OnKeysPressed?.Invoke(key);
+            }
         }
 
         OnKeysHeld?.Invoke(new List<KeyCode>(_pressedKeys));

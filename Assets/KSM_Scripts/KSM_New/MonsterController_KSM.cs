@@ -3,58 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster_KSM : MonoBehaviour
+public class MonsterController_KSM : CreatureController_KSM
 {
     [Header("약점 시각화 (머티리얼 교체)")]
     public Renderer weakPointRenderer;
     public Material highlightedMaterial;
+    private Material normalMaterial;
+    private bool isCurrentlyHighlighted = false;
+
+    [Header("몬스터 AI 범위")]
+    public float patrolRadius = 7f;
+    public float chaseDistance = 10f;
+    public float attackDistance = 2f;
+    public float lostDistance = 15f;
+    public float proximityRadius = 5f;
+    public float viewAngle = 90f;
 
     [Header("콜라이더 설정")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
-    public Collider hitCollider;
+
     public Collider weakPointCollider;
+    public Collider hitCollider;
 
-    private int maxHealth = 100;
-    private int currentHealth;
-    private int attackDamage = 10;
-    private float weakPointMultiplier = 2f;
+    [Header("몬스터 스탯 (Base 스탯에 추가)")]
+    [SerializeField] private float weakPointMultiplier = 2f;
 
-    private State currentState;
     private Transform target;
-    private float patrolRadius = 8f;
-    private float attackDistance = 3f;
-    private float lostDistance = 12f;
-    private float proximityRadius = 6f;
-    private float viewAngle = 90f;
-
-    private NavMeshAgent nmAgent;
-    private Animator anim;
     private Vector3 patrolOrigin;
-    private Material normalMaterial;
 
-    private bool isCurrentlyHighlighted = false;
+    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE }
+    public State currentState;
 
-    public enum State
+    protected override void Awake()
     {
-        IDLE,
-        PATROL,
-        CHASE,
-        ATTACK,
-        DIE,
-    }
-
-    private void Awake()
-    {
-        anim = GetComponent<Animator>();
+        base.Awake();
         nmAgent = GetComponent<NavMeshAgent>();
     }
 
-    private void Start()
+    protected override void Start()
     {
-        currentHealth = maxHealth;
-        patrolOrigin = transform.position;
+        base.Start();
 
+        patrolOrigin = transform.position;
         nmAgent.stoppingDistance = attackDistance;
 
         if (weakPointRenderer != null)
@@ -65,34 +56,33 @@ public class Monster_KSM : MonoBehaviour
         ChangeState(State.IDLE);
     }
 
-    private void Update()
+    private void OnEnable()
+    {
+        Flashlight2_KSM.OnUVLightToggled += HandleUVLightToggle;
+    }
+
+    private void OnDisable()
+    {
+        Flashlight2_KSM.OnUVLightToggled -= HandleUVLightToggle;
+    }
+
+    private void HandleUVLightToggle(bool isUvOn)
     {
         if (weakPointRenderer == null) return;
 
-        if (Flashlight_KSM.isUVLightActive && !isCurrentlyHighlighted)
+        if (isUvOn && !isCurrentlyHighlighted)
         {
             weakPointRenderer.material = highlightedMaterial;
             isCurrentlyHighlighted = true;
         }
-
-        else if (!Flashlight_KSM.isUVLightActive && isCurrentlyHighlighted)
+        else if (!isUvOn && isCurrentlyHighlighted)
         {
             weakPointRenderer.material = normalMaterial;
             isCurrentlyHighlighted = false;
         }
     }
 
-    private void ChangeState(State newState)
-    {
-        if (currentState == State.DIE) return;
-
-        StopAllCoroutines();
-        currentState = newState;
-
-        StartCoroutine(currentState.ToString());
-    }
-
-    public void TakeDamage(int damage, Transform attacker, bool isWeakPoint)
+    public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         if (currentState == State.DIE) return;
 
@@ -100,14 +90,13 @@ public class Monster_KSM : MonoBehaviour
 
         if (isWeakPoint)
         {
-            if (Flashlight_KSM.isUVLightActive)
+            if (isCurrentlyHighlighted)
             {
                 finalDamage = (int)(damage * weakPointMultiplier);
                 Debug.Log("UV활성화 약점 피격 " + finalDamage);
             }
             else
             {
-                finalDamage = damage;
                 Debug.Log("UV비활성화 약점 피격: " + finalDamage);
             }
         }
@@ -116,15 +105,9 @@ public class Monster_KSM : MonoBehaviour
             Debug.Log("일반 피격 데미지: " + finalDamage);
         }
 
-        currentHealth -= finalDamage;
-        Debug.Log("Monster Health: " + currentHealth);
+        base.OnDamaged(finalDamage, attacker, isWeakPoint);
 
-        if (currentHealth <= 0)
-        {
-            currentHealth = 0;
-            ChangeState(State.DIE);
-        }
-        else
+        if (currentHealth > 0)
         {
             if (target == null && attacker != null)
             {
@@ -135,6 +118,21 @@ public class Monster_KSM : MonoBehaviour
                 ChangeState(State.CHASE);
             }
         }
+    }
+
+    public override void OnDead()
+    {
+        ChangeState(State.DIE);
+    }
+
+    private void ChangeState(State newState)
+    {
+        if (currentState == State.DIE) return;
+
+        StopAllCoroutines();
+        currentState = newState;
+
+        StartCoroutine(currentState.ToString());
     }
 
     private void OnTriggerStay(Collider other)

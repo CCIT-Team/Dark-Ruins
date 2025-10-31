@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Flashlight_KSM : MonoBehaviour
+public class Flashlight2_KSM : MonoBehaviour, IEquipment_KSM
 {
     [Header("Lights")]
     public Light regularLight;
@@ -10,22 +8,24 @@ public class Flashlight_KSM : MonoBehaviour
 
     public static bool isUVLightActive = false;
 
+    public static event System.Action<bool> OnUVLightToggled;
+
     void Start()
     {
         if (regularLight == null || uvLight == null) return;
 
         regularLight.enabled = true;
         uvLight.enabled = false;
-        isUVLightActive = false;
     }
 
-    public void ToggleFlashlight()
+    public void Toggle()
     {
         if (regularLight == null || uvLight == null) return;
 
         isUVLightActive = !isUVLightActive;
-
         regularLight.enabled = !isUVLightActive;
         uvLight.enabled = isUVLightActive;
+
+        OnUVLightToggled?.Invoke(isUVLightActive);
     }
 }

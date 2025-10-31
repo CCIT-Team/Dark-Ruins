@@ -1,47 +1,41 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class Player_KSM : MonoBehaviour
+public class PlayerController_KSM : CreatureController_KSM
 {
-    [Header("ÎßàÏö∞Ïä§ ÎØºÍ∞êÎèÑ")]
+    [Header("∏∂øÏΩ∫ πŒ∞®µµ")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
 
-    [Header("ÌîåÎ†àÏù¥Ïñ¥ Ïù¥Îèô")]
+    [Header("«√∑π¿ÃæÓ ¿Ãµø")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
-    public int HealthMax;
-    public int currentHealth;
-
-    private Animator anim;
     private Rigidbody rb;
-    private Knife_KSM knife;
-    private Flashlight_KSM flashlight;
     private Vector3 targetVelocity = Vector3.zero;
+
+    private IWeapon_KSM currentWeapon;
+    private IEquipment_KSM currentEquipment;
 
     private float mouseX;
     private float mouseY;
     private float fireDelay;
     private bool isFireReady = true;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         if (playerCamera == null)
             playerCamera = GetComponentInChildren<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
-        knife = GetComponent<Knife_KSM>();
-        flashlight = GetComponentInChildren<Flashlight_KSM>();
+
+        currentWeapon = GetComponentInChildren<IWeapon_KSM>();
+        currentEquipment = GetComponentInChildren<IEquipment_KSM>();
     }
 
     void Update()
@@ -51,7 +45,8 @@ public class Player_KSM : MonoBehaviour
         if (!isFireReady)
         {
             fireDelay += Time.deltaTime;
-            if (knife != null && knife.rate < fireDelay)
+
+            if (currentWeapon != null && currentWeapon.rate < fireDelay)
             {
                 isFireReady = true;
             }
@@ -66,7 +61,6 @@ public class Player_KSM : MonoBehaviour
 
     void OnDisable()
     {
-        // Ï°∞Í±¥Î¨∏ Ï∂îÍ∞ÄÌï¥ÏÑú ÏΩîÎìú Í∞êÏã∏Í∏∞ (Îπ®Í∞ÑÏÉâ Ï≥êÎÇ¥Í∏∞ Îõ∞Î∞ú)
         if (Managers_KSM.Instance != null)
         {
             Managers_KSM.Input.OnKeysHeld -= HandleKeysHeld;
@@ -105,7 +99,7 @@ public class Player_KSM : MonoBehaviour
 
         if (heldKeys.Contains(KeyCode.Mouse0))
         {
-            KnifeAttack();
+            WeaponAttack();
         }
     }
 
@@ -129,18 +123,31 @@ public class Player_KSM : MonoBehaviour
     }
     void UVflash()
     {
-        flashlight.ToggleFlashlight();
+        if (currentEquipment != null)
+        {
+            currentEquipment.Toggle();
+        }
     }
 
-    void KnifeAttack()
+    void WeaponAttack()
     {
-        if (isFireReady && knife != null)
+        if (isFireReady && currentWeapon != null)
         {
-            knife.Use();
+            currentWeapon.Use();
             anim.SetTrigger("Attack");
 
             isFireReady = false;
             fireDelay = 0;
         }
+    }
+
+    public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
+    {
+        base.OnDamaged(damage, attacker, false);
+    }
+
+    public override void OnDead()
+    {
+        Debug.Log("¿Ø¥Ÿ»Ò");
     }
 }
