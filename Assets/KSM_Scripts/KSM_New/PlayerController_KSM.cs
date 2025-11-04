@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
-    [Header("¸¶¿ì½º ¹Î°¨µµ")]
+    [Header("ë§ˆìš°ìŠ¤ ë¯¼ê°ë„")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
 
-    [Header("ÇÃ·¹ÀÌ¾î ÀÌµ¿")]
+    [Header("ì´ë™ ì†ë„")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
@@ -148,6 +148,6 @@ public class PlayerController_KSM : CreatureController_KSM
 
     public override void OnDead()
     {
-        Debug.Log("À¯´ÙÈñ");
+        Debug.Log("ìœ ë‹¤í¬");
     }
 }

@@ -7,8 +7,9 @@ public class Flashlight2_KSM : MonoBehaviour, IEquipment_KSM
     public Light uvLight;
 
     public static bool isUVLightActive = false;
-
     public static event System.Action<bool> OnUVLightToggled;
+
+    public static Transform uvLightTransform { get; private set; }
 
     void Start()
     {
@@ -16,6 +17,8 @@ public class Flashlight2_KSM : MonoBehaviour, IEquipment_KSM
 
         regularLight.enabled = true;
         uvLight.enabled = false;
+
+        uvLightTransform = uvLight.transform;
     }
 
     public void Toggle()

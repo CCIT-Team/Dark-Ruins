@@ -5,13 +5,9 @@ using UnityEngine.AI;
 
 public class MonsterController_KSM : CreatureController_KSM
 {
-    [Header("¾àÁ¡ ½Ã°¢È­ (¸ÓÆ¼¸®¾ó ±³Ã¼)")]
-    public Renderer weakPointRenderer;
-    public Material highlightedMaterial;
-    private Material normalMaterial;
     private bool isCurrentlyHighlighted = false;
 
-    [Header("¸ó½ºÅÍ AI ¹üÀ§")]
+    [Header("ê±°ë¦¬")]
     public float patrolRadius = 7f;
     public float chaseDistance = 10f;
     public float attackDistance = 2f;
@@ -19,16 +15,16 @@ public class MonsterController_KSM : CreatureController_KSM
     public float proximityRadius = 5f;
     public float viewAngle = 90f;
 
-    [Header("Äİ¶óÀÌ´õ ¼³Á¤")]
+    [Header("ì½œë¼ì´ë”")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
-
     public Collider weakPointCollider;
     public Collider hitCollider;
 
-    [Header("¸ó½ºÅÍ ½ºÅÈ (Base ½ºÅÈ¿¡ Ãß°¡)")]
+    [Header("ì•½ì  ë€ì§€ë°°ìˆ˜")]
     [SerializeField] private float weakPointMultiplier = 2f;
 
+    private Rigidbody rb;
     private Transform target;
     private Vector3 patrolOrigin;
 
@@ -39,6 +35,13 @@ public class MonsterController_KSM : CreatureController_KSM
     {
         base.Awake();
         nmAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+
+        if (nmAgent != null)
+        {
+            nmAgent.updatePosition = false;
+            nmAgent.updateRotation = true;
+        }
     }
 
     protected override void Start()
@@ -48,37 +51,21 @@ public class MonsterController_KSM : CreatureController_KSM
         patrolOrigin = transform.position;
         nmAgent.stoppingDistance = attackDistance;
 
-        if (weakPointRenderer != null)
-        {
-            normalMaterial = weakPointRenderer.material;
-        }
-
         ChangeState(State.IDLE);
     }
 
-    private void OnEnable()
+    private void FixedUpdate()
     {
-        Flashlight2_KSM.OnUVLightToggled += HandleUVLightToggle;
-    }
-
-    private void OnDisable()
-    {
-        Flashlight2_KSM.OnUVLightToggled -= HandleUVLightToggle;
-    }
-
-    private void HandleUVLightToggle(bool isUvOn)
-    {
-        if (weakPointRenderer == null) return;
-
-        if (isUvOn && !isCurrentlyHighlighted)
+        if (nmAgent == null || rb == null || currentState == State.DIE)
         {
-            weakPointRenderer.material = highlightedMaterial;
-            isCurrentlyHighlighted = true;
+            return;
         }
-        else if (!isUvOn && isCurrentlyHighlighted)
+
+        Vector3 desiredVelocity = nmAgent.velocity;
+
+        if (!nmAgent.isStopped)
         {
-            weakPointRenderer.material = normalMaterial;
-            isCurrentlyHighlighted = false;
+            rb.MovePosition(rb.position + desiredVelocity * Time.fixedDeltaTime);
         }
     }
 
@@ -93,16 +80,16 @@ public class MonsterController_KSM : CreatureController_KSM
             if (isCurrentlyHighlighted)
             {
                 finalDamage = (int)(damage * weakPointMultiplier);
-                Debug.Log("UVÈ°¼ºÈ­ ¾àÁ¡ ÇÇ°İ " + finalDamage);
+                Debug.Log("UVí™œì„±í™” ì•½ê³µ" + finalDamage);
             }
             else
             {
-                Debug.Log("UVºñÈ°¼ºÈ­ ¾àÁ¡ ÇÇ°İ: " + finalDamage);
+                Debug.Log("UVë¹„í™œì„±í™” ì•½ê³µ" + finalDamage);
             }
         }
         else
         {
-            Debug.Log("ÀÏ¹İ ÇÇ°İ µ¥¹ÌÁö: " + finalDamage);
+            Debug.Log("ì¼ë°˜ ë€ì§€" + finalDamage);
         }
 
         base.OnDamaged(finalDamage, attacker, isWeakPoint);
@@ -118,6 +105,11 @@ public class MonsterController_KSM : CreatureController_KSM
                 ChangeState(State.CHASE);
             }
         }
+    }
+
+    public void NotifyWeakPointExposed()
+    {
+        isCurrentlyHighlighted = true;
     }
 
     public override void OnDead()
@@ -148,7 +140,7 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             target = other.transform;
             ChangeState(State.CHASE);
-            Debug.Log("±ÙÃ³ °¨Áö");
+            Debug.Log("ì£¼ë³€ íƒì§€");
             return;
         }
 
@@ -170,7 +162,7 @@ public class MonsterController_KSM : CreatureController_KSM
             {
                 target = other.transform;
                 ChangeState(State.CHASE);
-                Debug.Log("¿ø°Å¸® ½Ã¾ß°¢ °¨Áö");
+                Debug.Log("ì‹œì•¼ê° íƒì§€");
             }
         }
     }
