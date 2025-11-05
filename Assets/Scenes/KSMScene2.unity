@@ -16356,12 +16356,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
-  patrolRadius: 7
-  chaseDistance: 10
-  attackDistance: 2
-  lostDistance: 15
-  proximityRadius: 5
-  viewAngle: 90
   detectionCollider: {fileID: 551883825}
   obstacleMask:
     serializedVersion: 2
@@ -39671,10 +39665,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b4a479f3bd86dd4896746d05a8d6cd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredExposure: 3
+  requiredExposure: 0.1
+  uvLightRadius: 0.5
   highlightedMaterial: {fileID: 2100000, guid: 09738d778cac57b49b5e4fb18e6adf29, type: 2}
   WeakPointRenderer: {fileID: 1325374324}
-  uvLightRadius: 0.5
   weakcollider: {fileID: 1325374325}
 --- !u!4 &1328719716 stripped
 Transform:

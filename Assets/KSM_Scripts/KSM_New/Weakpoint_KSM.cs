@@ -2,10 +2,10 @@ using UnityEngine;
 public class WeakPoint : MonoBehaviour
 {
     [Header("활성화")]
-    [SerializeField] private float requiredExposure = 3.0f;
+    [SerializeField] private float requiredExposure = 0.1f;
+    [SerializeField] private float uvLightRadius = 0.5f;
     [SerializeField] private Material highlightedMaterial;
     [SerializeField] private Renderer WeakPointRenderer;
-    [SerializeField] private float uvLightRadius = 0.5f;
 
     public BoxCollider weakcollider;
 
@@ -29,6 +29,16 @@ public class WeakPoint : MonoBehaviour
         {
             normalMaterial = WeakPointRenderer.material;
         }
+    }
+
+    private void OnEnable()
+    {
+        Flashlight2_KSM.OnUVLightToggled += HandleUVLightToggle;
+    }
+
+    private void OnDisable()
+    {
+        Flashlight2_KSM.OnUVLightToggled -= HandleUVLightToggle;
     }
 
     void Update()
@@ -73,8 +83,18 @@ public class WeakPoint : MonoBehaviour
         return false;
     }
 
+    private void HandleUVLightToggle(bool isUvOn)
+    {
+        if (isUvOn == false)
+        {
+            DeactivateWeakPoint();
+        }
+    }
+
     private void ActivateWeakPoint()
     {
+        if (isExposed) return;
+
         isExposed = true;
 
         if (WeakPointRenderer != null && highlightedMaterial != null)
@@ -85,5 +105,25 @@ public class WeakPoint : MonoBehaviour
         monsterController.NotifyWeakPointExposed();
 
         Debug.Log(gameObject.name + " 약점 활성화!");
+    }
+
+    private void DeactivateWeakPoint()
+    {
+        if (!isExposed || WeakPointRenderer == null) return;
+
+        isExposed = false;
+        currentExposureTimer = 0f;
+
+        if (normalMaterial != null)
+        {
+            WeakPointRenderer.material = normalMaterial;
+        }
+
+        if (monsterController != null)
+        {
+            monsterController.NotifyWeakPointHidden();
+        }
+
+        Debug.Log(gameObject.name + " 약점 비활성화됨.");
     }
 }

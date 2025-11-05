@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
+    public static event Action<Transform> OnPlayerFired;
+
     [Header("마우스 민감도")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;

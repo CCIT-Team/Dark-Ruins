@@ -8,12 +8,12 @@ public class MonsterController_KSM : CreatureController_KSM
     private bool isCurrentlyHighlighted = false;
 
     [Header("거리")]
-    public float patrolRadius = 7f;
-    public float chaseDistance = 10f;
-    public float attackDistance = 2f;
-    public float lostDistance = 15f;
-    public float proximityRadius = 5f;
-    public float viewAngle = 90f;
+    private float patrolRadius = 7f;
+    private float attackDistance = 2f;
+    private float lostDistance = 15f;
+    private float proximityRadius = 5f;
+    private float viewAngle = 90f;
+    private float hearingRadius = 20f;
 
     [Header("콜라이더")]
     public SphereCollider detectionCollider;
@@ -50,6 +50,8 @@ public class MonsterController_KSM : CreatureController_KSM
 
         patrolOrigin = transform.position;
         nmAgent.stoppingDistance = attackDistance;
+
+
 
         ChangeState(State.IDLE);
     }
@@ -110,6 +112,10 @@ public class MonsterController_KSM : CreatureController_KSM
     public void NotifyWeakPointExposed()
     {
         isCurrentlyHighlighted = true;
+    }
+    public void NotifyWeakPointHidden()
+    {
+        isCurrentlyHighlighted = false;
     }
 
     public override void OnDead()
@@ -239,14 +245,13 @@ public class MonsterController_KSM : CreatureController_KSM
 
     public IEnumerator ATTACK()
     {
+        //anim.SetTrigger("Attack");
         nmAgent.isStopped = true;
 
         if (target != null)
         {
             transform.LookAt(target.position);
         }
-
-        //anim.SetTrigger("Attack");
 
         yield return new WaitForSeconds(0.5f);
 
