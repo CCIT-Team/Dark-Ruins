@@ -6,67 +6,31 @@ namespace LYS_Work.Controller
 {
     public class RotatablePuzzleController : MonoBehaviour
     {
-
-        private Transform _savedParentObj;
-        private Quaternion _savedQuaternion;
-        private Quaternion _savedLocalQuaternion;
-        private Vector3 _savedPosition;
-        private Vector3 _savedLocalPosition;
-        private Vector3 _savedLocalScale;
-
-        private RotatablePuzzleController _token;
-        private RotatablePuzzleController _key;
+        private Vector3 _clickedPos;
+        private Vector3 _rotationStartPos;
+        private Vector3 _accumulatedRotation;
 
         void Awake()
         {
-            _token = _key = this;
+            _accumulatedRotation = transform.localEulerAngles;
         }
-
-        public bool DoPuzzle(Transform trackTarget, int scaleSize, ref RotatablePuzzleController outRefToken)
+        public void DoUpdate()
         {
-            
-            if (_token is null)
+            if (Input.GetMouseButton(0) == false)
             {
-                Debug.LogError("토큰 획득 실패로 인한 퍼즐 시작 실패");
-                return false;
+                _clickedPos = Input.mousePosition;
+                _rotationStartPos = _accumulatedRotation;
+                return;
             }
 
-            _savedParentObj = transform.parent;
-            _savedQuaternion = transform.rotation;
-            _savedLocalQuaternion = transform.localRotation;
-            _savedPosition = transform.position;
-            _savedLocalPosition = transform.localPosition;
-            _savedLocalScale = transform.localScale;
+            float dy = (Input.mousePosition.x - _clickedPos.x) / (_clickedPos.x + Screen.width)*-1;
+            float dx = (Input.mousePosition.y - _clickedPos.y) / (_clickedPos.y + Screen.height);
 
-            outRefToken = _token;
-            _token = null;
-            return true;
+            _accumulatedRotation.x = Mathf.LerpUnclamped(_rotationStartPos.x, _rotationStartPos.x + 360, dx);
+            _accumulatedRotation.y = Mathf.LerpUnclamped(_rotationStartPos.y, _rotationStartPos.y + 360, dy);
+            transform.localRotation = Quaternion.Euler(_accumulatedRotation);
         }
-
-        public bool EndPuzzle(RotatablePuzzleController token)
-        {
-            if (_token is not null && _key != token)
-            {
-                return false;
-            }
-
-            _token = token;
-
-            transform.SetParent(_savedParentObj);
-            if (_savedParentObj is null)
-            {
-                transform.SetPositionAndRotation(_savedPosition, _savedQuaternion);
-            }
-            else
-            {
-                transform.SetLocalPositionAndRotation(_savedLocalPosition, _savedLocalQuaternion);
-            }
-
-            transform.localScale = _savedLocalScale;
-            _savedParentObj = null;
-
-            return true;
-        }
+        
 
     }
 }
