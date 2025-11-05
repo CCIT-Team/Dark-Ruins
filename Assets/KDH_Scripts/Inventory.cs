@@ -119,6 +119,7 @@ public class Inventory :MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         if(_dragItem !=null)
         {
+            _dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
     }

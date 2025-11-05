@@ -4,8 +4,10 @@ using UnityEngine;
 
 public abstract class ItemBase : MonoBehaviour
 {
+    [SerializeField]
     private int _max;
     public int Max { get { return _max; } }
+    [SerializeField]
     protected int _count=0;
     public int Count { get { return _count; } }
     public int Length;
@@ -21,6 +23,16 @@ public abstract class ItemBase : MonoBehaviour
             Debug.Log("이거나타났움");
 #endif
         }
+    }
+    public virtual void SetData() //더 들고 올 데이터 있으면 여기서 override랑 base 쓰기
+    {
+        var data=DataLoader.FindByName(this.GetType().Name);
+        if (data==null)
+        {
+            return;
+        }
+        int.TryParse(data["MAX"],out _max);
+        int.TryParse(data["COUNT"],out _count);
     }
     public void GetItem(int value)
     {

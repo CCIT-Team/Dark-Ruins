@@ -4,34 +4,49 @@
     "Name": "Potion",
     "Type": "Consume",
     "Value": "50",
-    "Description": "체력을 50 회복합니다."
+    "Description": "체력을 50 회복합니다.",
+    "": "",
+    "MAX": "0",
+    "COUNT": "0"
   },
   {
     "ID": "2",
     "Name": "Elixir",
     "Type": "Consume",
     "Value": "150",
-    "Description": "마나를 150 회복합니다."
+    "Description": "마나를 150 회복합니다.",
+    "": "",
+    "MAX": "0",
+    "COUNT": "0"
   },
   {
     "ID": "3",
     "Name": "IronSword",
     "Type": "Weapon",
     "Value": "300",
-    "Description": "기본 근접 무기입니다."
+    "Description": "기본 근접 무기입니다.",
+    "": "",
+    "MAX": "0",
+    "COUNT": "0"
   },
   {
     "ID": "4",
     "Name": "FireWand",
     "Type": "Weapon",
     "Value": "500",
-    "Description": "화염 속성 마법 지팡이입니다."
+    "Description": "화염 속성 마법 지팡이입니다.",
+    "": "",
+    "MAX": "0",
+    "COUNT": "0"
   },
   {
     "ID": "5",
-    "Name": "LeatherArmor",
-    "Type": "Armor",
-    "Value": "250",
-    "Description": "가벼운 방어구입니다."
+    "Name": "BulletItem",
+    "Type": "BulletItem",
+    "Value": "0",
+    "Description": "가벼운 방어구입니다.",
+    "": "",
+    "MAX": "12",
+    "COUNT": "6"
   }
 ]
