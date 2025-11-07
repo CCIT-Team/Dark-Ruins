@@ -23,6 +23,7 @@ public class InputManager_KSM
         KeyCode.I,
         KeyCode.E,
         KeyCode.F,
+        KeyCode.R,
         KeyCode.Mouse0,
     };
     #endregion

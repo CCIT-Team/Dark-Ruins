@@ -19,6 +19,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
     private IWeapon_KSM currentWeapon;
     private IEquipment_KSM currentEquipment;
+    private FlashlightItem_KSM myFlashlight;
 
     private float mouseX;
     private float mouseY;
@@ -37,6 +38,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
         rb = GetComponent<Rigidbody>();
 
+        myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
         currentWeapon = GetComponentInChildren<IWeapon_KSM>();
         currentEquipment = GetComponentInChildren<IEquipment_KSM>();
     }
@@ -70,11 +72,18 @@ public class PlayerController_KSM : CreatureController_KSM
             Managers_KSM.Input.OnKeysPressed -= HandleKeysPressed;
         }
     }
+
+    #region PlayerInputKeys
     private void HandleKeysPressed(KeyCode key)
     {
         if (key == KeyCode.F)
         {
             UVflash();
+        }
+
+        if (key == KeyCode.Mouse0)
+        {
+            WeaponAttack();
         }
     }
 
@@ -99,12 +108,8 @@ public class PlayerController_KSM : CreatureController_KSM
         {
             targetVelocity = Vector3.zero;
         }
-
-        if (heldKeys.Contains(KeyCode.Mouse0))
-        {
-            WeaponAttack();
-        }
     }
+    #endregion
 
     private void FixedUpdate()
     {

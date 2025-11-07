@@ -27363,6 +27363,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   regularLight: {fileID: 269838866}
   uvLight: {fileID: 163750460}
+  currentBattery: 100
+  maxBattery: 100
+  regularLightDrain: 1
+  uvLightDrain: 5
+  batteryReloadAmount: 50
+  detectionRange: 15
+  weakPointLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  detectionRadius: 3
 --- !u!1001 &796479586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39666,10 +39676,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   requiredExposure: 0.1
-  uvLightRadius: 0.5
   highlightedMaterial: {fileID: 2100000, guid: 09738d778cac57b49b5e4fb18e6adf29, type: 2}
-  WeakPointRenderer: {fileID: 1325374324}
-  weakcollider: {fileID: 1325374325}
 --- !u!4 &1328719716 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: d9541a81ec52f7b4c9eb95856ec82d8d, type: 3}

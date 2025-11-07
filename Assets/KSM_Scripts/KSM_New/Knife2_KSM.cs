@@ -61,7 +61,7 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
             return;
         }
 
-        bool isWeakPoint = other.GetComponent<WeakPoint>() != null;
+        bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
         damageable.OnDamaged(damage, transform.root, isWeakPoint);
         hitTargetsList.Add(damageable);
