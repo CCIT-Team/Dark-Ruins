@@ -1707,7 +1707,7 @@ GameObject:
   - component: {fileID: 732573247}
   - component: {fileID: 732573246}
   - component: {fileID: 732573245}
-  - component: {fileID: 732573244}
+  - component: {fileID: 732573252}
   m_Layer: 0
   m_Name: SlimePBR
   m_TagString: Monster
@@ -1715,26 +1715,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &732573244
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732573243}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab75804bd0463794b9eb31df8135e17f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  weakPointRenderer: {fileID: 0}
-  highlightedMaterial: {fileID: 0}
-  detectionCollider: {fileID: 732573247}
-  obstacleMask:
-    serializedVersion: 2
-    m_Bits: 0
-  hitCollider: {fileID: 732573246}
-  weakPointCollider: {fileID: 0}
 --- !u!54 &732573245
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1877,6 +1857,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dropItem: {fileID: 2187647049532525568, guid: 86ada36f822e3e146909d706e990abab, type: 3}
+--- !u!114 &732573252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 732573243}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab75804bd0463794b9eb31df8135e17f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  weakPointRenderer: {fileID: 0}
+  highlightedMaterial: {fileID: 0}
+  detectionCollider: {fileID: 732573247}
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  hitCollider: {fileID: 732573247}
+  weakPointCollider: {fileID: 0}
 --- !u!1 &771277788
 GameObject:
   m_ObjectHideFlags: 0
@@ -2757,7 +2757,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  damage: 3
+  damage: 1000
   rate: 1
   knifeArea: {fileID: 1417507952}
   hitEffect:
