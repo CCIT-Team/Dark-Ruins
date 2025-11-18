@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BatteryItem_KSM : ItemBase
 {
-    private void Start()
+    private void Awake()
     {
         if (_count == 0)
         {
@@ -16,10 +16,27 @@ public class BatteryItem_KSM : ItemBase
 
     public override void ItemUse(List<KeyCode> keys = null)
     {
+
+    }
+
+    public void Consume()
+    {
         if (_count > 0)
         {
             _count--;
-            Debug.Log("배터리 사용, 남은 개수: " + _count);
+            Debug.Log($"배터리 아이템 소모. 남은 수량: {_count}");
+
+            if (_count <= 0)
+            {
+                Slot mySlot = GetComponentInParent<Slot>();
+
+                if (mySlot != null)
+                {
+                    mySlot.Clears();
+                }
+
+                Destroy(this.gameObject);
+            }
         }
     }
 }

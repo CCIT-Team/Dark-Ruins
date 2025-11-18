@@ -99,19 +99,24 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
 
     void DrainBattery()
     {
-        if (currentBattery <= 0)
-        {
-            currentBattery = 0;
-            if (uvLight.enabled)
-            {
-                TurnOffUV();
-            }
-            return;
-        }
-
         if (uvLight.enabled)
         {
             currentBattery -= uvLightDrain * Time.deltaTime;
+        }
+
+        if (currentBattery <= 0 && (uvLight.enabled || regularLight.enabled))
+        {
+            ReloadBattery();
+
+            if (currentBattery <= 0)
+            {
+                currentBattery = 0;
+
+                if (uvLight.enabled)
+                {
+                    TurnOffUV();
+                }
+            }
         }
     }
 
@@ -119,23 +124,35 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     {
         if (currentBattery >= maxBattery) return;
 
-        if (playerInventory == null) playerInventory = transform.root.GetComponent<Inventory>();
+        if (playerInventory == null)
+            playerInventory = transform.root.GetComponent<Inventory>();
+
         if (playerInventory == null) return;
 
         BatteryItem_KSM battery = playerInventory.CheckItem<BatteryItem_KSM>() as BatteryItem_KSM;
 
-        if (battery != null && battery.Count > 0)
+        if (battery != null)
         {
-            battery.ItemUse(null);
+            if (battery.Count > 0)
+            {
+                battery.Consume();
 
-            currentBattery += batteryReloadAmount;
-            if (currentBattery > maxBattery) currentBattery = maxBattery;
+                currentBattery += batteryReloadAmount;
+                if (currentBattery > maxBattery)
+                {
+                    currentBattery = maxBattery;
+                }
 
-            Debug.Log($"재장전 완료, 현재 배터리: {currentBattery}, 남은 배터리 수: {battery.Count}");
+                Debug.Log($"배터리 갈아끼기: {currentBattery}, 남은 배터리 수량: {battery.Count}");
+            }
+            else
+            {
+                Debug.LogWarning("승민씨의 병신같은 코드1");
+            }
         }
         else
         {
-            Debug.Log("인벤토리에 사용 가능한 배터리가 없음.");
+            Debug.Log("너 배터리가 없다고");
         }
     }
 
