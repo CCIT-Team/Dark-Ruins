@@ -10,7 +10,7 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
     public Type type;
     public int damage = 3;
 
-    [SerializeField] private float _rate = 4f;
+    [SerializeField] private float _rate = 1f;
     public float rate { get { return _rate; } }
 
     public BoxCollider knifeArea;
@@ -49,6 +49,11 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.isTrigger)
+        {
+            return;
+        }
+
         IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
 
         if (damageable == null || hitTargetsList.Contains(damageable))
@@ -56,7 +61,7 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
             return;
         }
 
-        bool isWeakPoint = other.GetComponent<WeakPoint>() != null;
+        bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
         damageable.OnDamaged(damage, transform.root, isWeakPoint);
         hitTargetsList.Add(damageable);

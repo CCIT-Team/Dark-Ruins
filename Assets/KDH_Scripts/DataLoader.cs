@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEditor;
 public static class DataLoader
 {
-    private static Dictionary<string, List<Dictionary<string, string>>> _dataCache
-        = new Dictionary<string, List<Dictionary<string, string>>>();
+    private static Dictionary<string, Dictionary<string, string>> _dataCache = new Dictionary<string, Dictionary<string, string>>();
+
     [InitializeOnLoadMethod]
     private static void Load()
     {
-        DataLoader.LoadAll();
+        LoadAll();
     }
 
     [MenuItem("Tools/SetData")]
@@ -20,42 +20,36 @@ public static class DataLoader
         string folderPath = "Assets/@JsonFiles";
 
         if (!Directory.Exists(folderPath))
-        {
             return;
-        }
 
         foreach (var file in Directory.GetFiles(folderPath, "*.json", SearchOption.AllDirectories))
         {
-            string fileName = Path.GetFileNameWithoutExtension(file);
             string jsonText = File.ReadAllText(file);
 
             try
             {
                 var list = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonText);
-                _dataCache[fileName] = list;
+                foreach (var entry in list)
+                {
+                    if (entry.TryGetValue("Name", out string name))
+                    {
+                        _dataCache[name] = entry;
+                    }
+                }
             }
             catch (System.Exception e)
             {
 #if UNITY_EDITOR
-                Debug.LogError($"{fileName} ÆÄ½Ì ½ÇÆÐ: {e.Message}");
+                Debug.LogError($"{file} ÆÄ½Ì ½ÇÆÐ: {e.Message}");
 #endif
             }
         }
     }
-
-    public static Dictionary<string, string> FindByName(string category, string name)
+    public static Dictionary<string, string> FindByName(string name) //DataLoader.FindByName(name) ÇÏ¸é °ª ³ª¿È
     {
-        if (!_dataCache.ContainsKey(category))
-        {
-            return null;
-        }
+        if (_dataCache.TryGetValue(name, out var value))
+            return value;
 
-        var list = _dataCache[category];
-        foreach (var entry in list)
-        {
-            if (entry.TryGetValue("Name", out string value) && value == name)
-                return entry;
-        }
         return null;
     }
 }

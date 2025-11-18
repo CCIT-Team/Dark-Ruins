@@ -1,6 +1,6 @@
-﻿ID,Name,Type,Value,Description
-1,Potion,Consume,50,체력을 50 회복합니다.
-2,Elixir,Consume,150,마나를 150 회복합니다.
-3,IronSword,Weapon,300,기본 근접 무기입니다.
-4,FireWand,Weapon,500,화염 속성 마법 지팡이입니다.
-5,LeatherArmor,Armor,250,가벼운 방어구입니다.
+﻿ID,Name,Type,Value,Description,,MAX,COUNT
+1,Potion,Consume,50,체력을 50 회복합니다.,,0,0
+2,Elixir,Consume,150,마나를 150 회복합니다.,,0,0
+3,IronSword,Weapon,300,기본 근접 무기입니다.,,0,0
+4,FireWand,Weapon,500,화염 속성 마법 지팡이입니다.,,0,0
+5,BulletItem,BulletItem,0,가벼운 방어구입니다.,,12,6

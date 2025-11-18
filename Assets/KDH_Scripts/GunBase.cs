@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GunBase : ItemBase
 {
+    [SerializeField]
     private int _loadedBullet = 0, _maxBullet=6;
     private float _fireCooltime = 0f;
     private float _fireCooltimeSet=0.5f;
@@ -40,24 +41,47 @@ public class GunBase : ItemBase
         {
             Zoom(false);
         }
-        if (keys.Contains(KeyCode.R))
+        //        if (keys.Contains(KeyCode.R))
+        //        {
+        //#if UNITY_EDITOR
+        //            Debug.Log("Ã¶ÄÀ2");
+        //#endif
+        //            if (_loadedBullet<_maxBullet)
+        //            {
+        //#if UNITY_EDITOR
+        //                Debug.Log("Ã¶ÄÀ3");
+        //#endif
+        //                Reload();
+        //            }
+        //        }
+
+        if (Input.GetKey(KeyCode.R))
         {
-            if(_loadedBullet<_maxBullet)
+#if UNITY_EDITOR
+            Debug.Log("Ã¶ÄÀ2");
+#endif
+            if (_loadedBullet < _maxBullet)
             {
+#if UNITY_EDITOR
+                Debug.Log("Ã¶ÄÀ3");
+#endif
                 Reload();
             }
         }
-
     }
     public void Fire()
     {
+        _loadedBullet--;
         _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//À§Ä¡±âÁØ ³ªÁß¿¡ ÇÏ°í È°¼ºÈ­³ª ±âÅ¸µîµî ºÎºÐ Àú±â¼­ Ãß°¡
     }
     public void Reload()
     {
-        BulletItem b=(BulletItem)GetComponent<Inventory>().CheckItem<BulletItem>();
+        BulletItem b= (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<BulletItem>();
         if ( b is null)
         {
+#if UNITY_EDITOR
+            Debug.Log("Ã¶ÄÀ4");
+#endif
             return;
         }
         else
@@ -66,11 +90,14 @@ public class GunBase : ItemBase
             {
                 if (b.Count > 0)
                 {
-                    b.ItemUse();
+                    b.Re();
                     _loadedBullet++;
                 }
                 else 
-                { 
+                {
+#if UNITY_EDITOR
+                    Debug.Log("Ã¶ÄÀ5");
+#endif
                     return;
                 }
             }
