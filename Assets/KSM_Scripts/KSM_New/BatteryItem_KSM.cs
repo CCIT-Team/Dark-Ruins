@@ -19,7 +19,7 @@ public class BatteryItem_KSM : ItemBase
         if (_count > 0)
         {
             _count--;
-            Debug.Log("배터리 하나 사용, 남은 개수: " + _count);
+            Debug.Log("배터리 사용, 남은 개수: " + _count);
         }
     }
 }

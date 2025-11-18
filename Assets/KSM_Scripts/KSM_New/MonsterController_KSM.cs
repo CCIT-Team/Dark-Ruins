@@ -13,7 +13,7 @@ public class MonsterController_KSM : CreatureController_KSM
     private float lostDistance = 15f;
     private float proximityRadius = 5f;
     private float viewAngle = 90f;
-    private float hearingRadius = 20f;
+    //private float hearingRadius = 20f;
 
     [Header("콜라이더")]
     public SphereCollider detectionCollider;
