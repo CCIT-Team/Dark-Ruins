@@ -1,13 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
-    [Header("∏∂øÏΩ∫ πŒ∞®µµ")]
+    //public static event Action<Transform> OnPlayerFired;
+
+    [Header("ÎßàÏö∞Ïä§ ÎØºÍ∞êÎèÑ")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
 
-    [Header("«√∑π¿ÃæÓ ¿Ãµø")]
+    [Header("Ïù¥Îèô ÏÜçÎèÑ")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
@@ -16,6 +19,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
     private IWeapon_KSM currentWeapon;
     private IEquipment_KSM currentEquipment;
+    private FlashlightItem_KSM myFlashlight;
 
     private float mouseX;
     private float mouseY;
@@ -34,6 +38,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
         rb = GetComponent<Rigidbody>();
 
+        myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
         currentWeapon = GetComponentInChildren<IWeapon_KSM>();
         currentEquipment = GetComponentInChildren<IEquipment_KSM>();
     }
@@ -67,11 +72,18 @@ public class PlayerController_KSM : CreatureController_KSM
             Managers_KSM.Input.OnKeysPressed -= HandleKeysPressed;
         }
     }
+
+    #region PlayerInputKeys
     private void HandleKeysPressed(KeyCode key)
     {
         if (key == KeyCode.F)
         {
             UVflash();
+        }
+
+        if (key == KeyCode.Mouse0)
+        {
+            WeaponAttack();
         }
     }
 
@@ -96,12 +108,8 @@ public class PlayerController_KSM : CreatureController_KSM
         {
             targetVelocity = Vector3.zero;
         }
-
-        if (heldKeys.Contains(KeyCode.Mouse0))
-        {
-            WeaponAttack();
-        }
     }
+    #endregion
 
     private void FixedUpdate()
     {
@@ -148,6 +156,6 @@ public class PlayerController_KSM : CreatureController_KSM
 
     public override void OnDead()
     {
-        Debug.Log("¿Ø¥Ÿ»Ò");
+        Debug.Log("Ïú†Îã§Ìù¨");
     }
 }

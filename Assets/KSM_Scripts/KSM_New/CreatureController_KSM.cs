@@ -4,7 +4,7 @@ using UnityEngine.AI;
 [RequireComponent(typeof(Animator))]
 public abstract class CreatureController_KSM : MonoBehaviour, IDamageable_KSM
 {
-    [Header("기본 능력치")]
+    [Header("泥대젰")]
     [SerializeField] protected int maxHealth = 100;
     public int currentHealth { get; protected set; }
     [SerializeField] protected int attackDamage = 10;
