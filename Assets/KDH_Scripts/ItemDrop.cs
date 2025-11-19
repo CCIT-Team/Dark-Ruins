@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ItemDrop : MonoBehaviour
 {
     [SerializeField]
     public GameObject _dropItem;
