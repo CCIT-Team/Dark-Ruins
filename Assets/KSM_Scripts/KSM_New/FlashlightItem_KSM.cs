@@ -18,7 +18,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     [Tooltip("UV 빛 초당 소모량")]
     [SerializeField] public float uvLightDrain = 5.0f;
     [Tooltip("배터리 아이템 1개당 재충전되는 양")]
-    [SerializeField] public float batteryReloadAmount = 50.0f;
+    [SerializeField] public float batteryReloadAmount = 100.0f;
 
     [Header("Detection Settings")]
     [Tooltip("UV 라이트 감지 거리")]

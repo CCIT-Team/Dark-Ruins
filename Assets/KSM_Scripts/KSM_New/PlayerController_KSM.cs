@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
-    //public static event Action<Transform> OnPlayerFired;
-
     [Header("마우스 민감도")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
@@ -21,8 +19,7 @@ public class PlayerController_KSM : CreatureController_KSM
     private IEquipment_KSM currentEquipment;
     private FlashlightItem_KSM myFlashlight;
 
-    private float mouseX;
-    private float mouseY;
+    private float mouseX, mouseY;
     private float fireDelay;
     private bool isFireReady = true;
 
@@ -30,8 +27,7 @@ public class PlayerController_KSM : CreatureController_KSM
     {
         base.Awake();
 
-        if (playerCamera == null)
-            playerCamera = GetComponentInChildren<Camera>();
+        if (playerCamera == null) playerCamera = GetComponentInChildren<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -39,8 +35,14 @@ public class PlayerController_KSM : CreatureController_KSM
         rb = GetComponent<Rigidbody>();
 
         myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
-        currentWeapon = GetComponentInChildren<IWeapon_KSM>();
         currentEquipment = GetComponentInChildren<IEquipment_KSM>();
+    }
+
+    public void ChangeWeapon(IWeapon_KSM newWeapon)
+    {
+        currentWeapon = newWeapon;
+        isFireReady = true;
+        fireDelay = 0;
     }
 
     void Update()
@@ -50,7 +52,6 @@ public class PlayerController_KSM : CreatureController_KSM
         if (!isFireReady)
         {
             fireDelay += Time.deltaTime;
-
             if (currentWeapon != null && currentWeapon.rate < fireDelay)
             {
                 isFireReady = true;
@@ -60,13 +61,16 @@ public class PlayerController_KSM : CreatureController_KSM
 
     void OnEnable()
     {
-        Managers_KSM.Input.OnKeysHeld += HandleKeysHeld;
-        Managers_KSM.Input.OnKeysPressed += HandleKeysPressed;
+        if (Managers_KSM.Input != null)
+        {
+            Managers_KSM.Input.OnKeysHeld += HandleKeysHeld;
+            Managers_KSM.Input.OnKeysPressed += HandleKeysPressed;
+        }
     }
 
     void OnDisable()
     {
-        if (Managers_KSM.Instance != null)
+        if (Managers_KSM.Instance != null && Managers_KSM.Input != null)
         {
             Managers_KSM.Input.OnKeysHeld -= HandleKeysHeld;
             Managers_KSM.Input.OnKeysPressed -= HandleKeysPressed;
@@ -76,29 +80,20 @@ public class PlayerController_KSM : CreatureController_KSM
     #region PlayerInputKeys
     private void HandleKeysPressed(KeyCode key)
     {
-        if (key == KeyCode.F)
-        {
-            UVflash();
-        }
-
-        if (key == KeyCode.Mouse0)
-        {
-            WeaponAttack();
-        }
+        if (key == KeyCode.F) UVflash();
+        if (key == KeyCode.Mouse0) WeaponAttack();
     }
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
-        float currentSpeed = moveSpeed;
-        if (heldKeys.Contains(KeyCode.LeftShift))
-        {
-            currentSpeed = runSpeed;
-        }
+        float currentSpeed = heldKeys.Contains(KeyCode.LeftShift) ? runSpeed : moveSpeed;
+
         Vector3 direction = Vector3.zero;
         if (heldKeys.Contains(KeyCode.W)) direction += Vector3.forward;
         if (heldKeys.Contains(KeyCode.S)) direction += Vector3.back;
         if (heldKeys.Contains(KeyCode.A)) direction += Vector3.left;
         if (heldKeys.Contains(KeyCode.D)) direction += Vector3.right;
+
         if (direction != Vector3.zero)
         {
             Vector3 worldDirection = transform.TransformDirection(direction.normalized);
@@ -119,30 +114,31 @@ public class PlayerController_KSM : CreatureController_KSM
     private void MouseLook()
     {
         if (playerCamera == null) return;
-
         mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
         mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
-
         mouseY = Mathf.Clamp(mouseY, -90f, 90f);
 
         transform.localEulerAngles = new Vector3(0, mouseX, 0);
-
         playerCamera.transform.localEulerAngles = new Vector3(-mouseY, 0, 0);
     }
+
     void UVflash()
     {
-        if (currentEquipment != null)
-        {
-            currentEquipment.Toggle();
-        }
+        if (currentEquipment != null) currentEquipment.Toggle();
     }
 
     void WeaponAttack()
     {
-        if (isFireReady && currentWeapon != null)
+        if (currentWeapon == null) return;
+
+        if (currentWeapon is MonoBehaviour weaponMono && !weaponMono.gameObject.activeInHierarchy)
+            return;
+
+        if (isFireReady)
         {
             currentWeapon.Use();
-            anim.SetTrigger("Attack");
+
+            if (anim != null) anim.SetTrigger("Attack");
 
             isFireReady = false;
             fireDelay = 0;

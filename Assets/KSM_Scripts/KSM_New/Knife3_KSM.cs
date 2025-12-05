@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
+public class Knife3_KSM : ItemBase, IWeapon_KSM
 {
-    public enum Type { Knife, Gun };
-    public Type type;
+    public enum Type { Knife };
+    public Type type = Type.Knife;
     public int damage = 3;
+    public bool isAttacking = false;
 
     [SerializeField] private float _rate = 1f;
     public float rate { get { return _rate; } }
@@ -17,49 +16,52 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
     public ParticleSystem[] hitEffect;
 
     private bool hasPlayedHitEffectThisSwing;
-
-    private List<IDamageable_KSM> hitTargetsList;
+    private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
     private void Awake()
     {
         hitTargetsList = new List<IDamageable_KSM>();
     }
 
+    public override void ItemUse(List<KeyCode> keys)
+    {
+        if (keys.Contains(KeyCode.Mouse0))
+        {
+            Use();
+        }
+    }
+
     public void Use()
     {
-        if (type == Type.Knife)
-        {
-            StopCoroutine("Swing");
-            StartCoroutine("Swing");
-        }
+        if (!gameObject.activeInHierarchy || isAttacking) return;
+
+        StartCoroutine(Swing());
     }
 
     IEnumerator Swing()
     {
-        yield return new WaitForSeconds(0.1f);
+        isAttacking = true;
         hitTargetsList.Clear();
         hasPlayedHitEffectThisSwing = false;
-        knifeArea.enabled = true;
+
+        yield return new WaitForSeconds(0.1f);
+
+        if (knifeArea != null) knifeArea.enabled = true;
 
         yield return new WaitForSeconds(0.3f);
-        knifeArea.enabled = false;
 
-        yield return new WaitForSeconds(0.3f);
+        if (knifeArea != null) knifeArea.enabled = false;
+
+        isAttacking = false;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.isTrigger)
-        {
-            return;
-        }
+        if (other.isTrigger) return;
 
         IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
 
-        if (damageable == null || hitTargetsList.Contains(damageable))
-        {
-            return;
-        }
+        if (damageable == null || hitTargetsList.Contains(damageable)) return;
 
         bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
@@ -76,12 +78,12 @@ public class Knife2_KSM : MonoBehaviour, IWeapon_KSM
 
     public void HitParticles(Vector3 position)
     {
+        if (hitEffect == null) return;
         foreach (ParticleSystem ps in hitEffect)
         {
             if (ps != null)
             {
                 ps.transform.position = position;
-
                 ps.Play();
             }
         }
