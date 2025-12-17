@@ -111,7 +111,7 @@ public class UISetScene : EditorWindow
             return;
         }
 
-        //uiScene = root.GetComponent<UIScene>();
+        uiScene = root.GetComponent<UIScene>();
         if (uiScene == null)
         {
             Debug.LogWarning("@UI_Root에 UIScene 컴포넌트가 없습니다.");

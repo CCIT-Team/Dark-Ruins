@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,13 +27,13 @@ public abstract class ItemBase : MonoBehaviour
     }
     public virtual void SetData() //더 들고 올 데이터 있으면 여기서 override랑 base 쓰기
     {
-        var data=DataLoader.FindByName(this.GetType().Name);
+        var data=DataLoader.Instance.FindByName(this.GetType().Name);
         if (data==null)
         {
             return;
         }
-        int.TryParse(data["MAX"],out _max);
-        int.TryParse(data["COUNT"],out _count);
+        _max= Convert.ToInt32(data["MAX"]);
+        _count = Convert.ToInt32(data["COUNT"]);
     }
     public void GetItem(int value)
     {

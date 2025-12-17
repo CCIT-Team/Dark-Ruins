@@ -3,9 +3,11 @@ using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEditor;
-public static class DataLoader
+public class DataLoader
 {
-    private static Dictionary<string, Dictionary<string, string>> _dataCache = new Dictionary<string, Dictionary<string, string>>();
+    private static DataLoader _instance=new();
+    public static DataLoader Instance => _instance;
+    private Dictionary<string, Dictionary<string, object>> _dataCache = new Dictionary<string, Dictionary<string, object>>();
 
     [InitializeOnLoadMethod]
     private static void Load()
@@ -16,7 +18,7 @@ public static class DataLoader
     [MenuItem("Tools/SetData")]
     public static void LoadAll()
     {
-        _dataCache.Clear();
+        _instance._dataCache.Clear();
         string folderPath = "Assets/@JsonFiles";
 
         if (!Directory.Exists(folderPath))
@@ -28,12 +30,12 @@ public static class DataLoader
 
             try
             {
-                var list = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(jsonText);
+                var list = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(jsonText);
                 foreach (var entry in list)
                 {
-                    if (entry.TryGetValue("Name", out string name))
+                    if (entry.TryGetValue("Name", out object name))
                     {
-                        _dataCache[name] = entry;
+                        _instance._dataCache[$"{name}"] = entry;
                     }
                 }
             }
@@ -45,11 +47,15 @@ public static class DataLoader
             }
         }
     }
-    public static Dictionary<string, string> FindByName(string name) //DataLoader.FindByName(name) ÇÏ¸é °ª ³ª¿È
+    public Dictionary<string, object> FindByName(string name) //DataLoader.FindByName(name) ÇÏ¸é °ª ³ª¿È
     {
-        if (_dataCache.TryGetValue(name, out var value))
+        if (_instance._dataCache.TryGetValue(name, out var value))
             return value;
 
         return null;
+    }
+    public void SetByName(string set,string name, object value)
+    {
+        _instance._dataCache[set][name] = value;
     }
 }
