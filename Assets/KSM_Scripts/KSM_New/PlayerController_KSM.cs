@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -22,6 +23,7 @@ public class PlayerController_KSM : CreatureController_KSM
     private float mouseX, mouseY;
     private float fireDelay;
     private bool isFireReady = true;
+    private bool isKnockedBack = false;
 
     protected override void Awake()
     {
@@ -108,7 +110,10 @@ public class PlayerController_KSM : CreatureController_KSM
 
     private void FixedUpdate()
     {
-        rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+        if (!isKnockedBack)
+        {
+            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+        }
     }
 
     private void MouseLook()
@@ -153,5 +158,20 @@ public class PlayerController_KSM : CreatureController_KSM
     public override void OnDead()
     {
         Debug.Log("유다희");
+    }
+
+    public void ApplyKnockback(Vector3 force, float duration)
+    {
+        StartCoroutine(KnockbackRoutine(force, duration));
+    }
+
+    IEnumerator KnockbackRoutine(Vector3 force, float duration)
+    {
+        isKnockedBack = true;
+        rb.AddForce(force, ForceMode.Impulse);
+
+        yield return new WaitForSeconds(duration);
+
+        isKnockedBack = false;
     }
 }

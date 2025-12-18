@@ -5,15 +5,15 @@ using UnityEngine.AI;
 
 public class MonsterController_KSM : CreatureController_KSM
 {
-    private bool isCurrentlyHighlighted = false;
+    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
+    public State currentState;
 
     [Header("거리")]
-    private float patrolRadius = 7f;
-    private float attackDistance = 2f;
-    private float lostDistance = 15f;
-    private float proximityRadius = 5f;
-    private float viewAngle = 90f;
-    //private float hearingRadius = 20f;
+    protected float patrolRadius = 7f;
+    protected float attackDistance = 2f;
+    protected float lostDistance = 15f;
+    protected float proximityRadius = 5f;
+    protected float viewAngle = 90f;
 
     [Header("콜라이더")]
     public SphereCollider detectionCollider;
@@ -24,12 +24,11 @@ public class MonsterController_KSM : CreatureController_KSM
     [Header("약점 뎀지배수")]
     [SerializeField] private float weakPointMultiplier = 2f;
 
-    private Rigidbody rb;
-    private Transform target;
-    private Vector3 patrolOrigin;
+    protected Rigidbody rb;
+    protected Transform target;
+    protected Vector3 patrolOrigin;
 
-    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE }
-    public State currentState;
+    private bool isCurrentlyHighlighted = false;
 
     protected override void Awake()
     {
@@ -98,11 +97,8 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (currentHealth > 0)
         {
-            if (target == null && attacker != null)
-            {
-                target = attacker;
-            }
-            if (currentState != State.CHASE && currentState != State.ATTACK)
+            if (target == null && attacker != null) target = attacker;
+            if (currentState != State.CHASE && currentState != State.ATTACK && currentState != State.CHARGE)
             {
                 ChangeState(State.CHASE);
             }
@@ -123,13 +119,12 @@ public class MonsterController_KSM : CreatureController_KSM
         ChangeState(State.DIE);
     }
 
-    private void ChangeState(State newState)
+    protected void ChangeState(State newState)
     {
         if (currentState == State.DIE) return;
 
         StopAllCoroutines();
         currentState = newState;
-
         StartCoroutine(currentState.ToString());
     }
 
@@ -173,17 +168,14 @@ public class MonsterController_KSM : CreatureController_KSM
         }
     }
 
-    public IEnumerator IDLE()
+    public virtual IEnumerator IDLE()
     {
-        //anim.SetTrigger("Idle");
         nmAgent.isStopped = true;
-
         yield return new WaitForSeconds(Random.Range(2f, 4f));
-
         ChangeState(State.PATROL);
     }
 
-    public IEnumerator PATROL()
+    public virtual IEnumerator PATROL()
     {
         //anim.SetTrigger("Patrol");
         nmAgent.isStopped = false;
@@ -210,9 +202,8 @@ public class MonsterController_KSM : CreatureController_KSM
         ChangeState(State.IDLE);
     }
 
-    public IEnumerator CHASE()
+    public virtual IEnumerator CHASE()
     {
-        //anim.SetTrigger("Chase");
         nmAgent.isStopped = false;
 
         while (target != null)
@@ -223,55 +214,33 @@ public class MonsterController_KSM : CreatureController_KSM
             if (distance <= attackDistance)
             {
                 ChangeState(State.ATTACK);
-
                 yield break;
             }
             else if (distance > lostDistance)
             {
                 target = null;
                 ChangeState(State.PATROL);
-
                 yield break;
             }
-
             yield return new WaitForSeconds(0.2f);
         }
 
-        if (target == null)
-        {
-            ChangeState(State.PATROL);
-        }
+        if (target == null) ChangeState(State.PATROL);
     }
 
-    public IEnumerator ATTACK()
+    public virtual IEnumerator ATTACK()
     {
-        //anim.SetTrigger("Attack");
         nmAgent.isStopped = true;
-
-        if (target != null)
-        {
-            transform.LookAt(target.position);
-        }
+        if (target != null) transform.LookAt(target.position);
 
         yield return new WaitForSeconds(0.5f);
 
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-
-            if (distance <= attackDistance)
-            {
-                ChangeState(State.ATTACK);
-            }
-            else if (distance <= lostDistance)
-            {
-                ChangeState(State.CHASE);
-            }
-            else
-            {
-                target = null;
-                ChangeState(State.PATROL);
-            }
+            if (distance <= attackDistance) ChangeState(State.ATTACK);
+            else if (distance <= lostDistance) ChangeState(State.CHASE);
+            else ChangeState(State.PATROL);
         }
         else
         {
@@ -279,17 +248,12 @@ public class MonsterController_KSM : CreatureController_KSM
         }
     }
 
-    public IEnumerator DIE()
+    public virtual IEnumerator DIE()
     {
         nmAgent.isStopped = true;
-
-        //anim.SetTrigger("Die");
-
         if (hitCollider != null) hitCollider.enabled = false;
         if (detectionCollider != null) detectionCollider.enabled = false;
-
         yield return new WaitForSeconds(4f);
-
         Destroy(gameObject);
     }
 }
