@@ -11,8 +11,6 @@ namespace LYS_Work
     {
         private Vector3 _targetPos;
         private Vector3 _startpos;
-        [SerializeField]
-        [Range(1,10)]
         private float _movTime=1f;
         void Awake()
         {
@@ -30,7 +28,10 @@ namespace LYS_Work
             {
                 yield return null;
                 _movTime -= 0.01f;
-                transform.position = Vector3.LerpUnclamped(_targetPos,_startpos,_movTime);
+                if(_movTime <= 1)
+                {
+                    transform.position = Vector3.LerpUnclamped(_targetPos,_startpos,_movTime);
+                }
             }
             gameObject.SetActive(false);
             
