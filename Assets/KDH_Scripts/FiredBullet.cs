@@ -32,12 +32,19 @@ public class FiredBullet : MonoBehaviour
         }
 
     }
-
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.gameObject.CompareTag("Monster"))
+        if (other.isTrigger==true)
         {
-            Destroy(collider.gameObject);
+            return;
+        }
+#if UNITY_EDITOR
+        Debug.Log(other.transform.name);
+#endif
+        if(other.TryGetComponent<IDamageable_KSM>(out IDamageable_KSM damageable)==true) //만약 여기서 널레퍼런스 띄우면 김대한에게 문의
+        {
+            damageable.OnDamaged(10, transform.root, other.TryGetComponent<WeakPoint_KSM>(out var _));
+
         }
         _isFire = false;
     }
