@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Utils;
 using UnityEngine.UI;
-public class UI_Setting : UIPopup
+public class UI_GameSetting : UIPopup
 {
     enum GameObjects
     {
@@ -14,7 +14,6 @@ public class UI_Setting : UIPopup
     enum Buttons
     {
         VolumeActive,
-        SettingClose
     }
     enum Texts
     {
@@ -30,12 +29,9 @@ public class UI_Setting : UIPopup
         BindText(typeof(Texts));
         GetObject((int)GameObjects.VolumeSize).gameObject.BindUIEvent(SetVolume,Utils.Defines.UIEventTypes.DRAG);
         GetButton((int)Buttons.VolumeActive).gameObject.BindUIEvent(OnOffVolume);
-        GetButton((int)Buttons.SettingClose).gameObject.BindUIEvent(GetComponentInParent<UI_TitleScene>().CloseSetting);
+        GetObject((int)GameObjects.VolumeSize).gameObject.SetActive((bool)DataLoader.Instance.FindByName("Player")["VolumeActive"]);
         bool b = (bool)DataLoader.Instance.FindByName("Player")["VolumeActive"];
-#if UNITY_EDITOR
-        Debug.Log($"{DataLoader.Instance.FindByName("Player")["VolumeSize"]}");
-#endif
-        GetObject((int)GameObjects.VolumeSize).gameObject.GetComponent<Slider>().value=float.Parse($"{DataLoader.Instance.FindByName("Player")["VolumeSize"]}");
+        GetObject((int)GameObjects.VolumeSize).gameObject.GetComponent<Slider>().value = float.Parse($"{DataLoader.Instance.FindByName("Player")["VolumeSize"]}");
         GetObject((int)GameObjects.VolumeSize).gameObject.SetActive(b);
         if (b == true)
         {
@@ -45,7 +41,6 @@ public class UI_Setting : UIPopup
         {
             GetButton((int)Buttons.VolumeActive).GetComponentInChildren<TextMeshProUGUI>().text = "Sound\nOFF";
         }
-        
         return true;
     }
     protected void SetVolume(PointerEventData _)
