@@ -46,7 +46,7 @@
     "Value": "0",
     "Description": "가벼운 방어구입니다.",
     "": "",
-    "MAX": "12",
-    "COUNT": "6"
+    "MAX": 12,
+    "COUNT": 6
   }
 ]
