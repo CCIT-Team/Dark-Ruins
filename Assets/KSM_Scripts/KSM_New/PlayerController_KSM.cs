@@ -13,6 +13,10 @@ public class PlayerController_KSM : CreatureController_KSM
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
+    [Header("상호작용 설정")]
+    [SerializeField] private float interactionDistance = 3.0f;
+    [SerializeField] private LayerMask interactionLayer;
+
     private Rigidbody rb;
     private Vector3 targetVelocity = Vector3.zero;
 
@@ -84,6 +88,7 @@ public class PlayerController_KSM : CreatureController_KSM
     {
         if (key == KeyCode.F) UVflash();
         if (key == KeyCode.Mouse0) WeaponAttack();
+        if (key == KeyCode.E) TryInteract();
     }
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
@@ -147,6 +152,23 @@ public class PlayerController_KSM : CreatureController_KSM
 
             isFireReady = false;
             fireDelay = 0;
+        }
+    }
+    void TryInteract()
+    {
+        if (playerCamera == null) return;
+
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactionDistance, interactionLayer))
+        {
+            CandleScript_KSM candle = hit.collider.GetComponentInParent<CandleScript_KSM>();
+            if (candle != null)
+            {
+                candle.Interact();
+                return;
+            }
         }
     }
 
