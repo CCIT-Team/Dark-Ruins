@@ -7,11 +7,14 @@ public class ChargerMonster_KSM : MonsterController_KSM
     [SerializeField] private float chargeDistance = 10f;
     [SerializeField] private float chargeSpeed = 20f;
     [SerializeField] private float chargePreparationTime = 1.0f;
-    [SerializeField] private float chargeCooldown = 7.0f; // 쿨타임 7초
+    [SerializeField] private float chargeCooldown = 7.0f;
 
     [Header("넉백 설정")]
     [SerializeField] private float knockbackForce = 15f;
     [SerializeField] private float knockbackDuration = 0.5f;
+
+    [Header("추적 설정")]
+    [SerializeField] private float customLostDistance = 20f;
 
     private float defaultSpeed;
     private float lastChargeTime;
@@ -22,9 +25,16 @@ public class ChargerMonster_KSM : MonsterController_KSM
         base.Start();
         defaultSpeed = nmAgent.speed;
         originalAngularSpeed = nmAgent.angularSpeed;
-
-        // 게임 시작 시 바로 돌진 가능하도록 초기화
         lastChargeTime = -chargeCooldown;
+
+        lostDistance = customLostDistance;
+
+        if (rb != null)
+        {
+            rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            rb.interpolation = RigidbodyInterpolation.Interpolate;
+            rb.freezeRotation = true;
+        }
     }
 
     public override IEnumerator CHASE()
@@ -46,7 +56,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
                 ChangeState(State.ATTACK);
                 yield break;
             }
-            // 쿨타임 체크 (Time.time이 마지막 돌진시간 + 7초보다 커야 함)
             else if (distance <= chargeDistance && Time.time >= lastChargeTime + chargeCooldown)
             {
                 if (HasLineOfSightToTarget())
@@ -55,6 +64,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
                     yield break;
                 }
             }
+
             else if (distance > lostDistance)
             {
                 keepChasingTimer += Time.deltaTime;
@@ -86,15 +96,10 @@ public class ChargerMonster_KSM : MonsterController_KSM
 
     public IEnumerator CHARGE()
     {
-        // [수정 1] 쿨타임 즉시 적용 (중복 실행 방지)
         lastChargeTime = Time.time;
-
-        // 1. 돌진 준비
         nmAgent.isStopped = true;
         nmAgent.velocity = Vector3.zero;
         nmAgent.updateRotation = false;
-
-        Debug.Log("돌진 준비...");
 
         float elapsed = 0f;
         while (elapsed < chargePreparationTime)
@@ -113,76 +118,95 @@ public class ChargerMonster_KSM : MonsterController_KSM
             yield return null;
         }
 
-        // 2. 돌진 시간 계산
-        Debug.Log("돌진!");
+        nmAgent.updatePosition = false;
+        nmAgent.updateRotation = false;
+        rb.isKinematic = false;
 
         float distToTarget = 5f;
         if (target != null) distToTarget = Vector3.Distance(transform.position, target.position);
+        float actualChargeDistance = Mathf.Min(distToTarget + 3.0f, chargeDistance);
+        float chargeDuration = Mathf.Max(actualChargeDistance / chargeSpeed, 0.5f);
 
-        // 플레이어 뒤 3m까지 지나가도록 계산
-        float actualChargeDistance = distToTarget + 3.0f;
-        actualChargeDistance = Mathf.Min(actualChargeDistance, chargeDistance);
-
-        // 시간 = 거리 / 속도
-        float chargeDuration = actualChargeDistance / chargeSpeed;
-        chargeDuration = Mathf.Max(chargeDuration, 0.5f);
-
-        // 3. 돌진 루프
         float timer = 0f;
         bool hasHit = false;
-        Vector3 dashDirection = transform.forward; // 방향 고정
+        Vector3 dashDirection = transform.forward;
 
         while (timer < chargeDuration)
         {
-            // [수정 2] Rigidbody 직접 이동 (위치 동기화 문제 해결)
-            // NavMeshAgent.Move 대신 Rigidbody를 밀어버립니다.
-            Vector3 nextPosition = rb.position + dashDirection * chargeSpeed * Time.fixedDeltaTime;
-            rb.MovePosition(nextPosition);
+            float step = chargeSpeed * Time.fixedDeltaTime;
 
-            // [중요] 실린더(Agent)가 몸체를 따라오도록 강제 동기화
-            nmAgent.nextPosition = rb.position;
-
-            // 벽 충돌 감지 (SphereCast)
-            if (Physics.SphereCast(transform.position + Vector3.up, 1.0f, dashDirection, out RaycastHit hit, 1.0f, obstacleMask))
+            RaycastHit hit;
+            if (rb.SweepTest(dashDirection, out hit, step + 0.5f))
             {
-                Debug.Log("벽 충돌! 돌진 중단");
-                break;
+                if (((1 << hit.collider.gameObject.layer) & obstacleMask) != 0)
+                {
+                    rb.MovePosition(hit.point - dashDirection * 1.0f);
+                    break;
+                }
             }
 
-            // 플레이어 충돌 감지
+            Vector3 nextPosition = rb.position + dashDirection * step;
+            rb.MovePosition(nextPosition);
+            nmAgent.nextPosition = rb.position;
+
             if (!hasHit && target != null)
             {
-                float distToPlayer = Vector3.Distance(transform.position, target.position);
-                if (distToPlayer < 2.0f)
+                if (Vector3.Distance(transform.position, target.position) < 2.0f)
                 {
-                    Debug.Log("돌진 공격 적중!");
-
                     IDamageable_KSM damageable = target.GetComponent<IDamageable_KSM>();
                     if (damageable != null) damageable.OnDamaged(attackDamage, transform, false);
 
                     PlayerController_KSM player = target.GetComponent<PlayerController_KSM>();
                     if (player != null)
                     {
-                        Vector3 knockDir = dashDirection;
-                        knockDir.y = 0.5f;
+                        Vector3 knockDir = dashDirection; knockDir.y = 0.5f;
                         player.ApplyKnockback(knockDir * knockbackForce, knockbackDuration);
                     }
                     hasHit = true;
                 }
             }
 
-            timer += Time.fixedDeltaTime; // Rigidbody 이동이므로 fixedDeltaTime 사용 권장
-            yield return new WaitForFixedUpdate(); // 물리 이동과 싱크를 맞춤
+            timer += Time.fixedDeltaTime;
+            yield return new WaitForFixedUpdate();
         }
 
-        // 4. 돌진 종료 및 정리
-        nmAgent.velocity = Vector3.zero;
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
+
+        nmAgent.nextPosition = rb.position;
+        nmAgent.updatePosition = true;
         nmAgent.updateRotation = true;
         nmAgent.angularSpeed = originalAngularSpeed;
 
-        // 후딜레이
         yield return new WaitForSeconds(1.0f);
 
-        ChangeState(State.CHASE);
+        if (target != null)
+        {
+            float currentDist = Vector3.Distance(transform.position, target.position);
+
+            if (currentDist > lostDistance)
+            {
+                Debug.Log("돌진 후 타겟 놓침 -> 순찰 복귀");
+                target = null;
+                ChangeState(State.PATROL);
+            }
+            else
+            {
+                ChangeState(State.CHASE);
+            }
+        }
+        else
+        {
+            ChangeState(State.PATROL);
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (Application.isPlaying && currentState == State.CHARGE)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(transform.position + Vector3.up, transform.forward * 3.0f);
+        }
     }
 }
