@@ -5408,6 +5408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  currentState: 0
   detectionCollider: {fileID: 223816170}
   obstacleMask:
     serializedVersion: 2
@@ -5415,7 +5416,6 @@ MonoBehaviour:
   weakPointCollider: {fileID: 223816170}
   hitCollider: {fileID: 223816169}
   weakPointMultiplier: 2
-  currentState: 0
 --- !u!54 &223816168
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15162,6 +15162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  currentState: 0
   detectionCollider: {fileID: 469016273}
   obstacleMask:
     serializedVersion: 2
@@ -15169,7 +15170,6 @@ MonoBehaviour:
   weakPointCollider: {fileID: 469016273}
   hitCollider: {fileID: 469016272}
   weakPointMultiplier: 2
-  currentState: 0
 --- !u!54 &469016271
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -17844,6 +17844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  currentState: 0
   detectionCollider: {fileID: 589324032}
   obstacleMask:
     serializedVersion: 2
@@ -17851,7 +17852,6 @@ MonoBehaviour:
   weakPointCollider: {fileID: 589324032}
   hitCollider: {fileID: 589324031}
   weakPointMultiplier: 2
-  currentState: 0
 --- !u!54 &589324030
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19313,6 +19313,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1186341244}
+  - {fileID: 1115258912}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -35923,6 +35924,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  currentState: 0
   detectionCollider: {fileID: 1069958791}
   obstacleMask:
     serializedVersion: 2
@@ -35930,7 +35932,6 @@ MonoBehaviour:
   weakPointCollider: {fileID: 1069958791}
   hitCollider: {fileID: 1069958790}
   weakPointMultiplier: 2
-  currentState: 0
 --- !u!54 &1069958789
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -37064,6 +37065,81 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 75d4ede8f2477ec40bda53b3b6b0b41b, type: 3}
+--- !u!1 &1115258911
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1115258912}
+  - component: {fileID: 1115258914}
+  - component: {fileID: 1115258913}
+  m_Layer: 5
+  m_Name: CH
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1115258912
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115258911}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 633676036}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 30, y: 30}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1115258913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115258911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ea9b75e1806507548ac1f55fc7e873c9, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1115258914
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1115258911}
+  m_CullTransparentMesh: 1
 --- !u!1 &1117944750
 GameObject:
   m_ObjectHideFlags: 0
@@ -49687,6 +49763,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  currentState: 0
   detectionCollider: {fileID: 1628255521}
   obstacleMask:
     serializedVersion: 2
@@ -49694,7 +49771,6 @@ MonoBehaviour:
   weakPointCollider: {fileID: 1628255521}
   hitCollider: {fileID: 1628255520}
   weakPointMultiplier: 2
-  currentState: 0
 --- !u!54 &1628255519
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -60006,8 +60082,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc78904b78776b142a2d89cd41147134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _max: 0
+  _count: 0
+  Length: 0
+  _dropped: 0
   type: 0
   damage: 3
+  isAttacking: 0
   _rate: 1
   knifeArea: {fileID: 2018920986}
   hitEffect:
