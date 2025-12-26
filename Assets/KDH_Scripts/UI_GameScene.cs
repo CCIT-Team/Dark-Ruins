@@ -68,6 +68,7 @@ public class UI_GameScene : UIScene
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
             GameObject.Find("Player").GetComponent<PlayerController_KSM>().enabled = false;
+            GameObject.Find("Player").GetComponentInChildren<Inventory>().UnSub();
         }
         else
         {
@@ -77,6 +78,7 @@ public class UI_GameScene : UIScene
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
             GameObject.Find("Player").GetComponent<PlayerController_KSM>().enabled = true;
+            GameObject.Find("Player").GetComponentInChildren<Inventory>().Sub();
         }
     }
     #endregion
