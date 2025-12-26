@@ -8,20 +8,20 @@ public class MonsterController_KSM : CreatureController_KSM
     public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
     public State currentState;
 
-    [Header("거리")]
+    [Header("거리 설정")]
     protected float patrolRadius = 7f;
-    protected float attackDistance = 2f;
-    protected float lostDistance = 15f;
+    protected float attackDistance = 3f;
+    protected float lostDistance = 20f;
     protected float proximityRadius = 5f;
     protected float viewAngle = 90f;
 
-    [Header("콜라이더")]
+    [Header("콜라이더 및 레이어")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
     public Collider weakPointCollider;
     public Collider hitCollider;
 
-    [Header("약점 뎀지배수")]
+    [Header("약점 데미지 배수")]
     [SerializeField] private float weakPointMultiplier = 2f;
 
     protected Rigidbody rb;
@@ -38,36 +38,24 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (nmAgent != null)
         {
-            nmAgent.updatePosition = false;
+            nmAgent.updatePosition = true;
             nmAgent.updateRotation = true;
+        }
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
         }
     }
 
     protected override void Start()
     {
         base.Start();
-
         patrolOrigin = transform.position;
-        nmAgent.stoppingDistance = attackDistance;
 
-
+        if (nmAgent != null) nmAgent.stoppingDistance = attackDistance;
 
         ChangeState(State.IDLE);
-    }
-
-    private void FixedUpdate()
-    {
-        if (nmAgent == null || rb == null || currentState == State.DIE)
-        {
-            return;
-        }
-
-        Vector3 desiredVelocity = nmAgent.velocity;
-
-        if (!nmAgent.isStopped)
-        {
-            rb.MovePosition(rb.position + desiredVelocity * Time.fixedDeltaTime);
-        }
     }
 
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
@@ -81,16 +69,16 @@ public class MonsterController_KSM : CreatureController_KSM
             if (isCurrentlyHighlighted)
             {
                 finalDamage = (int)(damage * weakPointMultiplier);
-                Debug.Log("UV활성화 약공" + finalDamage);
+                Debug.Log("약점 타격! (치명타)");
             }
             else
             {
-                Debug.Log("UV비활성화 약공" + finalDamage);
+                Debug.Log("약점 타격 (UV 비활성)");
             }
         }
         else
         {
-            Debug.Log("일반 뎀지" + finalDamage);
+            Debug.Log("일반 타격");
         }
 
         base.OnDamaged(finalDamage, attacker, isWeakPoint);
@@ -98,6 +86,7 @@ public class MonsterController_KSM : CreatureController_KSM
         if (currentHealth > 0)
         {
             if (target == null && attacker != null) target = attacker;
+
             if (currentState != State.CHASE && currentState != State.ATTACK && currentState != State.CHARGE)
             {
                 ChangeState(State.CHASE);
@@ -105,14 +94,8 @@ public class MonsterController_KSM : CreatureController_KSM
         }
     }
 
-    public void NotifyWeakPointExposed()
-    {
-        isCurrentlyHighlighted = true;
-    }
-    public void NotifyWeakPointHidden()
-    {
-        isCurrentlyHighlighted = false;
-    }
+    public void NotifyWeakPointExposed() { isCurrentlyHighlighted = true; }
+    public void NotifyWeakPointHidden() { isCurrentlyHighlighted = false; }
 
     public override void OnDead()
     {
@@ -130,10 +113,7 @@ public class MonsterController_KSM : CreatureController_KSM
 
     private void OnTriggerStay(Collider other)
     {
-        if (!other.CompareTag("Player") || target != null || currentState == State.DIE)
-        {
-            return;
-        }
+        if (!other.CompareTag("Player") || target != null || currentState == State.DIE) return;
 
         float distance = Vector3.Distance(transform.position, other.transform.position);
 
@@ -141,49 +121,38 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             target = other.transform;
             ChangeState(State.CHASE);
-            Debug.Log("주변 탐지");
+            Debug.Log("근접 감지");
             return;
         }
 
-        Vector3 selfPos = transform.position;
-        Vector3 playerPos = other.transform.position;
-        selfPos.y = 0;
-        playerPos.y = 0;
-
-        Vector3 directionToPlayer = (playerPos - selfPos).normalized;
-
-        float angle = Vector3.Angle(transform.forward, directionToPlayer);
+        Vector3 direction = (other.transform.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, direction);
 
         if (angle < viewAngle / 2f)
         {
-            Vector3 rayStartPoint = transform.position + Vector3.up * 1f;
-            Vector3 directionToPlayerWithHeight = (other.transform.position - rayStartPoint).normalized;
-
-            if (!Physics.Raycast(rayStartPoint, directionToPlayerWithHeight, distance, obstacleMask))
+            if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
             {
                 target = other.transform;
                 ChangeState(State.CHASE);
-                Debug.Log("시야각 탐지");
+                Debug.Log("시야 감지");
             }
         }
     }
 
     public virtual IEnumerator IDLE()
     {
-        nmAgent.isStopped = true;
+        if (nmAgent) nmAgent.isStopped = true;
         yield return new WaitForSeconds(Random.Range(2f, 4f));
         ChangeState(State.PATROL);
     }
 
     public virtual IEnumerator PATROL()
     {
-        //anim.SetTrigger("Patrol");
-        nmAgent.isStopped = false;
+        if (nmAgent) nmAgent.isStopped = false;
 
-        Vector3 randomPos = Random.insideUnitSphere * patrolRadius;
-        randomPos += patrolOrigin;
-
+        Vector3 randomPos = Random.insideUnitSphere * patrolRadius + patrolOrigin;
         NavMeshHit hit;
+
         if (NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1))
         {
             nmAgent.SetDestination(hit.position);
@@ -194,17 +163,16 @@ public class MonsterController_KSM : CreatureController_KSM
             yield break;
         }
 
-        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance && !nmAgent.isPathStale))
+        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance))
         {
             yield return null;
         }
-
         ChangeState(State.IDLE);
     }
 
     public virtual IEnumerator CHASE()
     {
-        nmAgent.isStopped = false;
+        if (nmAgent) nmAgent.isStopped = false;
 
         while (target != null)
         {
@@ -230,7 +198,7 @@ public class MonsterController_KSM : CreatureController_KSM
 
     public virtual IEnumerator ATTACK()
     {
-        nmAgent.isStopped = true;
+        if (nmAgent) nmAgent.isStopped = true;
         if (target != null) transform.LookAt(target.position);
 
         yield return new WaitForSeconds(0.5f);
@@ -250,9 +218,10 @@ public class MonsterController_KSM : CreatureController_KSM
 
     public virtual IEnumerator DIE()
     {
-        nmAgent.isStopped = true;
+        if (nmAgent) nmAgent.isStopped = true;
         if (hitCollider != null) hitCollider.enabled = false;
         if (detectionCollider != null) detectionCollider.enabled = false;
+
         yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }
