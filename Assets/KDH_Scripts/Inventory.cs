@@ -20,7 +20,6 @@ public class Inventory :MonoBehaviour
     //{
     //    Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
     //}
-#if UNITY_EDITOR
     private void BindSlots()
     {
 
@@ -31,9 +30,9 @@ public class Inventory :MonoBehaviour
             InventorySlot[n].SetIndex(n);
         }
     }
-#endif
-    private void Awake()
+    private void Start()
     {
+        Managers_KSM.Input.OnKeysHeld -= OnKeyPressed;
         Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
         _inventoryView = GameObject.Find("InventoryView").transform;
         cam = GetComponentInChildren<Camera>();
@@ -49,6 +48,15 @@ public class Inventory :MonoBehaviour
         {
             _dragCooltime -= Time.fixedDeltaTime;
         }
+    }
+    public void Sub()
+    {
+        Managers_KSM.Input.OnKeysHeld -= OnKeyPressed;
+        Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
+    }
+    public void UnSub()
+    {
+        Managers_KSM.Input.OnKeysHeld -= OnKeyPressed;
     }
     public void OnKeyPressed(List<KeyCode> keys)
     {
