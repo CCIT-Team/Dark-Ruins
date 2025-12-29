@@ -19,7 +19,7 @@ public class MonsterController_KSM : CreatureController_KSM
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
     public List<Collider> hitColliders = new List<Collider>();
-    public Collider weakPointCollider;
+    public List<Collider> weakPointColliders = new List<Collider>();
 
     [Header("약점 데미지 배수")]
     [SerializeField] private float weakPointMultiplier = 2f;
@@ -228,12 +228,14 @@ public class MonsterController_KSM : CreatureController_KSM
             if (col != null) col.enabled = false;
         }
 
+        foreach (Collider col in weakPointColliders)
+        {
+            if (col != null) col.enabled = false;
+        }
+
         if (detectionCollider != null) detectionCollider.enabled = false;
-        if (weakPointCollider != null) weakPointCollider.enabled = false;
 
         yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }
-
-
 }
