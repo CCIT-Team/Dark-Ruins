@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: baaf316ecee2b4014935b3c5dc73a224
+timeCreated: 1475476189
+licenseType: Store
+ShaderImporter:
+  defaultTextures:
+  - _MainTex: {fileID: -844141329, guid: da4e8740f3d854d2fab46b274a661009, type: 3}
+  - _MetalRough: {fileID: 2800000, guid: d3aa581d66cab4583b960924a12b1ec2, type: 3}
+  - _NormalMap: {fileID: 2800000, guid: 8ddbec599fd684be19076e0167174e4a, type: 3}
+  - _AlbedoOpacity2: {fileID: -794224431, guid: 3d9749d2e5b3d48bcbec5e7b43d4ef2c,
+      type: 3}
+  - _NormalMap2: {fileID: 2800000, guid: 8ddbec599fd684be19076e0167174e4a, type: 3}
+  - _Height1: {fileID: 2800000, guid: 2fc9bfe273bba44c19a746a756587980, type: 3}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
