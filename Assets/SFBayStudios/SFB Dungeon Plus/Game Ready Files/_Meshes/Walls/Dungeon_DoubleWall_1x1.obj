@@ -1,0 +1,41 @@
+#Dungeon_DoubleWall_1x1.obj
+#Saturday, 13 May 2017
+#21:26:31
+#-------
+
+#Dungeon_DoubleWall_1x1
+#-------
+g Dungeon_DoubleWall_1x1
+v 0.1 -0.1 0.05000001
+v -0.1 0.1 0.05000001
+v -0.1 -0.1 0.05000001
+v 0.1 0.1 0.05000001
+v -0.1 -0.1 -0.04999999
+v 0.1 0.1 -0.04999999
+v 0.1 -0.1 -0.04999999
+v -0.1 0.1 -0.04999999
+
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 -1
+vn 0 0 -1
+vn 0 0 -1
+vn 0 0 -1
+
+vt 0 0
+vt 0.2 0.2
+vt 0.2 0
+vt 0 0.2
+vt 0 0
+vt 0.2 0.2
+vt 0.2 0
+vt 0 0.2
+
+usemtl Default_PrototypeMat
+usemap Default_PrototypeMat
+f 1/1/1 2/2/2 3/3/3
+f 4/4/4 2/2/2 1/1/1
+f 5/5/5 6/6/6 7/7/7
+f 8/8/8 6/6/6 5/5/5
