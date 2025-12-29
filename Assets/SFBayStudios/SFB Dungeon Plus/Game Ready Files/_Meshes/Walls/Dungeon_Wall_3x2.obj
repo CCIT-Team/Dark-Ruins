@@ -1,0 +1,27 @@
+#Dungeon_Wall_3x2.obj
+#Saturday, 13 May 2017
+#21:27:12
+#-------
+
+#Dungeon_Wall_3x2
+#-------
+g Dungeon_Wall_3x2
+v 1.5 0 0
+v -1.5 2 0
+v -1.5 0 0
+v 1.5 2 0
+
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+
+vt 1.192093E-07 5.960464E-08
+vt 0.6 0.4000001
+vt 0.6 5.960464E-08
+vt 1.192093E-07 0.4000001
+
+usemtl Default_PrototypeMat
+usemap Default_PrototypeMat
+f 1/1/1 2/2/2 3/3/3
+f 4/4/4 2/2/2 1/1/1
