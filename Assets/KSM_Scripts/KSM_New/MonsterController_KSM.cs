@@ -18,8 +18,8 @@ public class MonsterController_KSM : CreatureController_KSM
     [Header("콜라이더 및 레이어")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
+    public List<Collider> hitColliders = new List<Collider>();
     public Collider weakPointCollider;
-    public Collider hitCollider;
 
     [Header("약점 데미지 배수")]
     [SerializeField] private float weakPointMultiplier = 2f;
@@ -99,6 +99,10 @@ public class MonsterController_KSM : CreatureController_KSM
 
     public override void OnDead()
     {
+        if (TryGetComponent<ItemDrop>(out ItemDrop ID) == true)
+        {
+            //ID.DeathDrop();
+        }
         ChangeState(State.DIE);
     }
 
@@ -219,10 +223,17 @@ public class MonsterController_KSM : CreatureController_KSM
     public virtual IEnumerator DIE()
     {
         if (nmAgent) nmAgent.isStopped = true;
-        if (hitCollider != null) hitCollider.enabled = false;
+        foreach (Collider col in hitColliders)
+        {
+            if (col != null) col.enabled = false;
+        }
+
         if (detectionCollider != null) detectionCollider.enabled = false;
+        if (weakPointCollider != null) weakPointCollider.enabled = false;
 
         yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }
+
+
 }
