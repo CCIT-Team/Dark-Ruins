@@ -1,52 +1,42 @@
 [
   {
     "ID": "1",
-    "Name": "Potion",
-    "Type": "Consume",
-    "Value": "50",
-    "Description": "체력을 50 회복합니다.",
-    "": "",
-    "MAX": "0",
-    "COUNT": "0"
+    "Name": "FlashlightItem_KSM",
+    "Value": "",
+    "Description": "유적 탐사에 필요한 손전등이다.",
+    "MAX": "1",
+    "COUNT": "1"
   },
   {
     "ID": "2",
-    "Name": "Elixir",
-    "Type": "Consume",
-    "Value": "150",
-    "Description": "마나를 150 회복합니다.",
-    "": "",
-    "MAX": "0",
-    "COUNT": "0"
+    "Name": "FirstAidKit",
+    "Value": "",
+    "Description": "생명을 책임지는 구급상자다.",
+    "MAX": "1",
+    "COUNT": "1"
   },
   {
     "ID": "3",
-    "Name": "IronSword",
-    "Type": "Weapon",
-    "Value": "300",
-    "Description": "기본 근접 무기입니다.",
-    "": "",
-    "MAX": "0",
-    "COUNT": "0"
+    "Name": "BatteryItem_KSM",
+    "Value": "",
+    "Description": "UV라이트를 사용할 수 있게 해주는 특수한 배터리이다.",
+    "MAX": "1",
+    "COUNT": "1"
   },
   {
     "ID": "4",
-    "Name": "FireWand",
-    "Type": "Weapon",
-    "Value": "500",
-    "Description": "화염 속성 마법 지팡이입니다.",
-    "": "",
-    "MAX": "0",
-    "COUNT": "0"
+    "Name": "GlockAmmo",
+    "Value": "8",
+    "Description": "권총의 탄약이다.",
+    "MAX": "32",
+    "COUNT": "32"
   },
   {
     "ID": "5",
-    "Name": "BulletItem",
-    "Type": "BulletItem",
-    "Value": "0",
-    "Description": "가벼운 방어구입니다.",
-    "": "",
-    "MAX": 12,
-    "COUNT": 6
+    "Name": "RifleAmmo",
+    "Value": "6",
+    "Description": "소총의 탄환이다.",
+    "MAX": "48",
+    "COUNT": "48"
   }
 ]

@@ -1,21 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GunBase : ItemBase
+public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
-    private int _loadedBullet = 0, _maxBullet=6;
-    private float _fireCooltime = 0f;
-    private float _fireCooltimeSet=0.5f;
-    private bool _zoomOuted = true;
+    protected int _loadedBullet=0, _maxBullet=8;
+    protected float _fireCooltime = 0f;
+    protected float _fireCooltimeSet=0.5f;
+    protected bool _zoomOuted = true;
+    
+    protected float _fireLength;
     protected BulletsPool _bulletsPool;
-    [SerializeField]
-    private readonly Vector3 _up = new Vector3(0, 1.0f, 0);
-    private void Awake()
+
+    protected BulletsPool.Bullets _bullet;
+
+    protected Vector3 _up = new Vector3(0, 0, 0);
+    protected Vector3 _f=new Vector3(0, 0,0);
+
+    public float rate { get =>_fireCooltimeSet; }
+    public void Use()
     {
+        ItemUse(default(List<KeyCode>));
+    }
+    protected override void Awake()
+    {
+        base.Awake();
         Length = 2; //나중에 기획 나오면 적용하면 됨 ㅇㅇ
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
+        _bullet = (BulletsPool.Bullets)Enum.Parse(typeof(BulletsPool.Bullets), this.GetType().Name);
+#if UNITY_EDITOR
+        Debug.Log(this.GetType().Name);
+#endif
         //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }
     public void FixedUpdate()
@@ -33,6 +50,13 @@ public class GunBase : ItemBase
             _fireCooltime = _fireCooltimeSet;
             Fire();
         }
+#if UNITY_EDITOR
+        if(_fireCooltime<=0.0f&&Input.GetKey(KeyCode.Mouse1))
+        {
+            _fireCooltime = _fireCooltimeSet;
+            Fire();
+        }
+#endif
         if (keys.Contains(KeyCode.Mouse1))
         {
             Zoom(true);
@@ -71,13 +95,26 @@ public class GunBase : ItemBase
     }
     public void Fire()
     {
+#if UNITY_EDITOR
+        Debug.Log("발사");
+#endif
         _loadedBullet--;
-        _bulletsPool.Summon().GetComponent<FiredBullet>().FireSet(this.gameObject.transform.position+this.gameObject.transform.forward*1.5f,this.gameObject.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(this.gameObject.transform.parent.position+this.gameObject.transform.parent.forward*_fireLength, transform.parent.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
     }
     public void Reload()
     {
-        BulletItem b= (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<BulletItem>();
-        if ( b is null)
+        BulletItem b=default(BulletItem);
+        switch ((int)_bullet)
+        {
+            case 0:
+                b = (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<GlockAmmo>();
+                break;
+            case 1:
+                b = (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<RifleAmmo>();
+                break;
+        }
+        
+        if (b is default(BulletItem))
         {
 #if UNITY_EDITOR
             Debug.Log("철컥4");
@@ -104,6 +141,7 @@ public class GunBase : ItemBase
         }
         //인벤토리에서 총알 소모도 추가
     }
+    public int GetAmmos { get => _loadedBullet; }
     public void Zoom(bool b)
     {
 

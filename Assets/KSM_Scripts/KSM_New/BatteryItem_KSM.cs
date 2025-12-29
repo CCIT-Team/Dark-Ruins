@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class BatteryItem_KSM : ItemBase
 {
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (_count == 0)
         {
             _count = 1;

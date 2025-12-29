@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class ItemBase : MonoBehaviour
 {
@@ -13,7 +15,21 @@ public abstract class ItemBase : MonoBehaviour
     public int Count { get { return _count; } }
     public int Length;
     public bool _dropped = false;
-    
+    public Outline Outline;
+
+    protected virtual void Awake()
+    {
+        Outline = GetComponent<Outline>();
+
+        if (Outline == null)
+        {
+            Outline = gameObject.AddComponent<Outline>();
+            Outline.OutlineMode = Outline.Mode.OutlineAll;
+            Outline.OutlineColor = new Color(1.5f, 0.2f, 1.5f, 1.0f);
+            Outline.OutlineWidth = 4f;
+        }
+        Outline.enabled = false;
+    }
     public void Drop()
     {
         if(_dropped==true)
@@ -64,17 +80,19 @@ public abstract class ItemBase : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
-    private void OnTriggerEnter(Collider collider)
+    public void OnFocused()
     {
-        if (collider.CompareTag("Player"))
-        {
-            //int value = collider.GetComponent<Inventory>().TryItemGet(this);
-            //if(value<0)
-            //{
-            //    return;
-            //}
+#if UNITY_EDITOR
+        Debug.Log($"{name} 레이로 선택됨");
+#endif
+        Outline.enabled = true;
+    }
+    public void OutFocused()
+    {
+        Outline.enabled = false;
+    }
+    public virtual void Init()
+    {
 
-
-        }
     }
 }

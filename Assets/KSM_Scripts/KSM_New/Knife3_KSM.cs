@@ -18,8 +18,9 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     private bool hasPlayedHitEffectThisSwing;
     private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         hitTargetsList = new List<IDamageable_KSM>();
     }
 
