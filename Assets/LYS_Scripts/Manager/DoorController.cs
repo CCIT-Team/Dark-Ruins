@@ -9,15 +9,16 @@ namespace LYS_Work
 {
     public class DoorController : ItemPuzzleCompletedDetector
     {
-        private Vector3 _targetPos;
-        private Vector3 _startpos;
+        [SerializeField]
+        private float _toMove=6;
+        [SerializeField]
+        private float _movRate=0.01f;
         private float _movTime=1f;
         void Awake()
         {
-            _targetPos = transform.position;
-            _targetPos.y -= transform.localScale.y;
-            _startpos = transform.position;
+            _toMove*=_movRate;
         }
+        [ContextMenu("fuc")]
         public override void DetectPuzzleComplete()
         {
             StartCoroutine(MoveRoutine());
@@ -27,14 +28,11 @@ namespace LYS_Work
             while(_movTime >= 0)
             {
                 yield return null;
-                _movTime -= 0.01f;
-                if(_movTime <= 1)
-                {
-                    transform.position = Vector3.LerpUnclamped(_targetPos,_startpos,_movTime);
-                }
+                _movTime -= _movRate;
+                var pos = transform.position;
+                pos.y += _toMove;
+                transform.position = pos;
             }
-            gameObject.SetActive(false);
-            
         }
     }
 }
