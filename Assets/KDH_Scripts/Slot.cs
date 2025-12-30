@@ -6,12 +6,14 @@ public class Slot : MonoBehaviour
 {
     [SerializeField]
     private int _mainIndex;
+    [SerializeField]
+    private Material _White,_Black;
 
     public List<int> _slots=new();
     public int _thisIndex;
     public int MainIndex { get { return _mainIndex; } }
     [SerializeField]
-    private ItemBase _item;
+    private ItemBase _item=default(ItemBase);
     public ItemBase Item => Inventory.InventorySlot[_mainIndex]._item;
 
     public bool IsEquipped = false;
