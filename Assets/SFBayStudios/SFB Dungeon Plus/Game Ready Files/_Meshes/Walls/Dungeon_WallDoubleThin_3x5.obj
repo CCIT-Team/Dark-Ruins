@@ -1,0 +1,41 @@
+#Dungeon_WallDoubleThin_3x5.obj
+#Saturday, 13 May 2017
+#21:27:06
+#-------
+
+#Dungeon_WallDoubleThin_3x5
+#-------
+g Dungeon_WallDoubleThin_3x5
+v 1.5 0 0.07499981
+v -1.5 5 0.07499981
+v -1.5 0 0.07499981
+v 1.5 5 0.07499981
+v -1.5 0 -0.0750002
+v 1.5 5 -0.0750002
+v 1.5 0 -0.0750002
+v -1.5 5 -0.0750002
+
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 -1
+vn 0 0 -1
+vn 0 0 -1
+vn 0 0 -1
+
+vt 0 0
+vt 0.5999999 1
+vt 0.5999999 0
+vt 0 1
+vt 0 0
+vt 0.5999999 1
+vt 0.5999999 0
+vt 0 1
+
+usemtl Default_PrototypeMat
+usemap Default_PrototypeMat
+f 1/1/1 2/2/2 3/3/3
+f 4/4/4 2/2/2 1/1/1
+f 5/5/5 6/6/6 7/7/7
+f 8/8/8 6/6/6 5/5/5
