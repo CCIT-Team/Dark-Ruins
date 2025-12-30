@@ -66,10 +66,35 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: d81debf477a7a6a4f9485c0c2b1cd421, type: 2}
     - target: {fileID: 919132149155446097, guid: b90b78be07e98e944b6e8562a9716196, type: 3}
       propertyPath: m_Name
-      value: flashlight battery
+      value: "\uBC30\uD130\uB9AC"
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b90b78be07e98e944b6e8562a9716196, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8594607290060404934}
   m_SourcePrefab: {fileID: 100100000, guid: b90b78be07e98e944b6e8562a9716196, type: 3}
+--- !u!1 &9198540964056066035 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: b90b78be07e98e944b6e8562a9716196, type: 3}
+  m_PrefabInstance: {fileID: 8315511422008023714}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8594607290060404934
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9198540964056066035}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab12b799aebe4b946b26a5c9bdb9e148, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _max: 0
+  _count: 0
+  Length: 0
+  _dropped: 0
+  OutLine: {fileID: 0}
