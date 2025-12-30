@@ -4,7 +4,7 @@ public class WeakPoint_KSM : MonoBehaviour
     [Header("이펙트 설정")]
     [SerializeField] private GameObject weakPointEffect;
 
-    private bool isDetected = false;
+    protected bool isDetected = false;
     private ParticleSystem ps;
 
     private void Awake()
@@ -23,7 +23,7 @@ public class WeakPoint_KSM : MonoBehaviour
         }
     }
 
-    public void SetDetectedByUV(bool detected)
+    public virtual void SetDetectedByUV(bool detected)
     {
         if (isDetected != detected)
         {
