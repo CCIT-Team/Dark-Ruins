@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 
     protected Vector3 _up = new Vector3(0, 0, 0);
     protected Vector3 _f=new Vector3(0, 0,0);
-
+    private ParticleSystem _particleSystem;
     public float rate { get =>_fireCooltimeSet; }
     public void Use()
     {
@@ -30,6 +31,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         Length = 2; //나중에 기획 나오면 적용하면 됨 ㅇㅇ
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
         _bullet = (BulletsPool.Bullets)Enum.Parse(typeof(BulletsPool.Bullets), this.GetType().Name);
+        _particleSystem = GetComponentInChildren<ParticleSystem>();
 #if UNITY_EDITOR
         Debug.Log(this.GetType().Name);
 #endif
@@ -100,7 +102,12 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #endif
         _loadedBullet--;
         _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(this.gameObject.transform.parent.position+this.gameObject.transform.parent.forward*_fireLength, transform.parent.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        _particleSystem.Simulate(0f, true, true);
+        _particleSystem.Play();
+
     }
+
     public void Reload()
     {
         BulletItem b=null;
