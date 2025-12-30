@@ -27,10 +27,10 @@ public class TriggerRayInteractor : MonoBehaviour
         if (((1 << other.gameObject.layer) & interactableMask) == 0)
             return;
         canRaycast = false;
-        if (Item is not default(ItemBase))
+        if (Item is not default(IDrawOutLine))
         {
             Item.OutFocused();
-            Item=default(ItemBase);
+            Item=default(IDrawOutLine);
         }
     }
     private void LateUpdate()
@@ -40,7 +40,7 @@ public class TriggerRayInteractor : MonoBehaviour
         FireRayOnce();
         pendingRaycast = false;
     }
-    private ItemBase Item;
+    private IDrawOutLine Item;
     private void FireRayOnce()
     {
         if (!canRaycast) return;
@@ -54,7 +54,7 @@ public class TriggerRayInteractor : MonoBehaviour
 #endif
         if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out RaycastHit hit, rayDistance, interactableMask))
         {
-            if (hit.transform.TryGetComponent<ItemBase>(out ItemBase item))
+            if (hit.transform.TryGetComponent<IDrawOutLine>(out IDrawOutLine item))
             {
                 Item = item;
                 item.OnFocused();

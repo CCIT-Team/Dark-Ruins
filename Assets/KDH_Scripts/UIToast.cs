@@ -17,8 +17,6 @@ public class UIToast : UIBase
     }
     public void OnEnable()
     {
-        // Tm ���� ����
-        //OpenAnimation();
         PopupOpenAnimation(gameObject);
     }
     #endregion
@@ -43,7 +41,6 @@ public class UIToast : UIBase
 
     public void SetInfo(string msg)
     {
-        // �޽��� ����
         transform.localScale = Vector3.one;
         GetText((int)Texts.ToastMessageValueText).text = msg;
         Refresh();

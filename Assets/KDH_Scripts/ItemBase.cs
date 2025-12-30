@@ -5,7 +5,7 @@ using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.UI;
 
-public abstract class ItemBase : MonoBehaviour
+public abstract class ItemBase : MonoBehaviour,IDrawOutLine
 {
     [SerializeField]
     private int _max;
@@ -15,20 +15,20 @@ public abstract class ItemBase : MonoBehaviour
     public int Count { get { return _count; } }
     public int Length;
     public bool _dropped = false;
-    public Outline Outline;
+    public Outline OutLine;
 
     protected virtual void Start()
     {
-        Outline = GetComponent<Outline>();
+        OutLine = GetComponent<Outline>();
 
-        if (Outline == null)
+        if (OutLine == null)
         {
-            Outline = gameObject.AddComponent<Outline>();
-            Outline.OutlineMode = Outline.Mode.OutlineAll;
-            Outline.OutlineColor = new Color(1.5f, 0.2f, 1.5f, 1.0f);
-            Outline.OutlineWidth = 4f;
+            OutLine = gameObject.AddComponent<Outline>();
+            OutLine.OutlineMode = Outline.Mode.OutlineAll;
+            OutLine.OutlineColor = new Color(1.5f, 0.2f, 1.5f, 1.0f);
+            OutLine.OutlineWidth = 4f;
         }
-        Outline.enabled = false;
+        OutLine.enabled = false;
     }
     public void Drop()
     {
@@ -89,11 +89,11 @@ public abstract class ItemBase : MonoBehaviour
 #if UNITY_EDITOR
         Debug.Log($"{name} 레이로 선택됨");
 #endif
-        Outline.enabled = true;
+        OutLine.enabled = true;
     }
     public void OutFocused()
     {
-        Outline.enabled = false;
+        OutLine.enabled = false;
     }
     public virtual void Init()
     {
