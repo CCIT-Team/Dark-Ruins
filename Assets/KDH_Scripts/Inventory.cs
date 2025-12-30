@@ -9,7 +9,7 @@ using Utils;
 
 public class Inventory :MonoBehaviour
 {
-    public static Slot[] InventorySlot=new Slot[25];
+    public static Slot[] InventorySlot=new Slot[12];
     //private int _index, _inventoryCapacity; //나중에 쓰게 될 것
     public Action _itemUsing;
     private bool _drag=false;
@@ -32,7 +32,7 @@ public class Inventory :MonoBehaviour
             }
             int n = int.Parse(t.name.Substring(t.name.LastIndexOf('_') + 1));
             InventorySlot[n] =t.GetComponent<Slot>();
-            InventorySlot[n].SetIndex(n);
+            InventorySlot[n].ResetIndex();
         }
     }
     private void Start()
@@ -197,7 +197,7 @@ public class Inventory :MonoBehaviour
         }
         else
         {
-            for (int i = mainIndex; i < mainIndex + item.Length*5; i += 5)
+            for (int i = mainIndex; i < mainIndex + item.Length*3; i += 3)
             {
                 InventorySlot[i].SetIndex(mainIndex);
                 //_dragItem.GetComponent<Collider>().enabled = true;
@@ -209,7 +209,7 @@ public class Inventory :MonoBehaviour
     {
         if (xy==true)
         {
-            if (mainIndex%5+item.Length>5)
+            if (mainIndex%3+item.Length>3)
             {
                 return false;
             }
@@ -226,11 +226,11 @@ public class Inventory :MonoBehaviour
         }
         else
         {
-            if (mainIndex+item.Length*5>24)
+            if (mainIndex+item.Length*3-3>=12)
             {
                 return false;
             }
-            for (int i = mainIndex; i < mainIndex + item.Length; i += 5)
+            for (int i = mainIndex; i < mainIndex + item.Length; i += 3)
             {
                 if (InventorySlot[i].Item != default(ItemBase))
                 {
@@ -266,7 +266,11 @@ public class Inventory :MonoBehaviour
     {
         foreach(Slot s in InventorySlot)
         {
-            if (s.Item is T)
+            if(s.Item is default(ItemBase))
+            {
+                continue; 
+            }
+            else if (s.Item is T)
             {
                 return s.Item;
             }

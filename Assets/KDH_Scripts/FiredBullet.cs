@@ -11,7 +11,7 @@ public abstract class FiredBullet : MonoBehaviour
     protected BulletsPool _pool;
     protected BulletsPool.Bullets _bullet;
     protected const float _speed = 40.0f, _maxDistance=20.0f;
-    protected int _damage;
+    protected int _damage,_criticalDamage;
     public virtual void Initialize(BulletsPool pool)
     {
         _pool = pool;
@@ -42,30 +42,27 @@ public abstract class FiredBullet : MonoBehaviour
 #endif
         if (other.isTrigger==true)
         {
-            return;
-        }
-        if(other.TryGetComponent<IDamageable_KSM>(out IDamageable_KSM damageable)==true) //만약 여기서 널레퍼런스 띄우면 김대한에게 문의
-        {
-            damageable.OnDamaged(_damage, transform.root, other.TryGetComponent<WeakPoint_KSM>(out var _));
+            if (other.gameObject.layer == LayerMask.NameToLayer("WeakPoint"))
+            {
+#if UNITY_EDITOR
+                Debug.Log("찍힘");
+#endif
+                other.GetComponentInParent<IDamageable_KSM>().OnDamaged(_criticalDamage, transform.root, true);
+            }
+            else
+            {
+                return;
+            }
 
+        }
+        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
+        if (damageable != null)
+        {
+            damageable.OnDamaged(_damage, transform.root, false);
         }
         _isFire = false;
     }
-    /*IEnumerator Fired()
-    {
-        this.gameObject.transform.forward = _axis;
-        Vector3 startPos = transform.position;
-        while (_isFire)
-        {
-            this.gameObject.transform.position += _axis * _speed * Time.deltaTime;
-            if (Vector3.Distance(startPos, this.gameObject.transform.position) > _maxDistance)
-            {
-                _isFire = false;
-            }
-            yield return null;
-        }
-        _pool.Return(this.gameObject);
-    }*/
+
     private void FixedUpdate()
     {
         this.gameObject.transform.position += _axis * _speed * Time.fixedDeltaTime;
