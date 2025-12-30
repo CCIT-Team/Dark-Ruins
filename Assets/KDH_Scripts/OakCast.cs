@@ -6,7 +6,7 @@ public class OakCast : CreatureBase
 {
     //public enum State { IDLE, DIE }
     //public State currentState;
-    private const int _damage = 999;
+    private const int _damage = 30;
 
     public override void OnDead()
     {

@@ -76,7 +76,7 @@ public abstract class ItemBase : MonoBehaviour
         //GetItem(); //대충 나중에 줍기 추가할때 대입
         OnPickUp();
     }
-    public void OnPickUp()
+    public virtual void OnPickUp()
     {
         //아이템이 주웠을 경우 발동할 로직이 있다면 여기에
     }
