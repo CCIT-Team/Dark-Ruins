@@ -9,8 +9,11 @@ public class WeaponManager_KSM : MonoBehaviour
 
     [Header("스크립트 연결")]
     public GunBase gunScript;
+    public GunBase rifleScript;
     public Knife3_KSM knifeScript;
 
+    public GameObject knifeObject;
+    public GameObject rifleObject;
     public PlayerController_KSM playerController;
 
     void Start()
@@ -31,15 +34,16 @@ public class WeaponManager_KSM : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeaponMode(WeaponMode.Rifle);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetWeaponMode(WeaponMode.Gun);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetWeaponMode(WeaponMode.Knife);
+        if (Input.GetKeyDown(KeyCode.Alpha4)) SetWeaponMode(WeaponMode.None);
     }
 
     void SetWeaponMode(WeaponMode mode)
     {
         if (currentMode == mode) return;
-        currentMode = mode;
-
+            currentMode = mode;
         if (gunScript != null) gunScript.gameObject.SetActive(false);
-        if (knifeScript != null) knifeScript.gameObject.SetActive(false);
+        if (knifeObject != null) knifeObject.SetActive(false);
+        if (rifleObject != null) rifleObject.SetActive(false);
 
         IWeapon_KSM newWeapon = null;
 
@@ -48,7 +52,8 @@ public class WeaponManager_KSM : MonoBehaviour
             case WeaponMode.Rifle:
                 if (gunScript != null)
                 {
-
+                    rifleScript.gameObject.SetActive(true);
+                    newWeapon = null;
                 }
                 break;
 
@@ -63,9 +68,12 @@ public class WeaponManager_KSM : MonoBehaviour
             case WeaponMode.Knife:
                 if (knifeScript != null)
                 {
-                    knifeScript.gameObject.SetActive(true);
+                    if (knifeObject != null) knifeObject.SetActive(true);
                     newWeapon = knifeScript;
                 }
+                break;
+
+            case WeaponMode.None:
                 break;
         }
 
