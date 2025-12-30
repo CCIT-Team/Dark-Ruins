@@ -24,9 +24,9 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     {
         ItemUse(default(List<KeyCode>));
     }
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         Length = 2; //³ªÁß¿¡ ±âÈ¹ ³ª¿À¸é Àû¿ëÇÏ¸é µÊ ¤·¤·
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
         _bullet = (BulletsPool.Bullets)Enum.Parse(typeof(BulletsPool.Bullets), this.GetType().Name);
@@ -103,18 +103,18 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     }
     public void Reload()
     {
-        BulletItem b=default(BulletItem);
+        BulletItem b=null;
         switch ((int)_bullet)
         {
             case 0:
-                b = (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<GlockAmmo>();
+                b = (BulletItem)GetComponentInParent<Inventory>().CheckItem<GlockAmmo>();
                 break;
             case 1:
-                b = (BulletItem)GetComponentInParent<Inventory>()?.CheckItem<RifleAmmo>();
+                b = (BulletItem)GetComponentInParent<Inventory>().CheckItem<RifleAmmo>();
                 break;
         }
         
-        if (b is default(BulletItem))
+        if (b is null)
         {
 #if UNITY_EDITOR
             Debug.Log("Ã¶ÄÀ4");

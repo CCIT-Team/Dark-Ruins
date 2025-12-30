@@ -17,7 +17,7 @@ public abstract class ItemBase : MonoBehaviour
     public bool _dropped = false;
     public Outline Outline;
 
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         Outline = GetComponent<Outline>();
 
@@ -40,6 +40,10 @@ public abstract class ItemBase : MonoBehaviour
             Debug.Log("이거나타났움");
 #endif
         }
+    }
+    private void OnDestroy()
+    {
+        Unsubscribe();
     }
     public virtual void SetData() //더 들고 올 데이터 있으면 여기서 override랑 base 쓰기
     {

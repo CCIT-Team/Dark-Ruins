@@ -1,6 +1,7 @@
-﻿ID,Name,Value,Description,MAX,COUNT
-1,FlashlightItem_KSM,,유적 탐사에 필요한 손전등이다.,1,1
-2,FirstAidKit,,생명을 책임지는 구급상자다.,1,1
-3,BatteryItem_KSM,,UV라이트를 사용할 수 있게 해주는 특수한 배터리이다.,1,1
-4,GlockAmmo,8,권총의 탄약이다.,32,32
-5,RifleAmmo,6,소총의 탄환이다.,48,48
+﻿ID,Name,Value,Description,MAX,COUNT,RealName
+1,FlashlightItem_KSM,,유적 탐사에 필요한 손전등이다.,1,1,손전등
+2,FirstAidKit,30,생명을 책임지는 구급상자다.,1,1,구급상자다
+3,BatteryItem_KSM,,UV라이트를 사용할 수 있게 해주는 특수한 배터리이다.,1,1,배터리
+4,GlockAmmo,8,권총의 탄약이다.,32,32,권총탄
+5,RifleAmmo,6,소총의 탄환이다.,48,48,소총탄
+6,Key,,비밀의 열쇠 인 듯 하다...,1,1,열쇠

@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class Glock : GunBase
 {
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         _fireLength = 1.5f;
         _up = new Vector3(0, 0.0f, 0);
         _f = new Vector3(-90f, 0f, -90f);

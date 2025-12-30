@@ -6,9 +6,9 @@ using UnityEngine;
 public class FIrstAidKit : ItemBase
 {
     private int _health;
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         SetData();
     }
     public override void SetData()

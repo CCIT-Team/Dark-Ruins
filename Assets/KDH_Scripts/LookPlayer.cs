@@ -33,7 +33,7 @@ public class LookPlayer : UIPopup
             return;
         }
         GetObject((int)GameObjects.Canvas).SetActive(true);
-        string s= $"{data["Name"]}\n";
+        string s= $"{data["RealName"]}\n";
         if(item is IWeapon_KSM)
         {
             s += $"공격력 {data["Damage"]} / 약점 {data["CriticalDamage"]}\n" +
@@ -50,8 +50,8 @@ public class LookPlayer : UIPopup
         s += $"{data["Description"]}";
         GetObject((int)GameObjects.Canvas).GetChild<TextMeshProUGUI>("Text").text = s;
     }
-    private void FixedUpdate()
-    {
-        transform.LookAt(transform.position + cam.rotation * Vector3.forward, cam.rotation * Vector3.up);
-    }
+    //private void FixedUpdate()
+    //{
+    //    //transform.LookAt(transform.position + cam.rotation * Vector3.forward, cam.rotation * Vector3.up);
+    //}
 }

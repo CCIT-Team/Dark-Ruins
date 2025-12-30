@@ -155,7 +155,7 @@ public class Inventory :MonoBehaviour
         if(InventoryOpened==true)
         {
             InventoryOpened = false;
-            _inventoryView.position = this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
+            _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
             _inventoryView.gameObject.SetActive(true);
         }
         else

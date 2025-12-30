@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class Rifle : GunBase
 {
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         _fireLength = 1.0f;
         SetData();
         _up = new Vector3(0, 0f, 0);

@@ -10,7 +10,8 @@
     "Description": "일반적인 권총이다. ",
     "": "",
     "MAX": "1",
-    "COUNT": "1"
+    "COUNT": "1",
+    "RealName": "권총"
   },
   {
     "ID": "2",
@@ -23,7 +24,8 @@
     "Description": "많이 사용한 정글도다.",
     "": "",
     "MAX": "1",
-    "COUNT": "1"
+    "COUNT": "1",
+    "RealName": "정글도"
   },
   {
     "ID": "3",
@@ -36,6 +38,7 @@
     "Description": "유적에서 얻은 소총이다.",
     "": "",
     "MAX": "1",
-    "COUNT": "1"
+    "COUNT": "1",
+    "RealName": "자동소총"
   }
 ]

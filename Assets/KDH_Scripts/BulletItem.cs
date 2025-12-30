@@ -6,9 +6,9 @@ public abstract class BulletItem : ItemBase
 {
     protected Slot _slot;
     public BulletsPool.Bullets Bullet;
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         Length = 1;
         SetData();
         if(transform.parent!=null && transform.parent.TryGetComponent<Slot>(out Slot s))
