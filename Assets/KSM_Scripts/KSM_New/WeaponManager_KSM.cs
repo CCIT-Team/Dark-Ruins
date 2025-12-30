@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class WeaponManager_KSM : MonoBehaviour
 {
-    public enum WeaponMode { None, Gun, Knife }
+    public enum WeaponMode { None, Rifle, Gun, Knife }
 
     [Header("현재 상태")]
-    public WeaponMode currentMode = WeaponMode.None;
+    public WeaponMode currentMode = WeaponMode.Knife;
 
     [Header("스크립트 연결")]
     public GunBase gunScript;
@@ -28,7 +28,7 @@ public class WeaponManager_KSM : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeaponMode(WeaponMode.None);
+        if (Input.GetKeyDown(KeyCode.Alpha1)) SetWeaponMode(WeaponMode.Rifle);
         if (Input.GetKeyDown(KeyCode.Alpha2)) SetWeaponMode(WeaponMode.Gun);
         if (Input.GetKeyDown(KeyCode.Alpha3)) SetWeaponMode(WeaponMode.Knife);
     }
@@ -45,6 +45,13 @@ public class WeaponManager_KSM : MonoBehaviour
 
         switch (mode)
         {
+            case WeaponMode.Rifle:
+                if (gunScript != null)
+                {
+
+                }
+                break;
+
             case WeaponMode.Gun:
                 if (gunScript != null)
                 {

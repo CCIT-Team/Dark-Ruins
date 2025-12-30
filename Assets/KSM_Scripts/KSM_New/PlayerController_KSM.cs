@@ -17,6 +17,10 @@ public class PlayerController_KSM : CreatureController_KSM
     [SerializeField] private float interactionDistance = 3.0f;
     [SerializeField] private LayerMask interactionLayer;
 
+    [Header("현재 무기 상태")]
+    [SerializeField] private MonoBehaviour currentWeaponContext;
+    [SerializeField] private GameObject currentWeaponObject;
+
     private Rigidbody rb;
     private Vector3 targetVelocity = Vector3.zero;
 
@@ -26,6 +30,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
     private float mouseX, mouseY;
     private float fireDelay;
+    private bool isSwapping = false;
     private bool isFireReady = true;
     private bool isKnockedBack = false;
 
@@ -39,7 +44,6 @@ public class PlayerController_KSM : CreatureController_KSM
         Cursor.visible = false;
 
         rb = GetComponent<Rigidbody>();
-
         myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
         currentEquipment = GetComponentInChildren<IEquipment_KSM>();
     }
@@ -49,6 +53,42 @@ public class PlayerController_KSM : CreatureController_KSM
         currentWeapon = newWeapon;
         isFireReady = true;
         fireDelay = 0;
+    }
+
+    public void StartWeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
+    {
+        if (isSwapping) return;
+        if (currentWeaponContext == newWeaponScript) return;
+
+        StartCoroutine(Co_WeaponSwap(newWeaponScript, newWeaponObj, typeID));
+    }
+
+    IEnumerator Co_WeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
+    {
+        isSwapping = true;
+        isFireReady = false;
+
+        if (currentWeaponObject != null)
+        {
+            if (anim != null) anim.SetTrigger("Holster");
+            yield return new WaitForSeconds(0.5f);
+            currentWeaponObject.SetActive(false);
+        }
+
+        currentWeaponContext = newWeaponScript;
+        currentWeaponObject = newWeaponObj;
+
+        if (anim != null) anim.SetInteger("WeaponType", typeID);
+
+        if (currentWeaponObject != null)
+        {
+            currentWeaponObject.SetActive(true);
+            if (anim != null) anim.SetTrigger("Draw");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        isSwapping = false;
+        isFireReady = true;
     }
 
     void Update()
@@ -154,6 +194,7 @@ public class PlayerController_KSM : CreatureController_KSM
             fireDelay = 0;
         }
     }
+
     void TryInteract()
     {
         if (playerCamera == null) return;
