@@ -7,7 +7,7 @@ public class ItemDrop : MonoBehaviour
 {
     [SerializeField]
     public GameObject _dropItem;
-    private void OnDisable()
+    public void DeathDrop()
     {
         if (gameObject.scene == null || !gameObject.scene.isLoaded)
             return;
