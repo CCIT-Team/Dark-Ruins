@@ -5,6 +5,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Utils;
 
 public class Inventory :MonoBehaviour
 {
@@ -25,6 +26,10 @@ public class Inventory :MonoBehaviour
 
         foreach(Transform t in _inventoryView)
         {
+            if(t.name=="UI_Root")
+            {
+                continue;
+            }
             int n = int.Parse(t.name.Substring(t.name.LastIndexOf('_') + 1));
             InventorySlot[n] =t.GetComponent<Slot>();
             InventorySlot[n].SetIndex(n);
@@ -90,7 +95,9 @@ public class Inventory :MonoBehaviour
             _dragItem.SetParent(this.transform.Find("Main Camera"), false);
             _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
             _dragItem.localRotation = Quaternion.identity;
+            _dragItem.GetComponent<ItemBase>().Init();
             _drag = true;
+            item.OutFocused();
             StartCoroutine(SubCriber());
             _dragItem.GetComponent<Collider>().enabled = false;
         }
@@ -100,23 +107,33 @@ public class Inventory :MonoBehaviour
         if (_drag==false) //인벤토리에서 꺼내기
         {
             //바닥에서 줍기도? 아니다, 분할하자
-            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit,8f, 1 << LayerMask.NameToLayer("Slot")) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
             {
                 _dragItem = slot.Item.transform;
+                _dragItem.GetComponent<ItemBase>().OutFocused();
                 ClickItem(Inventory.InventorySlot[int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1))].MainIndex);
                 //ClickItem();
                 _drag = true;
                 StartCoroutine(SubCriber());
-
+                _dragItem.GetComponent<ItemBase>().Init();
                 _dragItem.GetComponent<Collider>().enabled = false;
                 return true;
             }
         }
         else //인벤토리에 집어넣기
         {
-            if(Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<Slot>(out Slot slot))
+#if UNITY_EDITOR
+            Debug.DrawRay(
+                cam.transform.position,
+                cam.transform.forward,
+                Color.red,
+                4f
+            );
+#endif
+            if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 8f, 1 << LayerMask.NameToLayer("Slot")) && hit.transform.TryGetComponent<Slot>(out Slot slot))
             {
                 SetItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+                _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(false);
                 return true;
             }
         }
@@ -127,6 +144,8 @@ public class Inventory :MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         if(_dragItem !=null)
         {
+            _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
+            _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
             _dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
@@ -136,7 +155,7 @@ public class Inventory :MonoBehaviour
         if(InventoryOpened==true)
         {
             InventoryOpened = false;
-            _inventoryView.position = this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
+            _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
             _inventoryView.gameObject.SetActive(true);
         }
         else
@@ -164,6 +183,8 @@ public class Inventory :MonoBehaviour
         _dragItem.SetParent(InventorySlot[mainIndex].transform, false);
         _dragItem.localPosition = new Vector3(0, 0.65f, 0);
         _dragItem.localRotation=Quaternion.identity;
+        _dragItem.GetComponent<ItemBase>().Init();
+        _dragItem.GetComponent<Collider>().enabled = true;
         item.Unsubscribe();
         _drag = false;
         if(xy==true)

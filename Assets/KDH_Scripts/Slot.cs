@@ -24,6 +24,9 @@ public class Slot : MonoBehaviour
         _mainIndex = _thisIndex;
         _item=default(ItemBase);
         IsEquipped = false;
+#if UNITY_EDITOR
+        Debug.Log(Item);
+#endif
         foreach(int s in _slots)
         {
             Inventory.InventorySlot[s].IsEquipped = false;
