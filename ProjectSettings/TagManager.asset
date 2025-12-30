@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - Monster
   - Knife
+  - Item
+  - FlickableObject
   layers:
   - Default
   - TransparentFX
@@ -21,8 +23,8 @@ TagManager:
   - Detection
   - Knife
   - 
-  - 
-  - 
+  - Item
+  - Slot
   - 
   - 
   - 

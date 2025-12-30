@@ -1,0 +1,44 @@
+[
+  {
+    "ID": "1",
+    "Name": "Glock",
+    "Damage": "8",
+    "AttackType": "F",
+    "AttackSpeed": "0.6",
+    "CriticalDamage": "20",
+    "MaxAmmo": "8",
+    "Description": "일반적인 권총이다. ",
+    "": "",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "권총"
+  },
+  {
+    "ID": "2",
+    "Name": "Knife3_KSM",
+    "Damage": "3",
+    "AttackType": "T",
+    "AttackSpeed": "0.8",
+    "CriticalDamage": "12",
+    "MaxAmmo": "0",
+    "Description": "많이 사용한 정글도다.",
+    "": "",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "정글도"
+  },
+  {
+    "ID": "3",
+    "Name": "Rifle",
+    "Damage": "6",
+    "AttackType": "F",
+    "AttackSpeed": "0.2",
+    "CriticalDamage": "10",
+    "MaxAmmo": "24",
+    "Description": "유적에서 얻은 소총이다.",
+    "": "",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "자동소총"
+  }
+]

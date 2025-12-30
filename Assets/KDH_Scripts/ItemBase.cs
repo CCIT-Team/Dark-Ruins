@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class ItemBase : MonoBehaviour
 {
@@ -13,7 +15,21 @@ public abstract class ItemBase : MonoBehaviour
     public int Count { get { return _count; } }
     public int Length;
     public bool _dropped = false;
-    
+    public Outline Outline;
+
+    protected virtual void Start()
+    {
+        Outline = GetComponent<Outline>();
+
+        if (Outline == null)
+        {
+            Outline = gameObject.AddComponent<Outline>();
+            Outline.OutlineMode = Outline.Mode.OutlineAll;
+            Outline.OutlineColor = new Color(1.5f, 0.2f, 1.5f, 1.0f);
+            Outline.OutlineWidth = 4f;
+        }
+        Outline.enabled = false;
+    }
     public void Drop()
     {
         if(_dropped==true)
@@ -24,6 +40,10 @@ public abstract class ItemBase : MonoBehaviour
             Debug.Log("이거나타났움");
 #endif
         }
+    }
+    private void OnDestroy()
+    {
+        Unsubscribe();
     }
     public virtual void SetData() //더 들고 올 데이터 있으면 여기서 override랑 base 쓰기
     {
@@ -56,7 +76,7 @@ public abstract class ItemBase : MonoBehaviour
         //GetItem(); //대충 나중에 줍기 추가할때 대입
         OnPickUp();
     }
-    public void OnPickUp()
+    public virtual void OnPickUp()
     {
         //아이템이 주웠을 경우 발동할 로직이 있다면 여기에
     }
@@ -64,17 +84,19 @@ public abstract class ItemBase : MonoBehaviour
     {
         Destroy(this.gameObject);
     }
-    private void OnTriggerEnter(Collider collider)
+    public void OnFocused()
     {
-        if (collider.CompareTag("Player"))
-        {
-            //int value = collider.GetComponent<Inventory>().TryItemGet(this);
-            //if(value<0)
-            //{
-            //    return;
-            //}
+#if UNITY_EDITOR
+        Debug.Log($"{name} 레이로 선택됨");
+#endif
+        Outline.enabled = true;
+    }
+    public void OutFocused()
+    {
+        Outline.enabled = false;
+    }
+    public virtual void Init()
+    {
 
-
-        }
     }
 }
