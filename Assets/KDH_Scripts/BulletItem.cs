@@ -11,20 +11,9 @@ public abstract class BulletItem : ItemBase
         base.Start();
         Length = 1;
         SetData();
-        if(transform.parent!=null && transform.parent.TryGetComponent<Slot>(out Slot s))
+        if (transform.parent != null && transform.parent.TryGetComponent<Slot>(out Slot s))
         {
             _slot = s;
-#if UNITY_EDITOR
-            Debug.Log(_slot.name);
-            Debug.Log(Count);
-            Debug.Log(Max);
-#endif
-        }
-        else
-        {
-#if UNITY_EDITOR
-            Debug.Log("부모없는 탄창");
-#endif
         }
     }
     public override void ItemUse(List<KeyCode> keys=null)

@@ -7,12 +7,13 @@ public class FiredGlockAmmo : FiredBullet
 {
     private void Start()
     {
-        var data = DataLoader.Instance.FindByName("GlockAmmo");
+        var data = DataLoader.Instance.FindByName("Glock");
         if (data == null)
         {
             return;
         }
-        _damage = Convert.ToInt32(data["Value"]);
+        _damage = Convert.ToInt32(data["Damage"]);
+        _criticalDamage = Convert.ToInt32(data["CriticalDamage"]);
     }
     public override void Initialize(BulletsPool pool)
     {

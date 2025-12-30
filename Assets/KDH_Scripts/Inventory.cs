@@ -32,7 +32,7 @@ public class Inventory :MonoBehaviour
             }
             int n = int.Parse(t.name.Substring(t.name.LastIndexOf('_') + 1));
             InventorySlot[n] =t.GetComponent<Slot>();
-            InventorySlot[n].SetIndex(n);
+            InventorySlot[n].ResetIndex();
         }
     }
     private void Start()
