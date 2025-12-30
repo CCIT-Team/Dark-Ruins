@@ -5,17 +5,20 @@ using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
-    [Header("마우스 민감도")]
+    [Header("설정")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
+    [SerializeField] private float interactionDistance = 3.0f;
+    [SerializeField] private LayerMask interactionLayer;
 
     [Header("이동 속도")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
-    [Header("상호작용 설정")]
-    [SerializeField] private float interactionDistance = 3.0f;
-    [SerializeField] private LayerMask interactionLayer;
+    [Header("애니메이션 연결")]
+    public Animation handParentsAnim;
+    public string switchAnimName = "SwitchAnimation";
+    public string holsterAnimName = "Holster";
 
     [Header("현재 무기 상태")]
     [SerializeField] private MonoBehaviour currentWeaponContext;
@@ -70,20 +73,30 @@ public class PlayerController_KSM : CreatureController_KSM
 
         if (currentWeaponObject != null)
         {
-            if (anim != null) anim.SetTrigger("Holster");
+            if (handParentsAnim != null)
+            {
+                handParentsAnim.Rewind(holsterAnimName);
+                handParentsAnim.Play(holsterAnimName);
+            }
+
             yield return new WaitForSeconds(0.5f);
+
             currentWeaponObject.SetActive(false);
         }
 
         currentWeaponContext = newWeaponScript;
         currentWeaponObject = newWeaponObj;
 
-        if (anim != null) anim.SetInteger("WeaponType", typeID);
-
         if (currentWeaponObject != null)
         {
             currentWeaponObject.SetActive(true);
-            if (anim != null) anim.SetTrigger("Draw");
+
+            if (handParentsAnim != null)
+            {
+                handParentsAnim.Rewind(switchAnimName);
+                handParentsAnim.Play(switchAnimName);
+            }
+
             yield return new WaitForSeconds(0.5f);
         }
 
@@ -166,7 +179,7 @@ public class PlayerController_KSM : CreatureController_KSM
         if (playerCamera == null) return;
         mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
         mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
-        mouseY = Mathf.Clamp(mouseY, -90f, 90f);
+        mouseY = Mathf.Clamp(mouseY, -60f, 60f);
 
         transform.localEulerAngles = new Vector3(0, mouseX, 0);
         playerCamera.transform.localEulerAngles = new Vector3(-mouseY, 0, 0);
