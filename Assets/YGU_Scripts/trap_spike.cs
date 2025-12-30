@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class trap_spike : MonoBehaviour, ITrap
 {
-    [SerializeField] private string targetTag = "Player";
-
     private float moveDistance = 0.5f; //함정이 움직일 거리
     private float moveDurationUp = 0.2f; //함정이 올라오는 시간
     private float moveDurationDown = 0.5f; //함정이 내려가는 시간
@@ -28,8 +26,6 @@ public class trap_spike : MonoBehaviour, ITrap
     private IEnumerator MoveUp()
     {
         ismoving = true;
-
-        Debug.Log("함정 카드 발동!");
 
         Vector3 startPos = this.transform.position;
         Vector3 endPos = startPos + new Vector3(0, moveDistance, 0);
@@ -53,8 +49,6 @@ public class trap_spike : MonoBehaviour, ITrap
     {
         ismoving = true;
 
-        Debug.Log("함정 카드 해제!");
-
         Vector3 startPos = this.transform.position;
         Vector3 endPos = startPos - new Vector3(0, moveDistance, 0);
 
@@ -72,6 +66,4 @@ public class trap_spike : MonoBehaviour, ITrap
         this.transform.position = endPos;
         ismoving = false;
     }
-
-    //데미지 처리 (coroutine을 쓰든, update를 쓰든)
 }

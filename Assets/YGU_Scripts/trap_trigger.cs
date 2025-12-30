@@ -12,19 +12,17 @@ public class trap_trigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        
         if (other.CompareTag(targetTag) /*&& !ismoving*/)
         {
-            trapObject.GetComponent<ITrap>()?.ActivateTrap();
+            trapObject.GetComponent<ITrap>().ActivateTrap();
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        
         if (other.CompareTag(targetTag) /*&& !ismoving*/)
         {
-            trapObject.GetComponent<ITrap>()?.DeactivateTrap();
+            trapObject.GetComponent<ITrap>().DeactivateTrap();
         }
     }
 }

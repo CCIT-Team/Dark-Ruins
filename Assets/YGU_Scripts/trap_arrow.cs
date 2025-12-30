@@ -6,12 +6,10 @@ public class trap_arrow : MonoBehaviour, ITrap
 {
     private float force_0 = 500f;
 
-    [SerializeField]
-    private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
 
     public void ActivateTrap()
     {
-        Debug.Log("active");
         ShootArrow();
     }
 
@@ -35,7 +33,6 @@ public class trap_arrow : MonoBehaviour, ITrap
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-
     }
 
 }
