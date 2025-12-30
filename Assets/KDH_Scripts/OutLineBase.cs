@@ -21,7 +21,7 @@ public class OutLineBase : MonoBehaviour,IDrawOutLine
     public void OnFocused()
     {
 #if UNITY_EDITOR
-        Debug.Log($"{name} ·¹ÀÌ·Î ¼±ÅÃµÊ");
+        Debug.Log($"{name} ï¿½ï¿½ï¿½Ì·ï¿½ ï¿½ï¿½ï¿½Ãµï¿½");
 #endif
         OutLine.enabled = true;
     }
