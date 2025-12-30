@@ -6,12 +6,14 @@ using UnityEngine.Animations;
 
 public abstract class FiredBullet : MonoBehaviour
 {
+
     public Vector3 _axis, startPos;
     protected bool _isFire;
     protected BulletsPool _pool;
     protected BulletsPool.Bullets _bullet;
     protected const float _speed = 40.0f, _maxDistance=20.0f;
     protected int _damage,_criticalDamage;
+
     public virtual void Initialize(BulletsPool pool)
     {
         _pool = pool;
@@ -65,7 +67,7 @@ public abstract class FiredBullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.gameObject.transform.position += _axis * _speed * Time.fixedDeltaTime;
+        this.gameObject.transform.position += _axis * _speed* Time.fixedDeltaTime;
         if (_isFire==false||Vector3.Distance(startPos, this.gameObject.transform.position) > _maxDistance)
         {
             _isFire = false;
