@@ -26,6 +26,7 @@ namespace LYS_Work
             {
                 OnPuzzleCompletedAction?.Invoke();
                 _completed = true;
+                Destroy(collision.gameObject);
             }
         }
     }
