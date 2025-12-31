@@ -64,14 +64,17 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     public void Subscribe()
     {
         //키입력 구독 및 취소 기능
+        Managers_KSM.Input.OnKeysHeld -= ItemUse;
         Managers_KSM.Input.OnKeysHeld += ItemUse;
+        PickUp();
     }
     public void Unsubscribe()
     {
         Managers_KSM.Input.OnKeysHeld -= ItemUse;
+        OnDropped();
     }
     //public abstract void ItemUse(키입력);
-    public void PickUp()
+    protected void PickUp()
     {
         //GetItem(); //대충 나중에 줍기 추가할때 대입
         OnPickUp();
@@ -79,6 +82,14 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     public virtual void OnPickUp()
     {
         //아이템이 주웠을 경우 발동할 로직이 있다면 여기에
+    }
+    protected void Dropped()
+    {
+        OnDropped();
+    }
+    public virtual void OnDropped()
+    {
+
     }
     public void DestroySelf()
     {

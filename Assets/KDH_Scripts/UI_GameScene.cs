@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,12 @@ public class UI_GameScene : UIScene
     }
     enum Texts
     {
-
+        Bullets
+    }
+    enum Images
+    {
+        CH,
+        RCH
     }
 
     public override bool Init()
@@ -26,7 +32,9 @@ public class UI_GameScene : UIScene
         BindObject(typeof(GameObjects));
         BindButton(typeof(Buttons));
         BindText(typeof(Texts));
-
+        BindImage(typeof(Images));
+        GetImage((int)Images.RCH).transform.DORotate(new Vector3(0, 0, 360f), 1f, RotateMode.FastBeyond360).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
+        GetImage((int)Images.RCH).transform.gameObject.SetActive(false);
         return true;
     }
     private void Awake()
@@ -80,6 +88,33 @@ public class UI_GameScene : UIScene
             GameObject.Find("Player").GetComponent<PlayerController_KSM>().enabled = true;
             GameObject.Find("Player").GetComponentInChildren<Inventory>().Sub();
         }
+    }
+    #endregion
+    #region Bullets
+    public void BulletUISet(bool b=true,int c=0,int m=0)
+    {
+        GetText((int)Texts.Bullets).gameObject.SetActive(b);
+        if(b==true)
+        {
+            GetText((int)Texts.Bullets).text = $"{c} / {m}";
+            if(c<=0)
+            {
+                GetText((int)Texts.Bullets).color= Color.red;
+            }
+            else
+            {
+                GetText((int)Texts.Bullets).color = Color.white;
+            }
+        }
+    }
+ 
+    public async void Delay()
+    {
+        GetImage((int)Images.CH).transform.gameObject.SetActive(false);
+        GetImage((int)Images.RCH).transform.gameObject.SetActive(true);
+        await System.Threading.Tasks.Task.Delay(2000);
+        GetImage((int)Images.RCH).transform.gameObject.SetActive(false);
+        GetImage((int)Images.CH).transform.gameObject.SetActive(true);
     }
     #endregion
 }

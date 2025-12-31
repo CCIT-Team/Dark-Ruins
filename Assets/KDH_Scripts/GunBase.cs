@@ -32,8 +32,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
         _bullet = (BulletsPool.Bullets)Enum.Parse(typeof(BulletsPool.Bullets), this.GetType().Name);
         _particleSystem = GetComponentInChildren<ParticleSystem>();
+        _camera = Camera.main;
+        _uir = GameObject.Find("@UI_Root").GetComponent<UI_GameScene>();
 #if UNITY_EDITOR
         Debug.Log(this.GetType().Name);
+        Debug.Log(_camera.transform.name);
 #endif
         //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }
@@ -47,7 +50,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     public override void ItemUse(List<KeyCode> keys)
     {
 
-        if (_fireCooltime <= 0.0f &&_loadedBullet>0&& keys.Contains(KeyCode.Mouse0))
+        if (_fireCooltime <= 0.0f &&_loadedBullet>0&& Input.GetKey(KeyCode.Mouse0))
         {
             _fireCooltime = _fireCooltimeSet;
             Fire();
@@ -56,10 +59,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         if(_fireCooltime<=0.0f&&Input.GetKey(KeyCode.Mouse1))
         {
             _fireCooltime = _fireCooltimeSet;
+            _loadedBullet++;
             Fire();
         }
 #endif
-        if (keys.Contains(KeyCode.Mouse1))
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             Zoom(true);
         }
@@ -67,19 +71,6 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             Zoom(false);
         }
-        //        if (keys.Contains(KeyCode.R))
-        //        {
-        //#if UNITY_EDITOR
-        //            Debug.Log("Ã¶ÄÀ2");
-        //#endif
-        //            if (_loadedBullet<_maxBullet)
-        //            {
-        //#if UNITY_EDITOR
-        //                Debug.Log("Ã¶ÄÀ3");
-        //#endif
-        //                Reload();
-        //            }
-        //        }
 
         if (Input.GetKey(KeyCode.R))
         {
@@ -105,7 +96,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
-
+        _uir.BulletUISet(true, _loadedBullet, _maxBullet);
     }
 
     public void Reload()
@@ -135,6 +126,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
                 if (b.Count > 0)
                 {
                     b.Re();
+                    _uir.Delay();
                     _loadedBullet++;
                 }
                 else 
@@ -144,13 +136,51 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #endif
                     return;
                 }
+                _uir.BulletUISet(true, _loadedBullet, _maxBullet);
             }
         }
         //ÀÎº¥Åä¸®¿¡¼­ ÃÑ¾Ë ¼Ò¸ðµµ Ãß°¡
     }
     public int GetAmmos { get => _loadedBullet; }
+
+    protected Camera _camera;
     public void Zoom(bool b)
     {
+#if UNITY_EDITOR
+        Debug.Log(_camera.transform.localPosition);
+#endif
+        if (b==false)
+        {
+            if (_camera.fieldOfView >= 60)
+            {
+                _camera.fieldOfView = 60;
+                _zoomOuted = false;
+                return;
+            }
 
+            _camera.fieldOfView += 1;
+            return;
+        }
+        else if(_camera.fieldOfView >= 20&&_zoomOuted==false)
+        {
+            _camera.fieldOfView -= 1;
+        }
+        else
+        {
+            _zoomOuted = true;
+            _camera.fieldOfView = 20;
+        }
+
+    }
+
+    private UI_GameScene _uir;
+    public override void OnPickUp()
+    {
+        _uir.BulletUISet(true,_loadedBullet,_maxBullet);
+    }
+
+    public override void OnDropped()
+    {
+        _uir.BulletUISet(false);
     }
 }
