@@ -4,32 +4,24 @@ using UnityEngine;
 
 public class Knife3_KSM : ItemBase, IWeapon_KSM
 {
+    [Header("공격 설정")]
+    public BoxCollider knifeArea;
+    public ParticleSystem[] hitEffect;
+
+    [SerializeField] private float _rate = 1.5f;
+    public float rate { get { return _rate; } }
+
     public enum Type { Knife };
     public Type type = Type.Knife;
     public int damage = 30;
     public bool isAttacking = false;
 
-    [SerializeField] private float _rate = 1.5f;
-    public float rate { get { return _rate; } }
-
-    [Header("공격 설정")]
-    public BoxCollider knifeArea;
-    public ParticleSystem[] hitEffect;
-
-    [Header("애니메이션 연결")]
-    public Animation weaponAnimation;
-    public string attackClipName = "Hitting";
-
-    private bool hasPlayedHitEffectThisSwing;
     private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
     protected override void Start()
     {
         base.Start();
         hitTargetsList = new List<IDamageable_KSM>();
-
-        if (weaponAnimation == null)
-            weaponAnimation = GetComponentInChildren<Animation>();
 
         if (knifeArea != null) knifeArea.enabled = false;
     }
@@ -53,18 +45,12 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     {
         isAttacking = true;
         hitTargetsList.Clear();
-        hasPlayedHitEffectThisSwing = false;
-
-        if (weaponAnimation != null)
-        {
-            weaponAnimation.Rewind(attackClipName);
-            weaponAnimation.Play(attackClipName);
-        }
 
         yield return new WaitForSeconds(0.2f);
         if (knifeArea != null) knifeArea.enabled = true;
         yield return new WaitForSeconds(0.3f);
         if (knifeArea != null) knifeArea.enabled = false;
+
         yield return new WaitForSeconds(0.5f);
 
         isAttacking = false;
