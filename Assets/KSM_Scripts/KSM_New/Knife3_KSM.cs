@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class Knife3_KSM : ItemBase, IWeapon_KSM
 {
-    [Header("공격 설정")]
-    public BoxCollider knifeArea;
-    public ParticleSystem[] hitEffect;
-
     [SerializeField] private float _rate = 1.5f;
     public float rate { get { return _rate; } }
+
+    [Header("공격 설정")]
+    public BoxCollider knifeArea;
+
+    [Header("이펙트 설정")]
+    [Tooltip("몬스터 타격 시 생성될 피 이펙트 프리팹")]
+    public GameObject bloodEffectPrefab;
+
+    private bool hasPlayedHitEffectThisSwing;
+    private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
     public enum Type { Knife };
     public Type type = Type.Knife;
     public int damage = 30;
     public bool isAttacking = false;
-
-    private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
     protected override void Start()
     {
@@ -69,19 +73,18 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
         hitTargetsList.Add(damageable);
 
         Vector3 hitPoint = other.ClosestPoint(transform.position);
-        HitParticles(hitPoint);
+
+        PlayBloodEffect(hitPoint);
+        Debug.Log("칼이펙트");
     }
 
-    public void HitParticles(Vector3 position)
+    private void PlayBloodEffect(Vector3 position)
     {
-        if (hitEffect == null) return;
-        foreach (ParticleSystem ps in hitEffect)
-        {
-            if (ps != null)
-            {
-                ps.transform.position = position;
-                ps.Play();
-            }
-        }
+        if (BloodPoolManager_KSM.Instance == null) return;
+
+        Vector3 direction = (transform.position - position).normalized;
+        Quaternion rotation = Quaternion.LookRotation(direction);
+
+        BloodPoolManager_KSM.Instance.PlayBloodEffect(position, rotation);
     }
 }

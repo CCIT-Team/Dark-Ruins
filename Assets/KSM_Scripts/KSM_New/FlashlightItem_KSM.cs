@@ -17,20 +17,15 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     [SerializeField] public float batteryReloadAmount = 100.0f;
 
     [Header("감지 설정")]
-    [Tooltip("감지 최대 거리")]
-    [SerializeField] private float detectionRange = 20f;
-    [Tooltip("감지 시야각")]
-    [SerializeField] private float detectionAngle = 50f;
-    [Tooltip("약점 부위가 설정된 레이어")]
-    [SerializeField] private LayerMask weakPointLayer;
+    public Collider det1;
 
     public static bool isUVLightActive = false;
     public static event System.Action<bool> OnUVLightToggled;
     public static Transform uvLightTransform { get; private set; }
 
     private Inventory playerInventory;
-    private WeakPoint_KSM currentLookingWeakPoint;
-    private HashSet<WeakPoint_KSM> activeWeakPoints = new HashSet<WeakPoint_KSM>();
+    private HashSet<WeakPoint_KSM> weakPointsInRange = new HashSet<WeakPoint_KSM>();
+
 
     void Start()
     {
@@ -42,6 +37,8 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
 
         uvLightTransform = uvLight.transform;
 
+        if (det1 != null) det1.isTrigger = true;
+
         if (playerInventory == null)
         {
             playerInventory = transform.root.GetComponent<Inventory>();
@@ -51,58 +48,52 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     void Update()
     {
         DrainBattery();
+    }
 
-        if (isUVLightActive && currentBattery > 0)
+    public void OnTriggerEnter(Collider other)
+    {
+        WeakPoint_KSM wp = other.GetComponent<WeakPoint_KSM>();
+
+        if (wp != null)
         {
-            DetectMultipleWeakPoints();
+            weakPointsInRange.Add(wp);
+
+            if (isUVLightActive && currentBattery > 0)
+            {
+                wp.SetDetectedByUV(true);
+            }
         }
-        else
+    }
+    public void OnTriggerExit(Collider other)
+    {
+        WeakPoint_KSM wp = other.GetComponent<WeakPoint_KSM>();
+
+        if (wp != null)
         {
-            ClearAllWeakPoints();
+            weakPointsInRange.Remove(wp);
+
+            wp.SetDetectedByUV(false);
         }
     }
 
-    private void DetectMultipleWeakPoints()
+    private void UpdateWeakPointsState()
     {
-        HashSet<WeakPoint_KSM> detectedThisFrame = new HashSet<WeakPoint_KSM>();
-
-        Collider[] targets = Physics.OverlapSphere(uvLightTransform.position, detectionRange, weakPointLayer);
-
-        foreach (Collider col in targets)
+        foreach (WeakPoint_KSM wp in weakPointsInRange)
         {
-            Vector3 directionToTarget = (col.transform.position - uvLightTransform.position).normalized;
-            float angleToTarget = Vector3.Angle(uvLightTransform.forward, directionToTarget);
-
-            if (angleToTarget < detectionAngle / 2f)
+            if (wp != null)
             {
-                WeakPoint_KSM wp = col.GetComponent<WeakPoint_KSM>();
-                if (wp != null)
-                {
-                    detectedThisFrame.Add(wp);
-                }
+                bool shouldActive = isUVLightActive && currentBattery > 0;
+                wp.SetDetectedByUV(shouldActive);
             }
         }
-        foreach (WeakPoint_KSM wp in activeWeakPoints)
-        {
-            if (!detectedThisFrame.Contains(wp))
-            {
-                if (wp != null) wp.SetDetectedByUV(false);
-            }
-        }
-        foreach (WeakPoint_KSM wp in detectedThisFrame)
-        {
-            if (wp != null) wp.SetDetectedByUV(true);
-        }
-        activeWeakPoints = detectedThisFrame;
     }
 
     private void ClearAllWeakPoints()
     {
-        foreach (WeakPoint_KSM wp in activeWeakPoints)
+        foreach (WeakPoint_KSM wp in weakPointsInRange)
         {
             if (wp != null) wp.SetDetectedByUV(false);
         }
-        activeWeakPoints.Clear();
     }
 
     void DrainBattery()
@@ -119,7 +110,6 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
             if (currentBattery <= 0)
             {
                 currentBattery = 0;
-
                 if (uvLight.enabled)
                 {
                     TurnOffUV();
@@ -131,10 +121,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     public void ReloadBattery()
     {
         if (currentBattery >= maxBattery) return;
-
-        if (playerInventory == null)
-            playerInventory = transform.root.GetComponent<Inventory>();
-
+        if (playerInventory == null) playerInventory = transform.root.GetComponent<Inventory>();
         if (playerInventory == null) return;
 
         BatteryItem_KSM battery = playerInventory.CheckItem<BatteryItem_KSM>() as BatteryItem_KSM;
@@ -144,23 +131,21 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
             if (battery.Count > 0)
             {
                 battery.Consume();
-
                 currentBattery += batteryReloadAmount;
-                if (currentBattery > maxBattery)
-                {
-                    currentBattery = maxBattery;
-                }
+                if (currentBattery > maxBattery) currentBattery = maxBattery;
 
-                Debug.Log($"배터리 갈아끼기: {currentBattery}, 남은 배터리 수량: {battery.Count}");
+                if (isUVLightActive) UpdateWeakPointsState();
+
+                Debug.Log($"배터리 교체 완료: {currentBattery}");
             }
             else
             {
-                Debug.LogWarning("승민씨의 병신같은 코드1");
+                Debug.LogWarning("배터리 아이템은 있는데 수량이 0임");
             }
         }
         else
         {
-            Debug.Log("너 배터리가 없다고");
+            Debug.Log("배터리 없음");
         }
     }
 
@@ -168,7 +153,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
     {
         if (currentBattery <= 0 && !isUVLightActive)
         {
-            Debug.Log("배터리 부족, UV 라이트를 못켜.");
+            Debug.Log("배터리 부족");
             return;
         }
 
@@ -177,6 +162,8 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
         uvLight.enabled = isUVLightActive;
 
         OnUVLightToggled?.Invoke(isUVLightActive);
+
+        UpdateWeakPointsState();
     }
 
     void TurnOffUV()
@@ -184,6 +171,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
         uvLight.enabled = false;
         isUVLightActive = false;
         regularLight.enabled = true;
+
         OnUVLightToggled?.Invoke(isUVLightActive);
 
         ClearAllWeakPoints();
