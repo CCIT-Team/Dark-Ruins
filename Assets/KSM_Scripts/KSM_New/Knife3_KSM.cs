@@ -10,11 +10,6 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     [Header("공격 설정")]
     public BoxCollider knifeArea;
 
-    [Header("이펙트 설정")]
-    [Tooltip("몬스터 타격 시 생성될 피 이펙트 프리팹")]
-    public GameObject bloodEffectPrefab;
-
-    private bool hasPlayedHitEffectThisSwing;
     private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
 
     public enum Type { Knife };

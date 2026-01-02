@@ -23,7 +23,7 @@ public class WeaponManager_KSM : MonoBehaviour
     public Animation knifeAnim;
 
     [Header("애니메이션 클립 이름")]
-    public string switchAnimClip = "SwitchAnimation";
+    public string switchAnimClip = "SwitchAnimation-1";
     public string rifleFireClip = "Firing";
     public string rifleReloadClip = "Reloading";
     public string gunFireClip = "Firing";
