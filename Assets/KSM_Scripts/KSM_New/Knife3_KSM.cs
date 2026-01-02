@@ -10,7 +10,7 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     [Header("공격 설정")]
     public BoxCollider knifeArea;
 
-    private List<IDamageable_KSM> hitTargetsList = new List<IDamageable_KSM>();
+    private HashSet<IDamageable_KSM> hitTargets = new HashSet<IDamageable_KSM>();
 
     public enum Type { Knife };
     public Type type = Type.Knife;
@@ -20,7 +20,7 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     protected override void Start()
     {
         base.Start();
-        hitTargetsList = new List<IDamageable_KSM>();
+        hitTargets = new HashSet<IDamageable_KSM>();
 
         if (knifeArea != null) knifeArea.enabled = false;
     }
@@ -28,7 +28,6 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     public void Use()
     {
         if (!gameObject.activeInHierarchy || isAttacking) return;
-
         StartCoroutine(Swing());
     }
 
@@ -43,7 +42,7 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
     IEnumerator Swing()
     {
         isAttacking = true;
-        hitTargetsList.Clear();
+        hitTargets.Clear();
 
         yield return new WaitForSeconds(0.2f);
         if (knifeArea != null) knifeArea.enabled = true;
@@ -60,17 +59,23 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
         IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
         if (other.isTrigger) return;
         if (other.CompareTag("Player")) return;
-        if (damageable == null || hitTargetsList.Contains(damageable)) return;
+        if (damageable == null) return;
+        if (hitTargets.Contains(damageable)) return;
 
         bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
-        damageable.OnDamaged(damage, transform.root, isWeakPoint);
-        hitTargetsList.Add(damageable);
+        if (isWeakPoint)
+        {
+            damageable.OnDamaged(damage, transform.root, true);
+        }
+        else
+        {
+            damageable.OnDamaged(damage, transform.root, false);
+        }
 
+        hitTargets.Add(damageable);
         Vector3 hitPoint = other.ClosestPoint(transform.position);
-
         PlayBloodEffect(hitPoint);
-        Debug.Log("칼이펙트");
     }
 
     private void PlayBloodEffect(Vector3 position)
