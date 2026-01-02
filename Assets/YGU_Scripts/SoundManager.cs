@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -7,7 +8,7 @@ using UnityEngine;
 public enum Sound
 {
     Bgm,
-    Effect,
+    UI,
     Max,
 }
 
@@ -18,7 +19,7 @@ public class SoundManager
 
     private GameObject _soundRoot = null; //사운드 재생기
 
-    public void Init(List<AudioClip> clips) //생성자
+    public void Init() //생성자
     {
         if (_soundRoot == null)
         {
@@ -26,7 +27,9 @@ public class SoundManager
             if (_soundRoot == null)
             {
                 _soundRoot = new GameObject { name = "@SoundRoot" };
-                Object.DontDestroyOnLoad(_soundRoot);
+                UnityEngine.Object.DontDestroyOnLoad(_soundRoot);
+
+
 
                 string[] soundTypeNames = System.Enum.GetNames(typeof(Sound));
                 for (int count = 0; count < soundTypeNames.Length - 1; count++)
@@ -38,17 +41,6 @@ public class SoundManager
 
                 _audioSources[(int)Sound.Bgm].loop = true;
             }
-
-            _audioClips.Clear();
-            if (clips ==null)
-            {
-                return;
-            }
-            foreach (AudioClip clip in clips)
-            {
-                if (!_audioClips.ContainsKey(clip.name))
-                    _audioClips.Add(clip.name, clip);
-            }
         }
     }
 
@@ -59,27 +51,57 @@ public class SoundManager
         _audioClips.Clear();
     }
 
-    public void Play(string key, Sound type, float pitch = 1.0f) //사운드 재생
+    public void Play(string key, Sound type, float volume = 1.0f, float pitch = 1.0f) //사운드 재생
     {
-        AudioClip audioClip = GetAudioClip(key);
-        if (audioClip == null) return;
-
         AudioSource audioSource = _audioSources[(int)type];
-        audioSource.pitch = pitch;
 
         if (type == Sound.Bgm)
         {
-            if (audioSource.isPlaying)
-                audioSource.Stop();
+            LoadAudioClip(key, (audioClip) =>
+            {
+                if (audioSource.isPlaying)
+                    audioSource.Stop();
 
-            audioSource.clip = audioClip;
-            audioSource.Play();
+                audioSource.clip = audioClip;
+                audioSource.pitch = pitch;
+                audioSource.volume = volume;
 
+                audioSource.Play();
+            });
         }
-        else if (type == Sound.Effect)
+        else if (type == Sound.UI)
         {
-            audioSource.PlayOneShot(audioClip);
+            LoadAudioClip(key, (audioClip) =>
+            {
+                audioSource.pitch = pitch;
+                audioSource.volume = volume;
+                audioSource.PlayOneShot(audioClip);
+            });
         }
+    }
+
+    public void Play3D(string key, Vector3 position, float volume = 1.0f, float pitch = 1.0f) //맵에서 사운드 재생
+    {
+        LoadAudioClip(key, (audioClip) =>
+        {
+            if (audioClip == null) return;
+
+            GameObject go = new GameObject($"3D_Sound_{key}");
+            go.transform.position = position;
+
+            AudioSource audioSource = go.AddComponent<AudioSource>();
+            audioSource.clip = audioClip;
+            audioSource.pitch = pitch;
+            audioSource.volume = volume;
+
+            audioSource.spatialBlend = 1f;
+            audioSource.rolloffMode = AudioRolloffMode.Linear;
+            audioSource.minDistance = 1f;
+            audioSource.maxDistance = 20f;
+
+            audioSource.Play();
+            UnityEngine.Object.Destroy(go, audioClip.length);
+        });
     }
 
     public void Stop(Sound type)
@@ -88,14 +110,20 @@ public class SoundManager
         audioSource.Stop();
     }
 
-    private AudioClip GetAudioClip(string key) //클립가져오기
+    private void LoadAudioClip(string key, Action<AudioClip> callback) //클립가져오기
     {
         AudioClip audioClip = null;
         if (_audioClips.TryGetValue(key, out audioClip))
-            return audioClip;
+        {
+            callback?.Invoke(audioClip);
+            return;
+        }
 
-        //Debug.Log($"{key}없음")
-        return null;
-
+        Managers_YGU.Resource.LoadAsync<AudioClip>(key, (audioClip) =>
+        {
+            if (!_audioClips.ContainsKey(key))
+                _audioClips.Add(key, audioClip);
+            callback?.Invoke(audioClip);
+        });
     }
 }
