@@ -44,11 +44,10 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
         isAttacking = true;
         hitTargets.Clear();
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
         if (knifeArea != null) knifeArea.enabled = true;
         yield return new WaitForSeconds(0.3f);
         if (knifeArea != null) knifeArea.enabled = false;
-
         yield return new WaitForSeconds(0.5f);
 
         isAttacking = false;

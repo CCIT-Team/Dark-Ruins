@@ -187,7 +187,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
 
             if (currentDist > lostDistance)
             {
-                Debug.Log("돌진 후 타겟 놓침 -> 순찰 복귀");
                 target = null;
                 ChangeState(State.PATROL);
             }

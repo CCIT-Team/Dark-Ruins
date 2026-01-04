@@ -90,16 +90,7 @@ public class MonsterController_KSM : CreatureController_KSM
             if (isCurrentlyHighlighted)
             {
                 finalDamage = (int)(damage * weakPointMultiplier);
-                Debug.Log("약점 타격! (치명타)");
             }
-            else
-            {
-                Debug.Log("약점 타격 (UV 비활성)");
-            }
-        }
-        else
-        {
-            Debug.Log("일반 타격");
         }
 
         base.OnDamaged(finalDamage, attacker, isWeakPoint);
@@ -147,7 +138,6 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             target = other.transform;
             ChangeState(State.CHASE);
-            Debug.Log("근접 감지");
             return;
         }
 
@@ -160,7 +150,6 @@ public class MonsterController_KSM : CreatureController_KSM
             {
                 target = other.transform;
                 ChangeState(State.CHASE);
-                Debug.Log("시야 감지");
             }
         }
     }
