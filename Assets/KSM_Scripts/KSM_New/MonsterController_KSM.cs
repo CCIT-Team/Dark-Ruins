@@ -15,6 +15,18 @@ public class MonsterController_KSM : CreatureController_KSM
     protected float proximityRadius = 5f;
     protected float viewAngle = 90f;
 
+    [Header("회전 설정")]
+    [SerializeField] protected float rotationSpeed = 5f;
+
+    [Header("공격 설정")]
+    [SerializeField] protected float attackImpactTime = 1.3f;
+    [SerializeField] protected float attackActiveDuration = 0.2f;
+    [SerializeField] protected float attackDuration = 2.2f;
+    [SerializeField] protected float attackCooldown = 1f;
+
+    [Header("공격 히트박스 연결")]
+    [SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
+
     [Header("콜라이더 및 레이어")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
@@ -56,14 +68,31 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (nmAgent != null) nmAgent.stoppingDistance = attackDistance;
 
+        if (attackHitbox != null)
+        {
+            attackHitbox.Initialize(attackDamage, transform);
+            attackHitbox.gameObject.SetActive(false);
+        }
+
         ChangeState(State.IDLE);
     }
 
     protected virtual void Update()
     {
-        if (anim != null && nmAgent != null)
+        if (anim != null && nmAgent != null && currentState != State.ATTACK)
         {
             anim.SetFloat("speed", nmAgent.velocity.magnitude);
+        }
+    }
+
+    protected void SmoothLookAt(Vector3 targetPos)
+    {
+        Vector3 direction = (targetPos - transform.position).normalized;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
         }
     }
 
@@ -188,7 +217,6 @@ public class MonsterController_KSM : CreatureController_KSM
     public virtual IEnumerator CHASE()
     {
         if (nmAgent) nmAgent.isStopped = false;
-
         while (target != null)
         {
             nmAgent.SetDestination(target.position);
@@ -201,30 +229,87 @@ public class MonsterController_KSM : CreatureController_KSM
             }
             else if (distance > lostDistance)
             {
-                target = null;
-                ChangeState(State.PATROL);
+                target = null; ChangeState(State.PATROL);
                 yield break;
             }
             yield return new WaitForSeconds(0.2f);
         }
-
         if (target == null) ChangeState(State.PATROL);
     }
 
     public virtual IEnumerator ATTACK()
     {
-        if (nmAgent) nmAgent.isStopped = true;
-        if (target != null) transform.LookAt(target.position);
+        if (nmAgent)
+        {
+            nmAgent.isStopped = true;
+            nmAgent.velocity = Vector3.zero;
+            nmAgent.updateRotation = false;
+        }
 
-        if (anim != null) anim.SetTrigger("attack");
-        yield return new WaitForSeconds(1.0f);
+        if (anim != null)
+        {
+            anim.ResetTrigger("attack");
+            anim.SetTrigger("attack");
+            anim.SetFloat("speed", 0f);
+        }
+
+        float timer = 0f;
+        while (timer < attackImpactTime)
+        {
+            if (nmAgent) nmAgent.velocity = Vector3.zero;
+
+            if (target != null) SmoothLookAt(target.position);
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
+        float activeTimer = 0f;
+        while (activeTimer < attackActiveDuration)
+        {
+            if (nmAgent) nmAgent.velocity = Vector3.zero;
+            activeTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+
+        float usedTime = attackImpactTime + attackActiveDuration;
+        float remainingAnimTime = attackDuration - usedTime;
+
+        if (remainingAnimTime > 0)
+        {
+            float endTimer = 0f;
+            while (endTimer < remainingAnimTime)
+            {
+                if (nmAgent) nmAgent.velocity = Vector3.zero;
+
+                endTimer += Time.deltaTime;
+                yield return null;
+            }
+        }
+
+        yield return new WaitForSeconds(attackCooldown);
+
+        if (nmAgent) nmAgent.updateRotation = true;
 
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-            if (distance <= attackDistance) ChangeState(State.ATTACK);
-            else if (distance <= lostDistance) ChangeState(State.CHASE);
-            else ChangeState(State.PATROL);
+
+            if (distance <= attackDistance)
+            {
+                ChangeState(State.ATTACK);
+            }
+            else if (distance <= lostDistance)
+            {
+                ChangeState(State.CHASE);
+            }
+            else
+            {
+                ChangeState(State.PATROL);
+            }
         }
         else
         {
@@ -235,18 +320,10 @@ public class MonsterController_KSM : CreatureController_KSM
     public virtual IEnumerator DIE()
     {
         if (nmAgent) nmAgent.isStopped = true;
-        foreach (Collider col in hitColliders)
-        {
-            if (col != null) col.enabled = false;
-        }
-
-        foreach (Collider col in weakPointColliders)
-        {
-            if (col != null) col.enabled = false;
-        }
-
+        foreach (Collider col in hitColliders) if (col != null) col.enabled = false;
+        foreach (Collider col in weakPointColliders) if (col != null) col.enabled = false;
         if (detectionCollider != null) detectionCollider.enabled = false;
-
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
         yield return new WaitForSeconds(4f);
         Destroy(gameObject);
     }

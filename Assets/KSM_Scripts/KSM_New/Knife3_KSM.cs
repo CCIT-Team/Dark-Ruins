@@ -46,9 +46,9 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
 
         yield return new WaitForSeconds(0.1f);
         if (knifeArea != null) knifeArea.enabled = true;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.9f);
         if (knifeArea != null) knifeArea.enabled = false;
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.3f);
 
         isAttacking = false;
     }
@@ -83,7 +83,6 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
 
         Vector3 direction = (transform.position - position).normalized;
         Quaternion rotation = Quaternion.LookRotation(direction);
-
         BloodPoolManager_KSM.Instance.PlayBloodEffect(position, rotation);
     }
 }
