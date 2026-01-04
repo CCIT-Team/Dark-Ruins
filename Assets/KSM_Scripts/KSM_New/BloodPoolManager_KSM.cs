@@ -6,28 +6,21 @@ public class BloodPoolManager_KSM : MonoBehaviour
     public static BloodPoolManager_KSM Instance;
 
     [Header("설정")]
-    public GameObject bloodPrefab;
-    public int poolSize = 10;
+    public Transform effectPoolParent;
 
-    private List<GameObject> poolList;
+    private List<GameObject> poolList = new List<GameObject>();
 
     private void Awake()
     {
         Instance = this;
-        poolList = new List<GameObject>();
 
-        for (int i = 0; i < poolSize; i++)
+        if (effectPoolParent == null) effectPoolParent = transform;
+
+        foreach (Transform child in effectPoolParent)
         {
-            CreateNewBlood();
+            poolList.Add(child.gameObject);
+            child.gameObject.SetActive(false);
         }
-    }
-
-    private GameObject CreateNewBlood()
-    {
-        GameObject obj = Instantiate(bloodPrefab, transform);
-        obj.SetActive(false);
-        poolList.Add(obj);
-        return obj;
     }
 
     public void PlayBloodEffect(Vector3 position, Quaternion rotation)
@@ -43,9 +36,6 @@ public class BloodPoolManager_KSM : MonoBehaviour
             }
         }
 
-        GameObject newBlood = CreateNewBlood();
-        newBlood.transform.position = position;
-        newBlood.transform.rotation = rotation;
-        newBlood.SetActive(true);
+        Debug.Log("모든 피 이펙트가 사용 중입니다! 풀 사이즈를 늘리세요.");
     }
 }

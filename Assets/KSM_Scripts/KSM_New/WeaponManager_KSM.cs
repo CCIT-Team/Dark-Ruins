@@ -18,17 +18,16 @@ public class WeaponManager_KSM : MonoBehaviour
     public GameObject knifeObject;
 
     [Header("애니메이션 컴포넌트")]
-    public Animation rifleAnim;
-    public Animation gunAnim;
-    public Animation knifeAnim;
+    public Animator rifleAnim;
+    public Animator gunAnim;
+    public Animator knifeAnim;
 
     [Header("애니메이션 클립 이름")]
-    public string switchAnimClip = "SwitchAnimation-1";
     public string rifleFireClip = "Firing";
     public string rifleReloadClip = "Reloading";
     public string gunFireClip = "Firing";
     public string gunReloadClip = "Reloading";
-    public string knifeAttackClip = "Hitting";
+    public string knifeAttackClip = "slash";
 
     public PlayerController_KSM playerController;
 
@@ -102,13 +101,16 @@ public class WeaponManager_KSM : MonoBehaviour
         switch (currentMode)
         {
             case WeaponMode.Rifle:
-                if (rifleAnim != null) { rifleAnim.Rewind(rifleFireClip); rifleAnim.Play(rifleFireClip); }
+                if (rifleAnim != null) rifleAnim.Play(rifleFireClip, -1, 0f);
                 break;
             case WeaponMode.Gun:
-                if (gunAnim != null) { gunAnim.Rewind(gunFireClip); gunAnim.Play(gunFireClip); }
+                if (gunAnim != null) gunAnim.Play(gunFireClip, -1, 0f);
                 break;
             case WeaponMode.Knife:
-                if (knifeAnim != null) { knifeAnim.Rewind(knifeAttackClip); knifeAnim.Play(knifeAttackClip); }
+                if (knifeAnim != null)
+                {
+                    knifeAnim.SetTrigger("slash");
+                }
                 break;
         }
     }
@@ -118,10 +120,10 @@ public class WeaponManager_KSM : MonoBehaviour
         switch (currentMode)
         {
             case WeaponMode.Rifle:
-                if (rifleAnim != null) { rifleAnim.Rewind(rifleReloadClip); rifleAnim.Play(rifleReloadClip); }
+                if (rifleAnim != null) rifleAnim.Play(rifleReloadClip, -1, 0f);
                 break;
             case WeaponMode.Gun:
-                if (gunAnim != null) { gunAnim.Rewind(gunReloadClip); gunAnim.Play(gunReloadClip); }
+                if (gunAnim != null) gunAnim.Play(gunReloadClip, -1, 0f);
                 break;
         }
     }

@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class AutoDisable_KSM : MonoBehaviour
 {
-    public float disableTime = 2.0f;
+    public float lifeTime = 1.5f;
     private void OnEnable()
     {
         CancelInvoke();
-        Invoke(nameof(DisableSelf), disableTime);
+        Invoke(nameof(DisableSelf), lifeTime);
     }
 
     void DisableSelf()
     {
-        gameObject.SetActive(false); 
+        gameObject.SetActive(false);
     }
 }

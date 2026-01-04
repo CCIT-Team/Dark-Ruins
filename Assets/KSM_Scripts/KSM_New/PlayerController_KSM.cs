@@ -20,10 +20,6 @@ public class PlayerController_KSM : CreatureController_KSM
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
 
-    [Header("애니메이션 연결")]
-    public Animation handParentsAnim;
-    public string switchAnimName = "SwitchAnimation";
-
     [Header("현재 무기 상태")]
     [SerializeField] private MonoBehaviour currentWeaponContext;
     [SerializeField] private GameObject currentWeaponObject;
@@ -84,15 +80,7 @@ public class PlayerController_KSM : CreatureController_KSM
         if (currentWeaponObject != null)
         {
             currentWeaponObject.SetActive(true);
-
-            if (handParentsAnim != null)
-            {
-                handParentsAnim.Stop();
-                handParentsAnim.Rewind(switchAnimName);
-                handParentsAnim.Play(switchAnimName);
-            }
-
-            yield return new WaitForSeconds(0.5f);
+            yield return null;
         }
 
         isSwapping = false;

@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 416508133490959578}
-  - component: {fileID: 2695079824778006373}
   - component: {fileID: 8437253147124315012}
   m_Layer: 0
   m_Name: Bloodprefab
@@ -44,19 +43,6 @@ Transform:
   - {fileID: 4863280013853212198}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2695079824778006373
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5373984521411519217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05a2c7561bf520244a83c6681fbb8a2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  disableTime: 2
 --- !u!114 &8437253147124315012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,8 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c00da3a732f65f4aa58887df5cabd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bloodPrefab: {fileID: 5361309612956734131, guid: 54425ebe90a5f5d4b9f6393bc2fba894, type: 3}
-  poolSize: 10
+  effectPoolParent: {fileID: 0}
 --- !u!1001 &518336889351644927
 PrefabInstance:
   m_ObjectHideFlags: 0
