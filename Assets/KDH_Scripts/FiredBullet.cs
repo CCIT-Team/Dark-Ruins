@@ -55,13 +55,20 @@ public abstract class FiredBullet : MonoBehaviour
             {
                 return;
             }
-
         }
-        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
-        if (damageable != null)
+        else
         {
-            damageable.OnDamaged(_damage, transform.root, false);
+            IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
+            if (damageable != null)
+            {
+                damageable.OnDamaged(_damage, transform.root, false);
+            }
+            else
+            {
+                return;
+            }
         }
+
         _isFire = false;
     }
 

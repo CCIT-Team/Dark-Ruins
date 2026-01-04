@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.5, y: 0.5, z: 0.5, w: 0.5}
   m_LocalPosition: {x: 35.569878, y: 1.184, z: -22.203}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 333, y: 333, z: 333}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3449584445972460612}
@@ -43,7 +43,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3872441101308563631}
-  m_Mesh: {fileID: 6385160460782503386, guid: c26a7cfc3343d7548a623eae9d068346, type: 3}
+  m_Mesh: {fileID: 6385160460782503386, guid: 8c5f1252667c2854eafefa27eb210bf8, type: 3}
 --- !u!23 &7829794526914427558
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 1
   m_CookingOptions: 30
-  m_Mesh: {fileID: 6385160460782503386, guid: c26a7cfc3343d7548a623eae9d068346, type: 3}
+  m_Mesh: {fileID: 6385160460782503386, guid: 8c5f1252667c2854eafefa27eb210bf8, type: 3}
 --- !u!1001 &3449584445972077276
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -140,8 +140,20 @@ PrefabInstance:
       value: Explosion single_2 sharp
       objectReference: {fileID: 0}
     - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.15
+      value: 0.0015
       objectReference: {fileID: 0}
     - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -149,7 +161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.02
+      value: 0.0002
       objectReference: {fileID: 0}
     - target: {fileID: 421528, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalRotation.w
@@ -181,15 +193,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 476560, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.001
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 476560, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.001
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 476560, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.001
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 19800262, guid: 5e5d062db78c41e4e8d06043fa80bee5, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
