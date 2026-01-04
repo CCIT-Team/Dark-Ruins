@@ -2,7 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
+using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public abstract class ItemBase : MonoBehaviour,IDrawOutLine
@@ -43,6 +45,10 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     }
     private void OnDestroy()
     {
+        if(SceneManager.GetActiveScene().name=="GameScene")
+        {
+            return;
+        }
         Unsubscribe();
     }
     public virtual void SetData() //더 들고 올 데이터 있으면 여기서 override랑 base 쓰기
