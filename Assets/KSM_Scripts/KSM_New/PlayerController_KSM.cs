@@ -1,3 +1,5 @@
+using LYS_Work.Manager;
+using LYS_Work.Token;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,6 +7,9 @@ using UnityEngine;
 
 public class PlayerController_KSM : CreatureController_KSM
 {
+    [Header("참조")]
+    public WeaponManager_KSM weaponManager;
+
     [Header("설정")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
@@ -14,11 +19,6 @@ public class PlayerController_KSM : CreatureController_KSM
     [Header("이동 속도")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
-
-    [Header("애니메이션 연결")]
-    public Animation handParentsAnim;
-    public string switchAnimName = "SwitchAnimation";
-    public string holsterAnimName = "Holster";
 
     [Header("현재 무기 상태")]
     [SerializeField] private MonoBehaviour currentWeaponContext;
@@ -32,38 +32,35 @@ public class PlayerController_KSM : CreatureController_KSM
     private FlashlightItem_KSM myFlashlight;
 
     private float mouseX, mouseY;
-    private float fireDelay;
     private bool isSwapping = false;
     private bool isFireReady = true;
     private bool isKnockedBack = false;
+    private int currentWeaponTypeID = 0;
+
+    private Coroutine swapCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
 
         if (playerCamera == null) playerCamera = GetComponentInChildren<Camera>();
+        if (weaponManager == null) weaponManager = GetComponentInChildren<WeaponManager_KSM>();
+        myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
+        currentEquipment = GetComponentInChildren<IEquipment_KSM>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
         rb = GetComponent<Rigidbody>();
-        myFlashlight = GetComponentInChildren<FlashlightItem_KSM>();
-        currentEquipment = GetComponentInChildren<IEquipment_KSM>();
-    }
-
-    public void ChangeWeapon(IWeapon_KSM newWeapon)
-    {
-        currentWeapon = newWeapon;
-        isFireReady = true;
-        fireDelay = 0;
     }
 
     public void StartWeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
     {
-        if (isSwapping) return;
-        if (currentWeaponContext == newWeaponScript) return;
+        if (currentWeaponTypeID == typeID) return;
 
-        StartCoroutine(Co_WeaponSwap(newWeaponScript, newWeaponObj, typeID));
+        if (swapCoroutine != null) StopCoroutine(swapCoroutine);
+
+        swapCoroutine = StartCoroutine(Co_WeaponSwap(newWeaponScript, newWeaponObj, typeID));
     }
 
     IEnumerator Co_WeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
@@ -73,48 +70,56 @@ public class PlayerController_KSM : CreatureController_KSM
 
         if (currentWeaponObject != null)
         {
-            if (handParentsAnim != null)
-            {
-                handParentsAnim.Rewind(holsterAnimName);
-                handParentsAnim.Play(holsterAnimName);
-            }
-
-            yield return new WaitForSeconds(0.5f);
-
             currentWeaponObject.SetActive(false);
         }
 
         currentWeaponContext = newWeaponScript;
         currentWeaponObject = newWeaponObj;
+        currentWeaponTypeID = typeID;
 
         if (currentWeaponObject != null)
         {
             currentWeaponObject.SetActive(true);
-
-            if (handParentsAnim != null)
-            {
-                handParentsAnim.Rewind(switchAnimName);
-                handParentsAnim.Play(switchAnimName);
-            }
-
-            yield return new WaitForSeconds(0.5f);
+            yield return null;
         }
 
         isSwapping = false;
         isFireReady = true;
+        swapCoroutine = null;
     }
 
     void Update()
     {
         MouseLook();
+    }
 
-        if (!isFireReady)
+    private void FixedUpdate()
+    {
+        if (!isKnockedBack)
         {
-            fireDelay += Time.deltaTime;
-            if (currentWeapon != null && currentWeapon.rate < fireDelay)
+            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+        }
+    }
+
+    void WeaponAttack()
+    {
+        if (!isFireReady || isSwapping || currentWeaponContext == null) return;
+        if (currentWeaponObject != null && !currentWeaponObject.activeInHierarchy) return;
+
+        if (weaponManager != null)
+        {
+            bool canPlayAnim = true;
+            if (currentWeaponContext is Knife3_KSM knife)
             {
-                isFireReady = true;
+                if (knife.isAttacking) canPlayAnim = false;
             }
+
+            if (canPlayAnim) weaponManager.PlayAttackAnimation();
+        }
+
+        if (currentWeaponContext is IWeapon_KSM weapon)
+        {
+            weapon.Use();
         }
     }
 
@@ -136,13 +141,50 @@ public class PlayerController_KSM : CreatureController_KSM
         }
     }
 
+
+    #region 퍼즐
+    private Token pToken = null;
+    [SerializeField]
+    private Camera playerCam;
+    private void DoPuzzle()
+    {
+        Vector3 rayOrigin = playerCam.transform.position;
+        Vector3 rayDirection = playerCam.transform.forward;
+        RaycastHit hit;
+        RotatablePuzzleManager pmgr;
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, float.PositiveInfinity) == false)
+        {
+            return;
+        }
+
+        pmgr = hit.collider.GetComponentInParent<RotatablePuzzleManager>();
+        if (pmgr == null)
+        {
+            return;
+        }
+
+        if (pToken == null)
+        {
+            pmgr.DoPuzzle(null, 2, ref pToken);
+        }
+        else
+        {
+            pmgr.EndPuzzle(pToken);
+            pToken = null;
+        }
+    }
+    #endregion
+
+
     #region PlayerInputKeys
     private void HandleKeysPressed(KeyCode key)
     {
         if (key == KeyCode.F) UVflash();
         if (key == KeyCode.Mouse0) WeaponAttack();
         if (key == KeyCode.E) TryInteract();
+        if (key == KeyCode.I) DoPuzzle();
     }
+
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
@@ -166,13 +208,6 @@ public class PlayerController_KSM : CreatureController_KSM
     }
     #endregion
 
-    private void FixedUpdate()
-    {
-        if (!isKnockedBack)
-        {
-            rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
-        }
-    }
 
     private void MouseLook()
     {
@@ -188,24 +223,6 @@ public class PlayerController_KSM : CreatureController_KSM
     void UVflash()
     {
         if (currentEquipment != null) currentEquipment.Toggle();
-    }
-
-    void WeaponAttack()
-    {
-        if (currentWeapon == null) return;
-
-        if (currentWeapon is MonoBehaviour weaponMono && !weaponMono.gameObject.activeInHierarchy)
-            return;
-
-        if (isFireReady)
-        {
-            currentWeapon.Use();
-
-            if (anim != null) anim.SetTrigger("Attack");
-
-            isFireReady = false;
-            fireDelay = 0;
-        }
     }
 
     void TryInteract()

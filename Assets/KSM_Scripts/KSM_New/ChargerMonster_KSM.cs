@@ -100,6 +100,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
         nmAgent.isStopped = true;
         nmAgent.velocity = Vector3.zero;
         nmAgent.updateRotation = false;
+        if (anim != null) anim.SetTrigger("rush attack");
 
         float elapsed = 0f;
         while (elapsed < chargePreparationTime)
