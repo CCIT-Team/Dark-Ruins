@@ -35,6 +35,7 @@ public class MonsterController_KSM : CreatureController_KSM
         base.Awake();
         nmAgent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();
 
         if (nmAgent != null)
         {
@@ -58,11 +59,31 @@ public class MonsterController_KSM : CreatureController_KSM
         ChangeState(State.IDLE);
     }
 
+    protected virtual void Update()
+    {
+        if (anim != null && nmAgent != null)
+        {
+            anim.SetFloat("speed", nmAgent.velocity.magnitude);
+        }
+    }
+
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         if (currentState == State.DIE) return;
 
         int finalDamage = damage;
+
+        if (anim != null)
+        {
+            if (isWeakPoint)
+            {
+                anim.SetTrigger("weakness attacked");
+            }
+            else
+            {
+                anim.SetTrigger("attacked");
+            }
+        }
 
         if (isWeakPoint)
         {
@@ -103,6 +124,7 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             //ID.DeathDrop();
         }
+        if (anim != null) anim.SetTrigger("dead");
         ChangeState(State.DIE);
     }
 
@@ -205,7 +227,8 @@ public class MonsterController_KSM : CreatureController_KSM
         if (nmAgent) nmAgent.isStopped = true;
         if (target != null) transform.LookAt(target.position);
 
-        yield return new WaitForSeconds(0.5f);
+        if (anim != null) anim.SetTrigger("attack");
+        yield return new WaitForSeconds(1.0f);
 
         if (target != null)
         {
