@@ -250,6 +250,7 @@ public class MonsterController_KSM : CreatureController_KSM
         }
 
         isAttackAnimationFinished = false;
+
         if (anim != null)
         {
             anim.ResetTrigger("attack");

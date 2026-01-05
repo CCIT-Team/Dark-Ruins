@@ -181,10 +181,8 @@ public class PlayerController_KSM : CreatureController_KSM
     {
         if (key == KeyCode.F) UVflash();
         if (key == KeyCode.Mouse0) WeaponAttack();
-        if (key == KeyCode.E) TryInteract();
         if (key == KeyCode.I) DoPuzzle();
     }
-
 
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
@@ -223,24 +221,6 @@ public class PlayerController_KSM : CreatureController_KSM
     void UVflash()
     {
         if (currentEquipment != null) currentEquipment.Toggle();
-    }
-
-    void TryInteract()
-    {
-        if (playerCamera == null) return;
-
-        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, interactionDistance, interactionLayer))
-        {
-            CandleScript_KSM candle = hit.collider.GetComponentInParent<CandleScript_KSM>();
-            if (candle != null)
-            {
-                candle.Interact();
-                return;
-            }
-        }
     }
 
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
