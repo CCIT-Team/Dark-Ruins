@@ -19,9 +19,6 @@ public class MonsterController_KSM : CreatureController_KSM
     [SerializeField] protected float rotationSpeed = 5f;
 
     [Header("공격 설정")]
-    [SerializeField] protected float attackImpactTime = 1.3f;
-    [SerializeField] protected float attackActiveDuration = 0.2f;
-    [SerializeField] protected float attackDuration = 2.2f;
     [SerializeField] protected float attackCooldown = 1f;
 
     [Header("공격 히트박스 연결")]
@@ -41,12 +38,12 @@ public class MonsterController_KSM : CreatureController_KSM
     protected Vector3 patrolOrigin;
 
     private bool isCurrentlyHighlighted = false;
+    protected bool isAttackAnimationFinished = false;
 
     protected override void Awake()
     {
         base.Awake();
         nmAgent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
         rb = GetComponent<Rigidbody>();
 
         if (nmAgent != null)
@@ -151,9 +148,13 @@ public class MonsterController_KSM : CreatureController_KSM
     protected void ChangeState(State newState)
     {
         if (currentState == State.DIE) return;
-
         StopAllCoroutines();
+
+        if (anim != null) anim.ResetTrigger("attack");
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+
         currentState = newState;
+
         StartCoroutine(currentState.ToString());
     }
 
@@ -217,6 +218,7 @@ public class MonsterController_KSM : CreatureController_KSM
     public virtual IEnumerator CHASE()
     {
         if (nmAgent) nmAgent.isStopped = false;
+
         while (target != null)
         {
             nmAgent.SetDestination(target.position);
@@ -229,7 +231,8 @@ public class MonsterController_KSM : CreatureController_KSM
             }
             else if (distance > lostDistance)
             {
-                target = null; ChangeState(State.PATROL);
+                target = null;
+                ChangeState(State.PATROL);
                 yield break;
             }
             yield return new WaitForSeconds(0.2f);
@@ -246,6 +249,7 @@ public class MonsterController_KSM : CreatureController_KSM
             nmAgent.updateRotation = false;
         }
 
+        isAttackAnimationFinished = false;
         if (anim != null)
         {
             anim.ResetTrigger("attack");
@@ -253,44 +257,21 @@ public class MonsterController_KSM : CreatureController_KSM
             anim.SetFloat("speed", 0f);
         }
 
-        float timer = 0f;
-        while (timer < attackImpactTime)
+        float lookTimer = 0f;
+        while (lookTimer < 0.5f && !isAttackAnimationFinished)
         {
-            if (nmAgent) nmAgent.velocity = Vector3.zero;
-
             if (target != null) SmoothLookAt(target.position);
-
-            timer += Time.deltaTime;
+            lookTimer += Time.deltaTime;
             yield return null;
         }
 
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
-        float activeTimer = 0f;
-        while (activeTimer < attackActiveDuration)
+        while (!isAttackAnimationFinished)
         {
-            if (nmAgent) nmAgent.velocity = Vector3.zero;
-            activeTimer += Time.deltaTime;
             yield return null;
         }
 
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
-
-        float usedTime = attackImpactTime + attackActiveDuration;
-        float remainingAnimTime = attackDuration - usedTime;
-
-        if (remainingAnimTime > 0)
-        {
-            float endTimer = 0f;
-            while (endTimer < remainingAnimTime)
-            {
-                if (nmAgent) nmAgent.velocity = Vector3.zero;
-
-                endTimer += Time.deltaTime;
-                yield return null;
-            }
-        }
-
-        yield return new WaitForSeconds(attackCooldown);
+        if (attackCooldown > 0)
+            yield return new WaitForSeconds(attackCooldown);
 
         if (nmAgent) nmAgent.updateRotation = true;
 
@@ -315,6 +296,21 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             ChangeState(State.PATROL);
         }
+    }
+
+    public void AE_EnableHitbox()
+    {
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
+    }
+
+    public void AE_DisableHitbox()
+    {
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+    }
+
+    public void AE_AttackEnd()
+    {
+        isAttackAnimationFinished = true;
     }
 
     public virtual IEnumerator DIE()

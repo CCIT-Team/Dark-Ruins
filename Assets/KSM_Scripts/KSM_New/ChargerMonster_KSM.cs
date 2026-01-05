@@ -50,19 +50,21 @@ public class ChargerMonster_KSM : MonsterController_KSM
         {
             nmAgent.SetDestination(target.position);
             float distance = Vector3.Distance(transform.position, target.position);
+            bool isChargeReady = (Time.time >= lastChargeTime + chargeCooldown);
 
-            if (distance <= attackDistance)
-            {
-                ChangeState(State.ATTACK);
-                yield break;
-            }
-            else if (distance <= chargeDistance && Time.time >= lastChargeTime + chargeCooldown)
+            if (distance <= chargeDistance && isChargeReady)
             {
                 if (HasLineOfSightToTarget())
                 {
                     ChangeState(State.CHARGE);
                     yield break;
                 }
+            }
+
+            if (distance <= attackDistance)
+            {
+                ChangeState(State.ATTACK);
+                yield break;
             }
 
             else if (distance > lostDistance)
@@ -201,12 +203,57 @@ public class ChargerMonster_KSM : MonsterController_KSM
         }
     }
 
-    private void OnDrawGizmos()
+    public override IEnumerator ATTACK()
     {
-        if (Application.isPlaying && currentState == State.CHARGE)
+        if (nmAgent)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawRay(transform.position + Vector3.up, transform.forward * 3.0f);
+            nmAgent.isStopped = true;
+            nmAgent.velocity = Vector3.zero;
+            nmAgent.updateRotation = false;
+        }
+
+        isAttackAnimationFinished = false;
+        if (anim != null)
+        {
+            anim.ResetTrigger("attack");
+            anim.SetTrigger("attack");
+            anim.SetFloat("speed", 0f);
+        }
+
+        float lookTimer = 0f;
+        while (lookTimer < 0.5f && !isAttackAnimationFinished)
+        {
+            if (target != null) SmoothLookAt(target.position);
+            lookTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        while (!isAttackAnimationFinished)
+        {
+            yield return null;
+        }
+
+        if (attackCooldown > 0)
+            yield return new WaitForSeconds(attackCooldown);
+
+        if (nmAgent) nmAgent.updateRotation = true;
+
+        if (target != null)
+        {
+            ChangeState(State.CHASE);
+        }
+        else
+        {
+            ChangeState(State.PATROL);
         }
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    if (Application.isPlaying && currentState == State.CHARGE)
+    //    {
+    //        Gizmos.color = Color.red;
+    //        Gizmos.DrawRay(transform.position + Vector3.up, transform.forward * 3.0f);
+    //    }
+    //}
 }
