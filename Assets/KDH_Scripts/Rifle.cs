@@ -22,6 +22,7 @@ public class Rifle : GunBase
     {
         _anim.Play("Rifle Fire", 0, 0f);
         base.Fire();
+
     }
 
     public override void Reload(out bool ob)

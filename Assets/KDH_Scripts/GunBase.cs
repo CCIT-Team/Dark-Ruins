@@ -96,6 +96,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
+        //Managers_YGU.Sound.Play("", Sound.Effect);
         _uir.BulletUISet(true, _loadedBullet, _maxBullet);
     }
 
