@@ -35,15 +35,19 @@ public class Rifle : GunBase
     }
     public override void Init()
     {
-        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        if (transform.gameObject.layer == LayerMask.NameToLayer("Item"))
+        {
+            _arm.SetActive(true);
+        }
+        else if (gameObject.layer == LayerMask.NameToLayer("Arms"))
         {
             return;
         }
-        _arm.SetActive(true);
+
     }
     public override void OnPickUp()
     {
-        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
             return;
         }

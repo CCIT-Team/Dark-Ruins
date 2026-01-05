@@ -40,7 +40,7 @@ public class Glock : GunBase
     }
     public override void OnPickUp()
     {
-        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Item"))
         {
             return;
         }

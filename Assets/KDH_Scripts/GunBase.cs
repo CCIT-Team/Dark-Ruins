@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
-    protected int _loadedBullet=0, _maxBullet=8;
+    protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
     protected float _fireCooltime = 0f;
     protected float _fireCooltimeSet=0.5f;
     protected bool _zoomOuted = true;
@@ -97,9 +97,37 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
         //Managers_YGU.Sound.Play("", Sound.Effect);
-        _uir.BulletUISet(true, _loadedBullet, _maxBullet);
+        _uir.BulletUISet(true, _loadedBullet, HaveBullet());
     }
+    public int HaveBullet()
+    {
+        int q = 0;
+        switch ((int)_bullet)
+        {
+            case 0:
+                List<ItemBase> lib = GetComponentInParent<Inventory>().CheckItems<GlockAmmo>();
+                foreach (ItemBase g in lib)
+                {
+                    q += g.Count;
+#if UNITY_EDITOR
+                    Debug.Log(g);
+#endif
+                }
+                break;
+            case 1:
+                List<ItemBase> LIB = GetComponentInParent<Inventory>().CheckItems<RifleAmmo>();
+                foreach (ItemBase gg in LIB)
+                {
+                    q += gg.Count;
+#if UNITY_EDITOR
+                    Debug.Log(gg);
+#endif
+                }
+                break;
+        }
 
+        return q;
+    }
     public virtual void Reload(out bool ob)
     {
         BulletItem b=null;
@@ -125,8 +153,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             for (int i=_loadedBullet; i<_maxBullet;i++)
             {
-                if (b.Count > 0)
+                if (b.Count > 0&&_loadedBullet<_maxBullet)
                 {
+#if UNITY_EDITOR
+                    Debug.Log(HaveBullet());
+#endif
                     b.Re();
                     _uir.Delay();
                     _loadedBullet++;
@@ -139,7 +170,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #endif
                     return;
                 }
-                _uir.BulletUISet(true, _loadedBullet, _maxBullet);
+                _uir.BulletUISet(true, _loadedBullet, HaveBullet());
             }
         }
         //인벤토리에서 총알 소모도 추가
@@ -179,7 +210,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     private UI_GameScene _uir;
     public override void OnPickUp()
     {
-        _uir.BulletUISet(true,_loadedBullet,_maxBullet);
+        _uir.BulletUISet(true,_loadedBullet,HaveBullet());
     }
 
     public override void OnDropped()
