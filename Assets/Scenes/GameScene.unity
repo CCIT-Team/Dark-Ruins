@@ -30604,10 +30604,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: "\uAE00\uB85D (1)"
       objectReference: {fileID: 0}
+    - target: {fileID: 6103944317441239150, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: fcbd02440b2e463458e66a31e6355c67, type: 2}
     - target: {fileID: 7829794526914427558, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7829794526914427558, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ef612fc2a11250f479b9816d4b08e4fe, type: 2}
     - target: {fileID: 8629895195532523423, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 34.99345
