@@ -82,26 +82,27 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
                 Debug.Log("철컥3");
 #endif
-                Reload();
+                Reload(out _);
             }
         }
     }
-    public void Fire()
+    public virtual void Fire()
     {
 #if UNITY_EDITOR
         Debug.Log("발사");
 #endif
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(this.gameObject.transform.parent.position+this.gameObject.transform.parent.forward*_fireLength, transform.parent.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.transform.position+ Camera.main.transform.forward *_fireLength, Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
         _uir.BulletUISet(true, _loadedBullet, _maxBullet);
     }
 
-    public void Reload()
+    public virtual void Reload(out bool ob)
     {
         BulletItem b=null;
+        ob = false;
         switch ((int)_bullet)
         {
             case 0:
@@ -128,6 +129,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
                     b.Re();
                     _uir.Delay();
                     _loadedBullet++;
+                    ob = true;
                 }
                 else 
                 {
@@ -172,7 +174,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         }
 
     }
-
+    [SerializeField]
     private UI_GameScene _uir;
     public override void OnPickUp()
     {

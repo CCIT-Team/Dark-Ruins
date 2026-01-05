@@ -99,8 +99,19 @@ public class Inventory :MonoBehaviour
             _drag = true;
             item.OutFocused();
             StartCoroutine(SubCriber());
-            _dragItem.GetComponent<Collider>().enabled = false;
+            //_dragItem.gameObject.SetActive(false);
+            DragFalse();
+            _dragItem.gameObject.GetComponent<Collider>().enabled = false;
         }
+    }
+    private void DragFalse()
+    {
+        if(_dragItem.CompareTag("Arms")==false)
+        {
+            return;
+        }
+        
+        _dragItem.gameObject.SetActive(false);
     }
     private bool DragItem() 
     {
@@ -116,7 +127,9 @@ public class Inventory :MonoBehaviour
                 _drag = true;
                 StartCoroutine(SubCriber());
                 _dragItem.GetComponent<ItemBase>().Init();
-                _dragItem.GetComponent<Collider>().enabled = false;
+                //_dragItem.gameObject.SetActive(false);
+                DragFalse();
+                _dragItem.gameObject.GetComponent<Collider>().enabled = false;
                 return true;
             }
         }
@@ -146,7 +159,7 @@ public class Inventory :MonoBehaviour
         {
             _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
             _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
-            _dragItem.GetComponent<ItemBase>().Unsubscribe();
+            //_dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
     }
@@ -184,7 +197,8 @@ public class Inventory :MonoBehaviour
         _dragItem.localPosition = new Vector3(0, 0.65f, 0);
         _dragItem.localRotation=Quaternion.identity;
         _dragItem.GetComponent<ItemBase>().Init();
-        _dragItem.GetComponent<Collider>().enabled = true;
+        _dragItem.gameObject.SetActive(true);
+        _dragItem.gameObject.GetComponent<Collider>().enabled = true;
         item.Unsubscribe();
         _drag = false;
         if(xy==true)

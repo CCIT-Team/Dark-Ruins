@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class Rifle : GunBase
 {
+    [SerializeField]
+    private GameObject _arm;
+    private Animator _anim;
     protected override void Start()
     {
         base.Start();
@@ -13,12 +16,47 @@ public class Rifle : GunBase
         SetData();
         _up = new Vector3(0, 0f, 0);
         _f = new Vector3(0, 0, 0);
+        _anim = _arm.GetComponent<Animator>();
+    }
+    public override void Fire()
+    {
+        _anim.SetTrigger("rifle shot");
+        base.Fire();
+    }
+
+    public override void Reload(out bool ob)
+    {
+        base.Reload(out ob);
+        if (ob == true)
+        {
+            _anim.SetTrigger("reloading");
+        }
     }
     public override void Init()
     {
-        transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
-        transform.localPosition=new Vector3(0.5f,-0.2f,0)+transform.localPosition;
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        _arm.SetActive(true);
+    }
+    public override void OnPickUp()
+    {
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        base.OnPickUp();
+    }
 
+    public override void OnDropped()
+    {
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        base.OnDropped();
+        _arm.SetActive(false);
     }
     public override void SetData()
     {

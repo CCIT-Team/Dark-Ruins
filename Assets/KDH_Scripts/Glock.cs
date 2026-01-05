@@ -5,17 +5,56 @@ using UnityEngine;
 
 public class Glock : GunBase
 {
+    [SerializeField]
+    private GameObject _arm;
+    private Animator _anim;
     protected override void Start()
     {
         base.Start();
         _fireLength = 1.5f;
         _up = new Vector3(0, 0.0f, 0);
-        _f = new Vector3(-90f, 0f, -90f);
+        _f = new Vector3(0f, 90f, 90f);
+        _anim=_arm.GetComponent<Animator>();
+    }
+    public override void Fire()
+    {
+        _anim.SetTrigger("gun shot");
+        base.Fire();
+    }
+
+    public override void Reload(out bool ob)
+    {
+        base.Reload(out ob);
+        if(ob==true)
+        {
+            _anim.SetTrigger("reloading");
+        }
     }
     public override void Init()
     {
-        transform.localRotation = Quaternion.Euler(_f);
-        transform.localPosition = new Vector3(0.5f, 0, 0) + transform.localPosition;
+        if(this.transform.gameObject.layer==LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        _arm.SetActive(true);
+    }
+    public override void OnPickUp()
+    {
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        base.OnPickUp();
+    }
+
+    public override void OnDropped()
+    {
+        if (this.transform.gameObject.layer == LayerMask.NameToLayer("Arms"))
+        {
+            return;
+        }
+        base.OnDropped();
+        _arm.SetActive(false);
     }
     public override void SetData()
     {
