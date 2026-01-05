@@ -62,6 +62,7 @@ public class WeaponManager_KSM : MonoBehaviour
         MonoBehaviour nextWeaponScript = null;
         GameObject nextWeaponVisual = null;
         int typeID = 0;
+        string equipSoundKey = "";
 
         switch (mode)
         {
@@ -81,6 +82,7 @@ public class WeaponManager_KSM : MonoBehaviour
                 nextWeaponScript = knifeScript;
                 nextWeaponVisual = knifeObject;
                 typeID = 3;
+                equipSoundKey = "Machete_Equip";
                 break;
 
             case WeaponMode.None:
@@ -93,6 +95,12 @@ public class WeaponManager_KSM : MonoBehaviour
         if (playerController != null)
         {
             playerController.StartWeaponSwap(nextWeaponScript, nextWeaponVisual, typeID);
+        }
+
+        if (!string.IsNullOrEmpty(equipSoundKey))
+        {
+            if (Managers_YGU.Sound != null)
+                Managers_YGU.Sound.Play(equipSoundKey, Sound.UI);
         }
     }
 
@@ -110,6 +118,7 @@ public class WeaponManager_KSM : MonoBehaviour
                 if (knifeAnim != null)
                 {
                     knifeAnim.SetTrigger("slash");
+                    Managers_YGU.Sound.Play("Machete_Swing", Sound.UI);
                 }
                 break;
         }

@@ -247,13 +247,4 @@ public class ChargerMonster_KSM : MonsterController_KSM
             ChangeState(State.PATROL);
         }
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    if (Application.isPlaying && currentState == State.CHARGE)
-    //    {
-    //        Gizmos.color = Color.red;
-    //        Gizmos.DrawRay(transform.position + Vector3.up, transform.forward * 3.0f);
-    //    }
-    //}
 }

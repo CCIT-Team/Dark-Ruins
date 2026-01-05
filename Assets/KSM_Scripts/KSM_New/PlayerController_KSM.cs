@@ -13,12 +13,16 @@ public class PlayerController_KSM : CreatureController_KSM
     [Header("설정")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private float interactionDistance = 3.0f;
     [SerializeField] private LayerMask interactionLayer;
 
     [Header("이동 속도")]
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private float runSpeed = 12f;
+
+    [Header("발소리 설정")]
+    [SerializeField] private float footstepInterval = 0.5f;
+    [SerializeField] private float runFootstepInterval = 0.3f;
+    private float footstepTimer = 0f;
 
     [Header("현재 무기 상태")]
     [SerializeField] private MonoBehaviour currentWeaponContext;
@@ -91,6 +95,7 @@ public class PlayerController_KSM : CreatureController_KSM
     void Update()
     {
         MouseLook();
+        HandleFootsteps();
     }
 
     private void FixedUpdate()
@@ -98,6 +103,30 @@ public class PlayerController_KSM : CreatureController_KSM
         if (!isKnockedBack)
         {
             rb.velocity = new Vector3(targetVelocity.x, rb.velocity.y, targetVelocity.z);
+        }
+    }
+
+    private void HandleFootsteps()
+    {
+        if (targetVelocity.magnitude > 0.1f)
+        {
+            bool isRunning = targetVelocity.magnitude > moveSpeed + 0.5f;
+            float currentInterval = isRunning ? runFootstepInterval : footstepInterval;
+
+            footstepTimer -= Time.deltaTime;
+
+            if (footstepTimer <= 0f)
+            {
+                float randomPitch = UnityEngine.Random.Range(0.9f, 1.1f);
+
+                Managers_YGU.Sound.Play("User_footstep", Sound.UI, 0.5f, randomPitch);
+
+                footstepTimer = currentInterval;
+            }
+        }
+        else
+        {
+            footstepTimer = 0f;
         }
     }
 
@@ -226,6 +255,7 @@ public class PlayerController_KSM : CreatureController_KSM
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         base.OnDamaged(damage, attacker, false);
+        Managers_YGU.Sound.Play("User_Hit_Monster", Sound.UI);
     }
 
     public override void OnDead()
