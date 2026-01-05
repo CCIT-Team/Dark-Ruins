@@ -9,6 +9,7 @@ TagManager:
   - Knife
   - Item
   - FlickableObject
+  - Arms
   layers:
   - Default
   - TransparentFX

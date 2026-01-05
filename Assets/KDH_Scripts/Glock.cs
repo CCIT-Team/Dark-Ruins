@@ -18,7 +18,7 @@ public class Glock : GunBase
     }
     public override void Fire()
     {
-        _anim.SetTrigger("gun shot");
+        _anim.Play("gun shot", 0, 0f);
         base.Fire();
     }
 

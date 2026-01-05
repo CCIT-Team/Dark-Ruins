@@ -20,7 +20,7 @@ public class Rifle : GunBase
     }
     public override void Fire()
     {
-        _anim.SetTrigger("rifle shot");
+        _anim.Play("Rifle Fire", 0, 0f);
         base.Fire();
     }
 
