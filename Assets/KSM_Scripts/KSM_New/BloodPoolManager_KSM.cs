@@ -32,10 +32,9 @@ public class BloodPoolManager_KSM : MonoBehaviour
                 blood.transform.position = position;
                 blood.transform.rotation = rotation;
                 blood.SetActive(true);
+                Managers_YGU.Sound.Play("Machete_Attack", Sound.UI);
                 return;
             }
         }
-
-        Debug.Log("모든 피 이펙트가 사용 중입니다! 풀 사이즈를 늘리세요.");
     }
 }

@@ -9,6 +9,7 @@ TagManager:
   - Knife
   - Item
   - FlickableObject
+  - Arms
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Item
   - Slot
   - FiredBullet
-  - 
+  - Arms
   - 
   - 
   - 

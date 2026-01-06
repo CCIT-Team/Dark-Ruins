@@ -470,14 +470,11 @@ MonoBehaviour:
   Length: 0
   _dropped: 0
   OutLine: {fileID: 0}
+  _rate: 1
+  knifeArea: {fileID: 5970324140077059698}
   type: 0
   damage: 3
   isAttacking: 0
-  _rate: 1
-  knifeArea: {fileID: 5970324140077059698}
-  hitEffect:
-  - {fileID: 1151993572977853869}
-  - {fileID: 738039469552493481}
 --- !u!1 &985646258617110004
 GameObject:
   m_ObjectHideFlags: 0
@@ -12487,16 +12484,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   attackDamage: 10
+  weaponManager: {fileID: 0}
   mouseSpeed: 5
   playerCamera: {fileID: 7752498267534849279}
-  moveSpeed: 7
-  runSpeed: 12
   interactionDistance: 3
   interactionLayer:
     serializedVersion: 2
     m_Bits: 0
+  moveSpeed: 7
+  runSpeed: 12
   currentWeaponContext: {fileID: 0}
   currentWeaponObject: {fileID: 0}
+  playerCam: {fileID: 0}
 --- !u!114 &2268850465567631423
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12917,8 +12916,4 @@ MonoBehaviour:
   regularLightDrain: 1
   uvLightDrain: 5
   batteryReloadAmount: 50
-  detectionRange: 15
-  detectionAngle: 50
-  weakPointLayer:
-    serializedVersion: 2
-    m_Bits: 512
+  det1: {fileID: 0}

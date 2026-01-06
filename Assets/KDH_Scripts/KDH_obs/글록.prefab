@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 1681774509805695677}
   m_Layer: 13
   m_Name: "\uAE00\uB85D"
-  m_TagString: Untagged
+  m_TagString: Arms
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 75427d4d42ac0e44baafa16ec1c84f3a, type: 2}
+  - {fileID: 2100000, guid: ef612fc2a11250f479b9816d4b08e4fe, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -105,6 +105,8 @@ MonoBehaviour:
   OutLine: {fileID: 0}
   _loadedBullet: 0
   _maxBullet: 8
+  _uir: {fileID: 0}
+  _arm: {fileID: 0}
 --- !u!64 &1681774509805695677
 MeshCollider:
   m_ObjectHideFlags: 0

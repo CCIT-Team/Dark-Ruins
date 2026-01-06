@@ -157,10 +157,10 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
             return;
         }
 
+        Managers_YGU.Sound.Play("Flash_Switch", Sound.UI);
         isUVLightActive = !isUVLightActive;
         regularLight.enabled = !isUVLightActive;
         uvLight.enabled = isUVLightActive;
-
         OnUVLightToggled?.Invoke(isUVLightActive);
 
         UpdateWeakPointsState();
@@ -171,7 +171,6 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
         uvLight.enabled = false;
         isUVLightActive = false;
         regularLight.enabled = true;
-
         OnUVLightToggled?.Invoke(isUVLightActive);
 
         ClearAllWeakPoints();
