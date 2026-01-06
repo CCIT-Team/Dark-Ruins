@@ -27,8 +27,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
         originalAngularSpeed = nmAgent.angularSpeed;
         lastChargeTime = -chargeCooldown;
 
-        lostDistance = customLostDistance;
-
         if (rb != null)
         {
             rb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
@@ -42,9 +40,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
         nmAgent.isStopped = false;
         nmAgent.speed = defaultSpeed;
         nmAgent.stoppingDistance = attackDistance;
-
-        float keepChasingTimer = 0f;
-        float chasePersistenceTime = 2.0f;
 
         while (target != null)
         {
@@ -65,21 +60,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
             {
                 ChangeState(State.ATTACK);
                 yield break;
-            }
-
-            else if (distance > lostDistance)
-            {
-                keepChasingTimer += Time.deltaTime;
-                if (keepChasingTimer > chasePersistenceTime)
-                {
-                    target = null;
-                    ChangeState(State.PATROL);
-                    yield break;
-                }
-            }
-            else
-            {
-                keepChasingTimer = 0f;
             }
 
             yield return new WaitForSeconds(0.2f);
@@ -186,16 +166,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
         if (target != null)
         {
             float currentDist = Vector3.Distance(transform.position, target.position);
-
-            if (currentDist > lostDistance)
-            {
-                target = null;
-                ChangeState(State.PATROL);
-            }
-            else
-            {
-                ChangeState(State.CHASE);
-            }
+            ChangeState(State.CHASE);
         }
         else
         {
