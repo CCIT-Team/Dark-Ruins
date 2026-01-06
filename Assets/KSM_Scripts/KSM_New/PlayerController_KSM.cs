@@ -260,6 +260,18 @@ public class PlayerController_KSM : CreatureController_KSM
         Managers_YGU.Sound.Play("User_Hit_Monster", Sound.UI);
     }
 
+    public void OnHealed(int damage)
+    {
+        base.OnDamaged(damage, this.transform, default);
+        if (currentHealth <= maxHealth)
+            currentHealth = 100;
+    }
+
+    public void Trapdamaged(int damage)
+    {
+
+    }
+
     public override void OnDead()
     {
         Debug.Log("유다희");

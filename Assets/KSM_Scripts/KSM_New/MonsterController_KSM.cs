@@ -8,6 +8,12 @@ public class MonsterController_KSM : CreatureController_KSM
     public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
     public State currentState;
 
+    [Header("사운드 설정")]
+    [SerializeField] protected string attackSound;
+    [SerializeField] protected string hitSound;
+    [SerializeField] protected string deathSound;
+    [SerializeField] protected string idleSound;
+
     [Header("거리 설정")]
     protected float patrolRadius = 7f;
     protected float attackDistance = 3f;
@@ -89,6 +95,14 @@ public class MonsterController_KSM : CreatureController_KSM
         }
     }
 
+    protected void PlaySound(string soundKey)
+    {
+        if (!string.IsNullOrEmpty(soundKey))
+        {
+            Managers_YGU.Sound.Play3D(soundKey, transform.position);
+        }
+    }
+
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         if (currentState == State.DIE) return;
@@ -103,6 +117,9 @@ public class MonsterController_KSM : CreatureController_KSM
                 else anim.SetTrigger("attacked");
             }
         }
+
+        if (Random.Range(0, 3) == 0)
+            PlaySound(hitSound);
 
         if (isWeakPoint)
         {
@@ -135,6 +152,7 @@ public class MonsterController_KSM : CreatureController_KSM
             ID.DeathDrop();
         }
         if (anim != null) anim.SetTrigger("dead");
+        PlaySound(deathSound);
         ChangeState(State.DIE);
     }
 
@@ -184,6 +202,10 @@ public class MonsterController_KSM : CreatureController_KSM
     public virtual IEnumerator IDLE()
     {
         if (nmAgent) nmAgent.isStopped = true;
+
+        if (Random.Range(0, 3) == 0)
+            PlaySound(idleSound);
+
         yield return new WaitForSeconds(Random.Range(2f, 4f));
         ChangeState(State.PATROL);
     }
@@ -251,6 +273,9 @@ public class MonsterController_KSM : CreatureController_KSM
             anim.SetFloat("speed", 0f);
         }
 
+        if (Random.Range(0, 3) == 0)
+            PlaySound(attackSound);
+
         float lookTimer = 0f;
         while (lookTimer < 0.5f && !isAttackAnimationFinished)
         {
@@ -269,15 +294,8 @@ public class MonsterController_KSM : CreatureController_KSM
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-
-            if (distance <= attackDistance)
-            {
-                ChangeState(State.ATTACK);
-            }
-            else
-            {
-                ChangeState(State.CHASE);
-            }
+            if (distance <= attackDistance) ChangeState(State.ATTACK);
+            else ChangeState(State.CHASE);
         }
         else
         {

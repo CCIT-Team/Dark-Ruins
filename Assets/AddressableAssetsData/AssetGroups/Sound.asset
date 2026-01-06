@@ -33,7 +33,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 273ffdca3219e7c4ba9594621fa4c51c
-    m_Address: Monster_Ghost_Defalt
+    m_Address: Monster_Ghost_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -168,7 +168,7 @@ MonoBehaviour:
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ce4794fed83573d4eb7278ea9fb03fe6
-    m_Address: Monster_Mummy_Defalt
+    m_Address: Monster_Mummy_Default
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

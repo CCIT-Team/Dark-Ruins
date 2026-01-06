@@ -9,6 +9,9 @@ public class ChargerMonster_KSM : MonsterController_KSM
     [SerializeField] private float chargePreparationTime = 1.0f;
     [SerializeField] private float chargeCooldown = 7.0f;
 
+    [Header("돌진 사운드")]
+    [SerializeField] private string chargeSound;
+
     [Header("넉백 설정")]
     [SerializeField] private float knockbackForce = 15f;
     [SerializeField] private float knockbackDuration = 0.5f;
@@ -83,6 +86,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
         nmAgent.velocity = Vector3.zero;
         nmAgent.updateRotation = false;
         if (anim != null) anim.SetTrigger("rush attack");
+        if (!string.IsNullOrEmpty(chargeSound)) PlaySound(chargeSound);
 
         float elapsed = 0f;
         while (elapsed < chargePreparationTime)
