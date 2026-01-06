@@ -16,13 +16,13 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     protected int _count=0;
     public int Count { get { return _count; } }
     public int Length;
-    public bool _dropped = false;
+    public bool _dropped = false,In=false;
     public Outline OutLine;
 
     protected virtual void Start()
     {
         OutLine = GetComponent<Outline>();
-
+        Length = 1;
         if (OutLine == null)
         {
             OutLine = gameObject.AddComponent<Outline>();
