@@ -18,9 +18,6 @@ public class MonsterController_KSM : CreatureController_KSM
     [Header("회전 설정")]
     [SerializeField] protected float rotationSpeed = 5f;
 
-    [Header("공격 설정")]
-    [SerializeField] protected float attackCooldown = 1f;
-
     [Header("공격 히트박스 연결")]
     [SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
 
@@ -99,15 +96,18 @@ public class MonsterController_KSM : CreatureController_KSM
 
         int finalDamage = damage;
 
-        if (anim != null)
+        if (currentState != State.ATTACK)
         {
-            if (isWeakPoint)
+            if (anim != null)
             {
-                anim.SetTrigger("weakness attacked");
-            }
-            else
-            {
-                anim.SetTrigger("attacked");
+                if (isWeakPoint)
+                {
+                    anim.SetTrigger("weakness attacked");
+                }
+                else
+                {
+                    anim.SetTrigger("attacked");
+                }
             }
         }
 
@@ -139,7 +139,7 @@ public class MonsterController_KSM : CreatureController_KSM
     {
         if (TryGetComponent<ItemDrop>(out ItemDrop ID) == true)
         {
-            //ID.DeathDrop();
+            ID.DeathDrop();
         }
         if (anim != null) anim.SetTrigger("dead");
         ChangeState(State.DIE);
@@ -270,9 +270,6 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             yield return null;
         }
-
-        if (attackCooldown > 0)
-            yield return new WaitForSeconds(attackCooldown);
 
         if (nmAgent) nmAgent.updateRotation = true;
 

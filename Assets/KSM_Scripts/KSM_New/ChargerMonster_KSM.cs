@@ -233,9 +233,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
             yield return null;
         }
 
-        if (attackCooldown > 0)
-            yield return new WaitForSeconds(attackCooldown);
-
         if (nmAgent) nmAgent.updateRotation = true;
 
         if (target != null)

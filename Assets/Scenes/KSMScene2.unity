@@ -66113,7 +66113,7 @@ Animator:
   m_GameObject: {fileID: 6109653300852968691}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1798e9858c78b1445aae42c8b26bb918, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2ed817ec4e3248e4c9a544ccf4ee19c4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -77275,7 +77275,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 8967978106402574550}
   detectionCollider: {fileID: 880697727117623525}
   obstacleMask:
@@ -196463,7 +196462,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 5244799750214521516}
   detectionCollider: {fileID: 9109007841538339995}
   obstacleMask:
@@ -220088,7 +220086,7 @@ Animator:
   m_GameObject: {fileID: 3817116503040317583}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1798e9858c78b1445aae42c8b26bb918, type: 2}
+  m_Controller: {fileID: 9100000, guid: 2ed817ec4e3248e4c9a544ccf4ee19c4, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -235272,6 +235270,8 @@ MonoBehaviour:
     m_Bits: 0
   moveSpeed: 7
   runSpeed: 12
+  footstepInterval: 0.5
+  runFootstepInterval: 0.3
   currentWeaponContext: {fileID: 6740011885484402230}
   currentWeaponObject: {fileID: 0}
   playerCam: {fileID: 3378825618716506744}
@@ -235362,7 +235362,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 1
   attackHitbox: {fileID: 7016828137132415546}
   detectionCollider: {fileID: 2729532842444380569}
   obstacleMask:
@@ -241085,7 +241084,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5232398291263511206}
   - component: {fileID: 82654224983106502}
-  - component: {fileID: 4631234307229884125}
   m_Layer: 0
   m_Name: Clothing_1
   m_TagString: Untagged
@@ -257740,7 +257738,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 4719815700888930211}
   detectionCollider: {fileID: 6250029208787151071}
   obstacleMask:
@@ -258603,7 +258600,6 @@ GameObject:
   m_Component:
   - component: {fileID: 5319240314957432982}
   - component: {fileID: 276638909168501344}
-  - component: {fileID: 4460423949551405291}
   m_Layer: 0
   m_Name: Clothing_1
   m_TagString: Untagged
@@ -285595,6 +285591,7 @@ GameObject:
   - component: {fileID: 3914298535244525915}
   - component: {fileID: 4103761480720414970}
   - component: {fileID: 6250029208787151071}
+  - component: {fileID: 6250029208787151072}
   - component: {fileID: 3182073434356651059}
   m_Layer: 0
   m_Name: Ghost_01 (2)
@@ -313069,28 +313066,6 @@ Transform:
   - {fileID: 8197647209120660786}
   m_Father: {fileID: 3646966855308386189}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &4460423949551405291
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3349402645965471600}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: -1
-  m_Mesh: {fileID: -8385311166440986022, guid: 0da8558d48df1204980f002657aa5f8d, type: 3}
 --- !u!4 &4467636640452435751
 Transform:
   m_ObjectHideFlags: 0
@@ -328403,28 +328378,6 @@ Transform:
   - {fileID: 1689456656151762136}
   m_Father: {fileID: 637106712895755924}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &4631234307229884125
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2838494259428153933}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: -1
-  m_Mesh: {fileID: -8385311166440986022, guid: 0da8558d48df1204980f002657aa5f8d, type: 3}
 --- !u!4 &4634959648132761370
 Transform:
   m_ObjectHideFlags: 0
@@ -378556,6 +378509,7 @@ GameObject:
   - component: {fileID: 7876661062829331301}
   - component: {fileID: 7358653774897955654}
   - component: {fileID: 1865372263208521466}
+  - component: {fileID: 9014474955250687706}
   - component: {fileID: 8078848804471380081}
   - component: {fileID: 9014474955250687705}
   m_Layer: 0
@@ -394591,6 +394545,7 @@ GameObject:
   - component: {fileID: 7071908796596586349}
   - component: {fileID: 6159074754859882490}
   - component: {fileID: 880697727117623525}
+  - component: {fileID: 7071908796596586350}
   - component: {fileID: 342552012614417234}
   m_Layer: 0
   m_Name: Ghost_01 (1)
@@ -409702,6 +409657,27 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 10
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &6250029208787151072
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3817116503040317583}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &6250280641584454179
 Transform:
   m_ObjectHideFlags: 0
@@ -419971,7 +419947,7 @@ Transform:
   m_GameObject: {fileID: 5820612728436269476}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 56.44, y: 0, z: 0}
+  m_LocalPosition: {x: 78.58, y: 0, z: 43.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -425592,7 +425568,7 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.7
   m_Height: 3
   m_Direction: 1
   m_Center: {x: 0, y: 1.4, z: 0}
@@ -442993,7 +442969,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 3687164512192127694}
   detectionCollider: {fileID: 7323031735811307715}
   obstacleMask:
@@ -444052,6 +444027,27 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!65 &7071908796596586350
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6109653300852968691}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &7074566531501079585
 Transform:
   m_ObjectHideFlags: 0
@@ -484979,28 +484975,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!64 &7543944142630471731
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8221138806900739593}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: -1
-  m_Mesh: {fileID: -8385311166440986022, guid: 0da8558d48df1204980f002657aa5f8d, type: 3}
 --- !u!65 &7545944498282379787
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -515558,7 +515532,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 463816265188471472}
   detectionCollider: {fileID: 6680467698182938676}
   obstacleMask:
@@ -551007,7 +550980,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4151761405758763629}
   - component: {fileID: 8291988293247979630}
-  - component: {fileID: 7543944142630471731}
   m_Layer: 0
   m_Name: Clothing_1
   m_TagString: Untagged
@@ -579744,7 +579716,6 @@ MonoBehaviour:
   attackDamage: 10
   currentState: 0
   rotationSpeed: 5
-  attackCooldown: 2
   attackHitbox: {fileID: 6080065757637555075}
   detectionCollider: {fileID: 8078848804471380081}
   obstacleMask:
@@ -579763,6 +579734,27 @@ MonoBehaviour:
   - {fileID: 5821997443761879045}
   - {fileID: 3684837009660989210}
   weakPointMultiplier: 2
+--- !u!65 &9014474955250687706
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5820612728436269476}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &9015227051739965209
 Transform:
   m_ObjectHideFlags: 0
@@ -600214,9 +600206,9 @@ SceneRoots:
   - {fileID: 8780043682402470016}
   - {fileID: 18469634}
   - {fileID: 6376873679696783284}
+  - {fileID: 8481307402430782325}
   - {fileID: 4304341092889006358}
   - {fileID: 5440104876103368425}
-  - {fileID: 8481307402430782325}
   - {fileID: 2807983208471988681}
   - {fileID: 4106007195496942540}
   - {fileID: 9059198241138492736}
