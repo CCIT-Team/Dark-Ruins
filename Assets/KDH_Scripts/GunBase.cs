@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
-    protected int _loadedBullet=0, _maxBullet=8;
+    protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
     protected float _fireCooltime = 0f;
     protected float _fireCooltimeSet=0.5f;
     protected bool _zoomOuted = true;
@@ -82,26 +82,56 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
                 Debug.Log("철컥3");
 #endif
-                Reload();
+                Reload(out _);
             }
         }
     }
-    public void Fire()
+    public virtual void Fire()
     {
 #if UNITY_EDITOR
         Debug.Log("발사");
 #endif
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(this.gameObject.transform.parent.position+this.gameObject.transform.parent.forward*_fireLength, transform.parent.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.transform.position+ Camera.main.transform.forward *_fireLength, Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
-        _uir.BulletUISet(true, _loadedBullet, _maxBullet);
+        //Managers_YGU.Sound.Play("", Sound.Effect);
+        _uir.BulletUISet(true, _loadedBullet, HaveBullet());
     }
+    public int HaveBullet()
+    {
+        int q = 0;
+        switch ((int)_bullet)
+        {
+            case 0:
+                List<ItemBase> lib = GetComponentInParent<Inventory>().CheckItems<GlockAmmo>();
+                foreach (ItemBase g in lib)
+                {
+                    q += g.Count;
+#if UNITY_EDITOR
+                    Debug.Log(g);
+#endif
+                }
+                break;
+            case 1:
+                List<ItemBase> LIB = GetComponentInParent<Inventory>().CheckItems<RifleAmmo>();
+                foreach (ItemBase gg in LIB)
+                {
+                    q += gg.Count;
+#if UNITY_EDITOR
+                    Debug.Log(gg);
+#endif
+                }
+                break;
+        }
 
-    public void Reload()
+        return q;
+    }
+    public virtual void Reload(out bool ob)
     {
         BulletItem b=null;
+        ob = false;
         switch ((int)_bullet)
         {
             case 0:
@@ -123,11 +153,15 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             for (int i=_loadedBullet; i<_maxBullet;i++)
             {
-                if (b.Count > 0)
+                if (b.Count > 0&&_loadedBullet<_maxBullet)
                 {
+#if UNITY_EDITOR
+                    Debug.Log(HaveBullet());
+#endif
                     b.Re();
                     _uir.Delay();
                     _loadedBullet++;
+                    ob = true;
                 }
                 else 
                 {
@@ -136,7 +170,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #endif
                     return;
                 }
-                _uir.BulletUISet(true, _loadedBullet, _maxBullet);
+                _uir.BulletUISet(true, _loadedBullet, HaveBullet());
             }
         }
         //인벤토리에서 총알 소모도 추가
@@ -172,11 +206,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         }
 
     }
-
+    [SerializeField]
     private UI_GameScene _uir;
     public override void OnPickUp()
     {
-        _uir.BulletUISet(true,_loadedBullet,_maxBullet);
+        _uir.BulletUISet(true,_loadedBullet,HaveBullet());
     }
 
     public override void OnDropped()
