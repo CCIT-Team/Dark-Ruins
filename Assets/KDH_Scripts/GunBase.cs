@@ -177,6 +177,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     }
     public int GetAmmos { get => _loadedBullet; }
 
+    [SerializeField]
     protected Camera _camera;
     public void Zoom(bool b)
     {

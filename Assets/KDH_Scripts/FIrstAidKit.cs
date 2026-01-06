@@ -6,6 +6,7 @@ using UnityEngine;
 public class FIrstAidKit : ItemBase
 {
     private int _health;
+    private bool _used = false;
     protected override void Start()
     {
         base.Start();
@@ -23,9 +24,12 @@ public class FIrstAidKit : ItemBase
     }
     public override void ItemUse(List<KeyCode> keys)
     {
-        if(keys.Contains(KeyCode.Mouse0))
+        if(Input.GetKey(KeyCode.Mouse1)&&_used==false)
         {
+            _used = true;
             GetComponentInParent<PlayerController_KSM>().OnDamaged(-_health,transform,false);
+            GetComponentInParent<Inventory>().UsedItem();
+            DestroySelf();
         }
     }
 }

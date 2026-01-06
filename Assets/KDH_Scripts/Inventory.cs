@@ -77,9 +77,28 @@ public class Inventory :MonoBehaviour
             {
                 PickUp();
             }
+            else if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit) && hit.transform.TryGetComponent<ItemBase>(out ItemBase item)&&item.In==false)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (InventorySlot[i].Item is default(ItemBase))
+                    {
+                        if (SetItem(i, item) == true)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+            }
         }
         //단축키 및 아이템 사용
         ItemUse(keys);
+    }
+    public void UsedItem()
+    {
+        _drag = false;
+        _dragItem = null;
     }
     public void PickUp() //필드에서 줍기
     {
@@ -91,6 +110,19 @@ public class Inventory :MonoBehaviour
 #if UNITY_EDITOR
             Debug.Log("주울 수 있움");
 #endif
+            if(item is BulletItem)
+            {
+                for (int i = 0; i < 12; i++)
+                {
+                    if (InventorySlot[i].Item is default(ItemBase))
+                    {
+                        if (SetItem(i, item) == true)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
             _dragItem = item.transform;
 
             _dragItem.SetParent(this.transform.Find("Main Camera"), false);
@@ -102,6 +134,7 @@ public class Inventory :MonoBehaviour
             StartCoroutine(SubCriber());
             //_dragItem.gameObject.SetActive(false);
             _dragItem.GetComponent<ItemBase>().Init();
+            _dragItem.GetComponent<ItemBase>().In = false;
             DragFalse();
             _dragItem.gameObject.GetComponent<Collider>().enabled = false;
         }
@@ -129,6 +162,7 @@ public class Inventory :MonoBehaviour
                 _drag = true;
                 StartCoroutine(SubCriber());
                 _dragItem.GetComponent<ItemBase>().Init();
+                _dragItem.GetComponent<ItemBase>().In = false;
                 //_dragItem.gameObject.SetActive(false);
                 DragFalse();
                 _dragItem.gameObject.GetComponent<Collider>().enabled = false;
@@ -147,7 +181,11 @@ public class Inventory :MonoBehaviour
 #endif
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 8f, 1 << LayerMask.NameToLayer("Slot")) && hit.transform.TryGetComponent<Slot>(out Slot slot))
             {
-                SetItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)));
+                if(SetItem(int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1)),default(ItemBase))==true)
+                {
+                    _drag = false;
+                    _dragItem = null;
+                }
                 _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(false);
                 return true;
             }
@@ -171,6 +209,7 @@ public class Inventory :MonoBehaviour
         {
             InventoryOpened = false;
             _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
+            _inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
             _inventoryView.gameObject.SetActive(true);
         }
         else
@@ -187,22 +226,26 @@ public class Inventory :MonoBehaviour
         InventorySlot[mainIndex].Clears();
         //아무튼 저장해두었다가 드래그든 뭐든 옮긴다면 SetItem 호출해서 되면 거기로 옮겨가고 안되면 복귀
     }
-    public void SetItem(int mainIndex,bool xy=true) //직접 수집이나 그런거 외로도 획득 경로 있을까봐 빼둠, 일단 가로형만
+    public bool SetItem(int mainIndex,ItemBase item,bool xy=true) //직접 수집이나 그런거 외로도 획득 경로 있을까봐 빼둠, 일단 가로형만
     {
-        ItemBase item=_dragItem.GetComponent<ItemBase>();
+        if(item is default(ItemBase))
+        {
+            item = _dragItem.GetComponent<ItemBase>();
+        }
         if (Check(mainIndex,item,xy)==false)
         {
-            return;
+            return false;
         }
         InventorySlot[mainIndex].SetItem(item);
-        _dragItem.SetParent(InventorySlot[mainIndex].transform, false);
-        _dragItem.localPosition = new Vector3(0, 0.65f, 0);
-        _dragItem.localRotation=Quaternion.identity;
-        _dragItem.GetComponent<ItemBase>().Init();
-        _dragItem.gameObject.SetActive(true);
-        _dragItem.gameObject.GetComponent<Collider>().enabled = true;
+        item.In = true;
+        item.transform.SetParent(InventorySlot[mainIndex].transform, false);
+        item.transform.localPosition = new Vector3(0, 0.65f, 0);
+        item.transform.localRotation =Quaternion.identity;
+        item.Init();
+        item.gameObject.SetActive(true);
+        item.gameObject.GetComponent<Collider>().enabled = true;
         item.Unsubscribe();
-        _drag = false;
+
         if(xy==true)
         {
             for (int i = mainIndex; i < mainIndex + item.Length; i++)
@@ -219,7 +262,8 @@ public class Inventory :MonoBehaviour
                 //_dragItem.GetComponent<Collider>().enabled = true;
             }
         }
-        _dragItem = null;
+
+        return true;
     }
     private bool Check(int mainIndex, ItemBase item,bool xy) //bool xy의 경우 true면 ㅡ false면 ㅣ모양
     {

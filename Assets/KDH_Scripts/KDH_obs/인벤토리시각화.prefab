@@ -98,8 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -223,8 +221,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -348,8 +344,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -473,8 +467,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -598,8 +590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -723,8 +713,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -848,8 +836,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -901,14 +887,14 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4602438667956950704}
-  m_LocalRotation: {x: 0.7071068, y: -0.7071068, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: -0.002}
   m_LocalScale: {x: 0.0005999999, y: 0.0005999999, z: 0.0006}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8925964153699037425}
   m_Father: {fileID: 8377476720439200698}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: -0.00141, y: -0}
@@ -1064,8 +1050,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -1189,8 +1173,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -1552,8 +1534,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -1677,8 +1657,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -1877,8 +1855,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _mainIndex: 0
-  _White: {fileID: 2100000, guid: 3326c585e39d0924a9ea8ca7ab5ecfb6, type: 2}
-  _Black: {fileID: 2100000, guid: 61db9e8f4b24b0e48b3f6c91f1821a3d, type: 2}
   _slots: 
   _thisIndex: 0
   _item: {fileID: 0}
@@ -1930,7 +1906,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f91b8b5b80d1e614ba8a6769cc2c9458, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.529
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: f91b8b5b80d1e614ba8a6769cc2c9458, type: 3}
       propertyPath: m_LocalPosition.z
