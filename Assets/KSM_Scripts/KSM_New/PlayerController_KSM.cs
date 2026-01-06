@@ -227,10 +227,12 @@ public class PlayerController_KSM : CreatureController_KSM
         {
             Vector3 worldDirection = transform.TransformDirection(direction.normalized);
             targetVelocity = worldDirection * currentSpeed;
+            anim.SetFloat("Speed", currentSpeed);
         }
         else
         {
             targetVelocity = Vector3.zero;
+            anim.SetFloat("Speed", 0f);
         }
     }
     #endregion

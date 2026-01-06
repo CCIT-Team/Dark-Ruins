@@ -55,34 +55,16 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
 
     private void OnTriggerEnter(Collider other)
     {
-        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
         if (other.isTrigger) return;
         if (other.CompareTag("Player")) return;
+        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
         if (damageable == null) return;
         if (hitTargets.Contains(damageable)) return;
 
         bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
-        if (isWeakPoint)
-        {
-            damageable.OnDamaged(damage, transform.root, true);
-        }
-        else
-        {
-            damageable.OnDamaged(damage, transform.root, false);
-        }
+        damageable.OnDamaged(damage, transform.root, isWeakPoint);
 
         hitTargets.Add(damageable);
-        Vector3 hitPoint = other.ClosestPoint(transform.position);
-        PlayBloodEffect(hitPoint);
-    }
-
-    private void PlayBloodEffect(Vector3 position)
-    {
-        if (BloodPoolManager_KSM.Instance == null) return;
-
-        Vector3 direction = (transform.position - position).normalized;
-        Quaternion rotation = Quaternion.LookRotation(direction);
-        BloodPoolManager_KSM.Instance.PlayBloodEffect(position, rotation);
     }
 }

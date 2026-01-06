@@ -11,7 +11,6 @@ public class MonsterController_KSM : CreatureController_KSM
     [Header("거리 설정")]
     protected float patrolRadius = 7f;
     protected float attackDistance = 3f;
-    protected float lostDistance = 20f;
     protected float proximityRadius = 5f;
     protected float viewAngle = 90f;
 
@@ -100,14 +99,8 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             if (anim != null)
             {
-                if (isWeakPoint)
-                {
-                    anim.SetTrigger("weakness attacked");
-                }
-                else
-                {
-                    anim.SetTrigger("attacked");
-                }
+                if (isWeakPoint) anim.SetTrigger("weakness attacked");
+                else anim.SetTrigger("attacked");
             }
         }
 
@@ -123,9 +116,9 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (currentHealth > 0)
         {
-            if (target == null && attacker != null) target = attacker;
+            if (attacker != null) target = attacker;
 
-            if (currentState != State.CHASE && currentState != State.ATTACK && currentState != State.CHARGE)
+            if (currentState != State.DIE)
             {
                 ChangeState(State.CHASE);
             }
@@ -152,9 +145,13 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (anim != null) anim.ResetTrigger("attack");
         if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+        if (nmAgent != null && nmAgent.isOnNavMesh)
+        {
+            nmAgent.isStopped = false;
+            nmAgent.updateRotation = true;
+        }
 
         currentState = newState;
-
         StartCoroutine(currentState.ToString());
     }
 
@@ -229,14 +226,10 @@ public class MonsterController_KSM : CreatureController_KSM
                 ChangeState(State.ATTACK);
                 yield break;
             }
-            else if (distance > lostDistance)
-            {
-                target = null;
-                ChangeState(State.PATROL);
-                yield break;
-            }
+
             yield return new WaitForSeconds(0.2f);
         }
+
         if (target == null) ChangeState(State.PATROL);
     }
 
@@ -281,13 +274,9 @@ public class MonsterController_KSM : CreatureController_KSM
             {
                 ChangeState(State.ATTACK);
             }
-            else if (distance <= lostDistance)
-            {
-                ChangeState(State.CHASE);
-            }
             else
             {
-                ChangeState(State.PATROL);
+                ChangeState(State.CHASE);
             }
         }
         else
