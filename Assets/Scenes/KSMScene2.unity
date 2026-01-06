@@ -97405,10 +97405,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Ghost_Attack
-  hitSound: Monster_Ghost_Hit
-  deathSound: Monster_Ghost_Death
-  idleSound: Monster_Ghose_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 4420474226861437221}
   detectionCollider: {fileID: 887779708438413940}
@@ -97541,10 +97537,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Mummy_Attack
-  hitSound: Monster_Mummy_Hit
-  deathSound: Monster_Mummy_Death
-  idleSound: Monster_Mummy_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 384616494360399776}
   detectionCollider: {fileID: 5260923849741912186}
@@ -345317,10 +345309,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Boss_Attack
-  hitSound: Monster_Boss_Hit
-  deathSound: Monster_Boss_Death
-  idleSound: 
   rotationSpeed: 5
   attackHitbox: {fileID: 8457614215635902789}
   detectionCollider: {fileID: 4276003009441034344}
@@ -345347,7 +345335,6 @@ MonoBehaviour:
   chargeSpeed: 15
   chargePreparationTime: 1
   chargeCooldown: 7
-  chargeSound: 
   knockbackForce: 10
   knockbackDuration: 0.5
   customLostDistance: 20
@@ -360973,10 +360960,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Ghost_Attack
-  hitSound: Monster_Ghost_Hit
-  deathSound: Monster_Ghost_Death
-  idleSound: Monster_Ghose_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 5412662093347817193}
   detectionCollider: {fileID: 7940009728609707680}
@@ -435584,10 +435567,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Ghost_Attack
-  hitSound: Monster_Ghost_Hit
-  deathSound: Monster_Ghost_Death
-  idleSound: Monster_Ghose_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 5754307386597322674}
   detectionCollider: {fileID: 3563729900095876700}
@@ -550094,10 +550073,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Mummy_Attack
-  hitSound: Monster_Mummy_Hit
-  deathSound: Monster_Mummy_Death
-  idleSound: Monster_Mummy_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 4021673513477087261}
   detectionCollider: {fileID: 7738714394640448663}
@@ -562082,10 +562057,6 @@ MonoBehaviour:
   attackDamage: 10
   useBloodEffect: 1
   currentState: 0
-  attackSound: Monster_Mummy_Attack
-  hitSound: Monster_Mummy_Hit
-  deathSound: Monster_Mummy_Death
-  idleSound: Monster_Mummy_Default
   rotationSpeed: 5
   attackHitbox: {fileID: 5700628673830462253}
   detectionCollider: {fileID: 3579894465633519322}
