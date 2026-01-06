@@ -35,6 +35,7 @@ public class UI_GameScene : UIScene
         BindImage(typeof(Images));
         GetImage((int)Images.RCH).transform.DORotate(new Vector3(0, 0, 360f), 1f, RotateMode.FastBeyond360).SetLoops(-1, LoopType.Restart).SetEase(Ease.Linear);
         GetImage((int)Images.RCH).transform.gameObject.SetActive(false);
+        GetText((int)Texts.Bullets).transform.gameObject.SetActive(false);
         return true;
     }
     private void Awake()

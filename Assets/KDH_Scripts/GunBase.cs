@@ -211,6 +211,10 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     private UI_GameScene _uir;
     public override void OnPickUp()
     {
+#if UNITY_EDITOR
+        Debug.Log("작동테스트");
+        Debug.Log(_uir.transform.name);
+#endif
         _uir.BulletUISet(true,_loadedBullet,HaveBullet());
     }
 

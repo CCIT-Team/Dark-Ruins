@@ -16,10 +16,8 @@ public class LookPlayer : UIPopup
     {
 
     }
-    private Transform cam;
     private void Awake()
     {
-        cam = Camera.main.transform;
         BindObject(typeof(GameObjects));
         GetObject((int)GameObjects.Canvas).SetActive(false);
     }
