@@ -17,13 +17,23 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: b430c33676a000048994aeb0c5b851e6
   m_SerializeEntries:
-  - m_GUID: 1b873cbb2ec4240b48f73457002f03d2
+  - m_GUID: 06f7b70a8e4efb247ab67e8e19c3d876
     m_Address: Flash_Noise
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15f0a8169caf21949b3cec7780c81f45
+    m_Address: Monster_Boss_Running
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 271a4ee25ea06124099a8d7c432b1273
     m_Address: Autogun_Reload
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 273ffdca3219e7c4ba9594621fa4c51c
+    m_Address: Monster_Ghost_Defalt
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -52,6 +62,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f358b2bd7b279b4984d117b4790938d
+    m_Address: Monster_Mummy_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 57a532b671d4ced4ab53ea374b107a47
     m_Address: Trap_Arrow_Attack
     m_ReadOnly: 0
@@ -64,6 +79,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7a39ba789208642ea9fda609aea157b6
     m_Address: User_Hit_Trap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a9f9d51726225d4e8f8aa34a5de2901
+    m_Address: Monster_Boss_Death
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -82,6 +102,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9578423e54c136747b1828dd44f7ffe3
+    m_Address: Monster_Ghost_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 964ac72855ac0c749bc81eac8ae747dc
     m_Address: Barrel_Explosion
     m_ReadOnly: 0
@@ -97,13 +122,38 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9ebdbc9ddb94cb41ba0fac12f1b3b4e
+    m_Address: Monster_Mummy_Death
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad43264a31dc4e5438bb21a5dc7d35db
     m_Address: Autogun_Shot
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b670a54e8ecc0ad4db2a2595abd55ba6
+    m_Address: Monster_Mummy_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b7dbfc90ac4bb7345a26a2a27ee6dac0
     m_Address: Machete_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b99675f3ac2e38f468ac1d4af552d88f
+    m_Address: Monster_Ghost_Death
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b99b3e2019347a24cacb9609451cb5ea
+    m_Address: Monster_Ghost_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb7a2d799a5e8c645a0d1ca53792368e
+    m_Address: Monster_Boss_Hit
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -117,8 +167,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce4794fed83573d4eb7278ea9fb03fe6
+    m_Address: Monster_Mummy_Defalt
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2df6d71031986846adf9ffc57a0d9ee
     m_Address: Trap_Thorn_Activate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e283aa63d0cf0c645a54ad2c5dba390e
+    m_Address: Monster_Boss_Attack
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -129,6 +189,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ed042c87951ed40268592d7ca7a2de59
     m_Address: User_Hit_Monster
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5346a2a957c66f4ab91c14d42e3c759
+    m_Address: Monster_User_Attack
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
