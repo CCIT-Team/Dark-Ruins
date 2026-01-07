@@ -21,6 +21,7 @@ public class Rifle : GunBase
     public override void Fire()
     {
         _anim.Play("Rifle Fire", 0, 0f);
+        Managers_YGU.Sound.Play("Autogun_Shot", Sound.UI);
         base.Fire();
 
     }
@@ -30,6 +31,7 @@ public class Rifle : GunBase
         base.Reload(out ob);
         if (ob == true)
         {
+            Managers_YGU.Sound.Play("Autogun_Reload", Sound.UI);
             _anim.SetTrigger("reloading");
         }
     }
@@ -52,6 +54,7 @@ public class Rifle : GunBase
             return;
         }
         base.OnPickUp();
+        Managers_YGU.Sound.Play("Autogun_Equip", Sound.UI);
     }
 
     public override void OnDropped()

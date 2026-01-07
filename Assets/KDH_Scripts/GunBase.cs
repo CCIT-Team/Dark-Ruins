@@ -8,8 +8,8 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
     protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
-    protected float _fireCooltime = 0f;
-    protected float _fireCooltimeSet=0.5f;
+    protected float _fireCooltime,_reloadCooltime = 0f;
+    protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=0.3f;
     protected bool _zoomOuted = true;
     
     protected float _fireLength;
@@ -46,6 +46,10 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _fireCooltime -= Time.fixedDeltaTime;
         }
+        if(_reloadCooltime>0)
+        {
+            _reloadCooltime-=Time.fixedDeltaTime;
+        }
     }
     public override void ItemUse(List<KeyCode> keys)
     {
@@ -77,11 +81,12 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
             Debug.Log("Ã¶ÄÀ2");
 #endif
-            if (_loadedBullet < _maxBullet)
+            if (_loadedBullet < _maxBullet&&_reloadCooltime<=0.0f)
             {
 #if UNITY_EDITOR
                 Debug.Log("Ã¶ÄÀ3");
 #endif
+                _reloadCooltime = _reloadCooltimeSet;
                 Reload(out _);
             }
         }
@@ -147,6 +152,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
             Debug.Log("Ã¶ÄÀ4");
 #endif
+            Managers_YGU.Sound.Play("Gun_Empty", Sound.UI);
             return;
         }
         else
