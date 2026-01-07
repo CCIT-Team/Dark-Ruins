@@ -7,7 +7,7 @@ public class WeaponManager_KSM : MonoBehaviour
     [Header("현재 상태")]
     public WeaponMode currentMode = WeaponMode.None;
 
-    [Header("자동 감지 설정")]
+    [Header("획득 총 이름")]
     [SerializeField] private string detectName = "소총";
 
     [Header("소지 여부")]
