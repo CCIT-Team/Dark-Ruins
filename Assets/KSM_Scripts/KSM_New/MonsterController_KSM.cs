@@ -145,7 +145,14 @@ public class MonsterController_KSM : CreatureController_KSM
 
         if (currentHealth > 0)
         {
-            if (attacker != null) target = attacker;
+            if (target == null)
+            {
+                GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+                if (playerObj != null)
+                {
+                    target = playerObj.transform;
+                }
+            }
 
             if (currentState != State.DIE)
             {
