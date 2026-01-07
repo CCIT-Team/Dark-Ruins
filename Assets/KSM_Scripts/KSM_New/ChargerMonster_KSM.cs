@@ -162,7 +162,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
         nmAgent.updateRotation = true;
         nmAgent.angularSpeed = originalAngularSpeed;
 
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(2.0f);
 
         if (target != null)
         {
@@ -206,6 +206,7 @@ public class ChargerMonster_KSM : MonsterController_KSM
         }
 
         if (nmAgent) nmAgent.updateRotation = true;
+        yield return new WaitForSeconds(2.0f);
 
         if (target != null)
         {
