@@ -27,7 +27,8 @@ public class FirstAidKit : ItemBase
         if(Input.GetKey(KeyCode.Mouse1)&&_used==false)
         {
             _used = true;
-            GetComponentInParent<PlayerController_KSM>().OnDamaged(-_health,transform,false);
+            Managers_YGU.Sound.Play("User_heal", Sound.UI);
+            GetComponentInParent<PlayerController_KSM>().OnHealed(-_health);
             GetComponentInParent<Inventory>().UsedItem();
             DestroySelf();
         }

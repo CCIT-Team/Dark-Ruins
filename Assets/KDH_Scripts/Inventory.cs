@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Utils;
+using static UnityEditor.Progress;
 
 public class Inventory :MonoBehaviour
 {
@@ -70,7 +71,7 @@ public class Inventory :MonoBehaviour
             _inventoryCooltime = 2.0f;
             OpenOrCloseInventory();
         }
-        if(InventoryOpened==false&& _dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
+        if(_dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
         {
             _dragCooltime = 1.0f;
             if (DragItem() == false && _drag == false)
@@ -148,6 +149,36 @@ public class Inventory :MonoBehaviour
         //_dragItem.GetComponent<ItemBase>().Unsubscribe();
         _dragItem.gameObject.SetActive(false);
     }
+    public void Changer<T>(ItemBase item=default(ItemBase))
+    {
+        ItemBase t=default(ItemBase);
+        for (int i = 0; i < 12; i++)
+        {
+            if (InventorySlot[i].Item is T)
+            {
+                t = InventorySlot[i].Item;
+                InventorySlot[i].Clears();
+                ItemBase ib = _dragItem.GetComponent<ItemBase>();
+                if(item is not Knife3_KSM)
+                {
+                    for (int j = 0; j < 12; j++)
+                    {
+                        if (InventorySlot[j].Item is default(ItemBase))
+                        {
+                            if (SetItem(j, ib) == true)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    _dragItem = t.transform;
+                    _dragItem.SetParent(this.transform.Find("Main Camera"), false);
+                    _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+                    _dragItem.localRotation = Quaternion.identity;
+                }    
+            }
+        }
+    }
     private bool DragItem() 
     {
         if (_drag==false) //인벤토리에서 꺼내기
@@ -207,15 +238,19 @@ public class Inventory :MonoBehaviour
     {
         if(InventoryOpened==true)
         {
+            Managers_YGU.Sound.Play("Zipper_Close", Sound.UI);
             InventoryOpened = false;
             _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
             _inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
             _inventoryView.gameObject.SetActive(true);
+
         }
         else
         {
+            Managers_YGU.Sound.Play("Zipper_Open", Sound.UI);
             InventoryOpened = true;
             _inventoryView.gameObject.SetActive(false);
+
         }
     }
     public void ClickItem(int mainIndex)//무엇을 어떻게? 상호작용 어케함 우리? 일단 해두는데 트리거가 없는;;
