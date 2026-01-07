@@ -26,6 +26,9 @@ public class MonsterController_KSM : CreatureController_KSM
     [Header("공격 히트박스 연결")]
     [SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
 
+    [Header("피격 모션 발동 체력 구간")]
+    [SerializeField] protected List<int> hitReactionThresholds = new List<int>();
+
     [Header("콜라이더 및 레이어")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
@@ -108,28 +111,37 @@ public class MonsterController_KSM : CreatureController_KSM
         if (currentState == State.DIE) return;
 
         int finalDamage = damage;
+        if (isWeakPoint && isCurrentlyHighlighted)
+        {
+            finalDamage = (int)(damage * weakPointMultiplier);
+        }
 
-        if (currentState != State.ATTACK)
+        int prevHealth = currentHealth;
+
+        base.OnDamaged(finalDamage, attacker, isWeakPoint);
+
+        bool triggerHitAnim = false;
+        foreach (int threshold in hitReactionThresholds)
+        {
+            if (prevHealth > threshold && currentHealth <= threshold)
+            {
+                triggerHitAnim = true;
+                break;
+            }
+        }
+
+        if (triggerHitAnim)
         {
             if (anim != null)
             {
                 if (isWeakPoint) anim.SetTrigger("weakness attacked");
                 else anim.SetTrigger("attacked");
+                Debug.Log("스턴");
             }
         }
 
         if (Random.Range(0, 3) == 0)
             PlaySound(hitSound);
-
-        if (isWeakPoint)
-        {
-            if (isCurrentlyHighlighted)
-            {
-                finalDamage = (int)(damage * weakPointMultiplier);
-            }
-        }
-
-        base.OnDamaged(finalDamage, attacker, isWeakPoint);
 
         if (currentHealth > 0)
         {

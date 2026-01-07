@@ -16,9 +16,6 @@ public class ChargerMonster_KSM : MonsterController_KSM
     [SerializeField] private float knockbackForce = 15f;
     [SerializeField] private float knockbackDuration = 0.5f;
 
-    [Header("추적 설정")]
-    [SerializeField] private float customLostDistance = 20f;
-
     private float defaultSpeed;
     private float lastChargeTime;
     private float originalAngularSpeed;
