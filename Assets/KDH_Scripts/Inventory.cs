@@ -16,7 +16,6 @@ public class Inventory :MonoBehaviour
     private bool _drag=false;
     public static bool InventoryOpened = false;
     private Transform _inventoryView,_dragItem;
-    private float _inventoryCooltime = 0.0f,_dragCooltime=0.0f;
     private Camera cam;
     //private Inventory()
     //{
@@ -44,17 +43,7 @@ public class Inventory :MonoBehaviour
         cam = Camera.main;
         BindSlots();
     }
-    public void FixedUpdate()
-    {
-        if (_inventoryCooltime > 0)
-        {
-            _inventoryCooltime -= Time.fixedDeltaTime;
-        }
-        if(_dragCooltime>0)
-        {
-            _dragCooltime -= Time.fixedDeltaTime;
-        }
-    }
+
     public void Sub()
     {
         Managers_KSM.Input.OnKeysHeld -= OnKeyPressed;
@@ -66,14 +55,12 @@ public class Inventory :MonoBehaviour
     }
     public void OnKeyPressed(List<KeyCode> keys)
     {
-        if(_inventoryCooltime<=0&&keys.Contains(KeyCode.I))
+        if(Input.GetKeyDown(KeyCode.I))
         {
-            _inventoryCooltime = 2.0f;
             OpenOrCloseInventory();
         }
-        if(_dragCooltime<=0&&keys.Contains(KeyCode.Mouse0))
+        if(Input.GetKeyDown(KeyCode.Mouse0))
         {
-            _dragCooltime = 1.0f;
             if (DragItem() == false && _drag == false)
             {
                 PickUp();
@@ -111,7 +98,7 @@ public class Inventory :MonoBehaviour
 #if UNITY_EDITOR
             Debug.Log("주울 수 있움");
 #endif
-            if(item is BulletItem)
+            if(item is BulletItem || item is GunBase)
             {
                 for (int i = 0; i < 12; i++)
                 {
@@ -240,17 +227,19 @@ public class Inventory :MonoBehaviour
         {
             Managers_YGU.Sound.Play("Zipper_Close", Sound.UI);
             InventoryOpened = false;
-            _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 3f;
-            _inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
-            _inventoryView.gameObject.SetActive(true);
+            _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 2.5f;
+            //_inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
+            _inventoryView.transform.rotation = Quaternion.LookRotation(cam.transform.position - _inventoryView.transform.position) * Quaternion.Euler(0f, 40f, 0f);
 
+            _inventoryView.gameObject.SetActive(true);
+            Time.timeScale = 0.0f;
         }
         else
         {
             Managers_YGU.Sound.Play("Zipper_Open", Sound.UI);
             InventoryOpened = true;
             _inventoryView.gameObject.SetActive(false);
-
+            Time.timeScale = 1.0f;
         }
     }
     public void ClickItem(int mainIndex)//무엇을 어떻게? 상호작용 어케함 우리? 일단 해두는데 트리거가 없는;;

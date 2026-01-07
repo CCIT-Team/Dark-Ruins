@@ -10,7 +10,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
     protected float _fireCooltime=0,_reloadCooltime=0;
     protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=2f;
-    protected bool _zoomOuted = true;
+    protected bool _zoomOuted = true, _zoomIng = false, e = false;
     
     protected float _fireLength;
     protected BulletsPool _bulletsPool;
@@ -51,10 +51,37 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _reloadCooltime-=Time.fixedDeltaTime;
         }
+        if(e==true)
+        {
+            if (_zoomIng == false && e == true)
+            {
+                if (_camera.fieldOfView >= 60)
+                {
+                    _camera.fieldOfView = 60;
+                    _zoomOuted = false;
+                    return;
+                }
+
+                _camera.fieldOfView += 1;
+                return;
+            }
+            else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
+            {
+                _camera.fieldOfView -= 1;
+            }
+            else
+            {
+                _zoomOuted = true;
+                _camera.fieldOfView = 20;
+            }
+            e = false;
+        }
+
+
     }
     public override void ItemUse(List<KeyCode> keys)
     {
-
+        e = true;
         if (Input.GetKey(KeyCode.Mouse0)&&_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f && _loadedBullet>0)
         {
 #if UNITY_EDITOR
@@ -67,8 +94,8 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         if(_fireCooltime<=0.0f&& _reloadCooltime <= 0.0f&&Input.GetKey(KeyCode.Mouse1))
         {
             _fireCooltime = _fireCooltimeSet;
-            _loadedBullet++;
-            Fire();
+            _loadedBullet=_maxBullet;
+            //Fire();
         }
 #endif
         if (Input.GetKey(KeyCode.Mouse1))
@@ -195,27 +222,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
         Debug.Log(_camera.transform.localPosition);
 #endif
-        if (b==false)
-        {
-            if (_camera.fieldOfView >= 60)
-            {
-                _camera.fieldOfView = 60;
-                _zoomOuted = false;
-                return;
-            }
-
-            _camera.fieldOfView += 1;
-            return;
-        }
-        else if(_camera.fieldOfView >= 20&&_zoomOuted==false)
-        {
-            _camera.fieldOfView -= 1;
-        }
-        else
-        {
-            _zoomOuted = true;
-            _camera.fieldOfView = 20;
-        }
+        _zoomIng = b;
 
     }
     [SerializeField]
@@ -232,5 +239,9 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     public override void OnDropped()
     {
         _uir.BulletUISet(false);
+    }
+    private void OnDisable()
+    {
+        _camera.fieldOfView = 60;
     }
 }
