@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cf3342fbaff1d24ba893a2deeb11b6a
+    m_Address: Barrel_Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 15f0a8169caf21949b3cec7780c81f45
     m_Address: Monster_Boss_Running
     m_ReadOnly: 0
@@ -107,11 +112,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 964ac72855ac0c749bc81eac8ae747dc
-    m_Address: Barrel_Explosion
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 974d29bf2383b6542b4edd3b530600b3
     m_Address: Door_Open
     m_ReadOnly: 0
@@ -129,6 +129,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ad43264a31dc4e5438bb21a5dc7d35db
     m_Address: Autogun_Shot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b05a87df75a11604d82ca060b5455ea9
+    m_Address: Zipper_Open
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -174,6 +179,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: d2df6d71031986846adf9ffc57a0d9ee
     m_Address: Trap_Thorn_Activate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da9b5973a4e8f0c44a3ac7dde9438f77
+    m_Address: Zipper_Close
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
