@@ -262,7 +262,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
     public void OnHealed(int damage)
     {
-        currentHealth -= damage;
+        base.OnDamaged(damage, this.transform, default);
         if (currentHealth <= maxHealth)
             currentHealth = 100;
     }
