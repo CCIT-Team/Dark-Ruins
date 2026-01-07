@@ -19,12 +19,50 @@ public class UVPuzzleManager : MonoBehaviour
             i.completedCallback+=Completed;
         }
     }
-    private void Completed()
+
+    public void Reset()
+    {
+        foreach(var target in targets)
+        {
+            target.Reset();
+        }
+        isCompleted=false;
+        cnt=0;
+    }
+
+    private int Check(string name)
+    {
+        for(int i = 0; i < targets.Count; i++)
+        {
+            if(targets[i].gameObject.name == name)
+            {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    private void Completed(string name)
     {
         if(isCompleted)
         {
             return;
+        }   
+
+        int idx = Check(name);
+
+        if(idx < 0)
+        {
+            return;
         }
+
+        if(idx > cnt )
+        {
+            Reset();
+            return;
+        }
+
         cnt++;
         
         if(cnt>=targets.Count)
