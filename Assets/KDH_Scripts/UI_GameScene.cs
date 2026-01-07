@@ -81,7 +81,10 @@ public class UI_GameScene : UIScene
         }
         else
         {
-            Time.timeScale = 1;
+            if(Inventory.InventoryOpened==true)
+            {
+                Time.timeScale = 1;
+            }
             ESCd = false;
             GetObject((int)GameObjects.ESC).SetActive(false);
             Cursor.lockState = CursorLockMode.Locked;
