@@ -55,16 +55,15 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
 
     private void OnTriggerEnter(Collider other)
     {
+        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
         if (other.isTrigger) return;
         if (other.CompareTag("Player")) return;
-        IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
         if (damageable == null) return;
         if (hitTargets.Contains(damageable)) return;
-
         bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
         damageable.OnDamaged(damage, transform.root, isWeakPoint);
-
+        Managers_YGU.Sound.Play("Machete_Attack", Sound.UI);
         hitTargets.Add(damageable);
     }
 }

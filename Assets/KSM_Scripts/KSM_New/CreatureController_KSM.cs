@@ -7,7 +7,7 @@ public abstract class CreatureController_KSM : MonoBehaviour, IDamageable_KSM
     [Header("체력")]
     [SerializeField] protected int maxHealth = 100;
     [SerializeField] protected int attackDamage = 10;
-    public int currentHealth { get; protected set; }
+    [SerializeField] public int currentHealth { get; protected set; }
 
     [Header("피격 이펙트 설정")]
     [SerializeField] protected bool useBloodEffect = true;
