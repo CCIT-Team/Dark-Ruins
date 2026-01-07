@@ -40,7 +40,7 @@ public class Inventory :MonoBehaviour
         Managers_KSM.Input.OnKeysHeld -= OnKeyPressed;
         Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
         _inventoryView = GameObject.Find("InventoryView").transform;
-        cam = GetComponentInChildren<Camera>();
+        cam = Camera.main;
         BindSlots();
     }
     public void FixedUpdate()
@@ -77,7 +77,7 @@ public class Inventory :MonoBehaviour
             {
                 PickUp();
             }
-            else if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, LayerMask.NameToLayer("Item")) && hit.transform.TryGetComponent<ItemBase>(out ItemBase item)&&item.In==false)
+            else if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, 4.0f, 1 << LayerMask.NameToLayer("Item")) && hit.transform.TryGetComponent<ItemBase>(out ItemBase item)&&item.In==false)
             {
                 for (int i = 0; i < 12; i++)
                 {
@@ -105,7 +105,7 @@ public class Inventory :MonoBehaviour
 #if UNITY_EDITOR
         Debug.Log("쐈움");
 #endif
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit, LayerMask.NameToLayer("Item")) &&hit.transform.TryGetComponent<ItemBase>(out ItemBase item))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit,4.0f, 1 << LayerMask.NameToLayer("Item")) &&hit.transform.TryGetComponent<ItemBase>(out ItemBase item))
         {
 #if UNITY_EDITOR
             Debug.Log("주울 수 있움");
