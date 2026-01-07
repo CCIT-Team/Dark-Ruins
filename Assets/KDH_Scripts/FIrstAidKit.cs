@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FIrstAidKit : ItemBase
+public class FirstAidKit : ItemBase
 {
     private int _health;
     private bool _used = false;
