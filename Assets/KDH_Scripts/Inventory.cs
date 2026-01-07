@@ -111,7 +111,7 @@ public class Inventory :MonoBehaviour
 #if UNITY_EDITOR
             Debug.Log("주울 수 있움");
 #endif
-            if(item is BulletItem)
+            if(item is BulletItem || item is GunBase)
             {
                 for (int i = 0; i < 12; i++)
                 {
