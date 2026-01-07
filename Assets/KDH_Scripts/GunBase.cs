@@ -102,7 +102,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         Debug.Log("발사");
 #endif
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.transform.position+ Camera.main.transform.forward *_fireLength, Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, _fireLength)), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
