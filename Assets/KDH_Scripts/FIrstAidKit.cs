@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FIrstAidKit : ItemBase
+public class FirstAidKit : ItemBase
 {
     private int _health;
     private bool _used = false;
@@ -27,7 +27,8 @@ public class FIrstAidKit : ItemBase
         if(Input.GetKey(KeyCode.Mouse1)&&_used==false)
         {
             _used = true;
-            GetComponentInParent<PlayerController_KSM>().OnDamaged(-_health,transform,false);
+            Managers_YGU.Sound.Play("User_heal", Sound.UI);
+            GetComponentInParent<PlayerController_KSM>().OnHealed(-_health);
             GetComponentInParent<Inventory>().UsedItem();
             DestroySelf();
         }

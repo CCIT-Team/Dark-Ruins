@@ -12,8 +12,13 @@ public class ArmSetGlock : MonoBehaviour
         _gl.Init();
         _gl.Subscribe();
         _gl.OnPickUp();
-        GameObject.Find("InventoryView").GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-        GameObject.Find("InventoryView").GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_gl.GetComponent<ItemBase>());
+        GameObject g = GameObject.Find("InventoryView");
+        if (g is null)
+        {
+            return;
+        }
+        g.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
+        g.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_gl.GetComponent<ItemBase>());
     }
     private void OnDisable()
     {
