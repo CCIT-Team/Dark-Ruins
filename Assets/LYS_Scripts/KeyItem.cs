@@ -12,8 +12,6 @@ public class KeyItem : ItemBase
         {
             _rb = gameObject.AddComponent<Rigidbody>();
         }
-        _rb.useGravity = false;
-        _rb.isKinematic=true;
     }
 
     public override void ItemUse(List<KeyCode> keys)
@@ -22,14 +20,7 @@ public class KeyItem : ItemBase
         {
             Drop();
             transform.SetParent(null);
-            _rb.useGravity = true;
-            _rb.isKinematic=false;
         }
     }
 
-    public override void OnPickUp()
-    {
-        _rb.useGravity = false;
-        _rb.isKinematic=true;
-    }
 }
