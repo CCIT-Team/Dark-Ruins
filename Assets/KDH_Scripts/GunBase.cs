@@ -8,8 +8,8 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
     protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
-    protected float _fireCooltime,_reloadCooltime = 0f;
-    protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=0.3f;
+    protected float _fireCooltime=0,_reloadCooltime=0;
+    protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=2f;
     protected bool _zoomOuted = true;
     
     protected float _fireLength;
@@ -28,6 +28,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     protected override void Start()
     {
         base.Start();
+        _reloadCooltimeSet = 2f;
         Length = 2; //나중에 기획 나오면 적용하면 됨 ㅇㅇ
         _bulletsPool =FindObjectOfType<BulletsPool>().GetComponent<BulletsPool>();
         _bullet = (BulletsPool.Bullets)Enum.Parse(typeof(BulletsPool.Bullets), this.GetType().Name);
@@ -54,13 +55,16 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     public override void ItemUse(List<KeyCode> keys)
     {
 
-        if (_fireCooltime <= 0.0f &&_loadedBullet>0&& Input.GetKey(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse0)&&_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f && _loadedBullet>0)
         {
+#if UNITY_EDITOR
+            Debug.Log(_reloadCooltimeSet);
+#endif
             _fireCooltime = _fireCooltimeSet;
             Fire();
         }
 #if UNITY_EDITOR
-        if(_fireCooltime<=0.0f&&Input.GetKey(KeyCode.Mouse1))
+        if(_fireCooltime<=0.0f&& _reloadCooltime <= 0.0f&&Input.GetKey(KeyCode.Mouse1))
         {
             _fireCooltime = _fireCooltimeSet;
             _loadedBullet++;
@@ -86,6 +90,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
                 Debug.Log("철컥3");
 #endif
+                _fireCooltime = _reloadCooltime;
                 _reloadCooltime = _reloadCooltimeSet;
                 Reload(out _);
             }
@@ -97,7 +102,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         Debug.Log("발사");
 #endif
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.transform.position+ Camera.main.transform.forward *_fireLength, Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, _fireLength)), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
