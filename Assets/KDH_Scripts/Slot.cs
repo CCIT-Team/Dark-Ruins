@@ -47,7 +47,7 @@ public class Slot : MonoBehaviour
         rd.GetPropertyBlock(mpb);
         if (b==true)
         {
-            mpb.SetColor("_Color", Color.black);
+            mpb.SetColor("_Color", Color.yellow);
         }
         else
         {

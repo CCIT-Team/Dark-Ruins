@@ -6,6 +6,7 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public abstract class ItemBase : MonoBehaviour,IDrawOutLine
 {
@@ -31,6 +32,25 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
             OutLine.OutlineWidth = 4f;
         }
         OutLine.enabled = false;
+        //var data = DataLoader.Instance.FindByName(this.GetType().Name);
+        //if (data == null)
+        //{
+        //    return;
+        //} 
+
+        //if (transform.parent != null)
+        //{
+        //    Vector3 p = transform.parent.lossyScale;
+        //    transform.localScale = new Vector3(
+        //        targetWorldScale.x / p.x,
+        //        targetWorldScale.y / p.y,
+        //        targetWorldScale.z / p.z
+        //    );
+        //}
+        //else
+        //{
+        //    transform.localScale = targetWorldScale;
+        //}
     }
     public void Drop()
     {
