@@ -12,7 +12,7 @@ public class trap_touchDamage : MonoBehaviour
     {
         if (!other.CompareTag(targetTag))
         {
-            Debug.Log($"플레이어가 아닌데?");
+            Debug.Log("플레이어가 아닌데?");
             return;
         }
 
@@ -20,10 +20,11 @@ public class trap_touchDamage : MonoBehaviour
 
         if (DM == null)
         {
-            Debug.Log("댐지를 못받는데?");
+            Debug.Log("피해를 못받는데?");
             return;
         }
         Debug.Log("아파아파아파");
         DM.OnDamaged(TrapDamage, this.transform, false);
+        //DM.Trapdamaged(TrapDamage);
     }
 }

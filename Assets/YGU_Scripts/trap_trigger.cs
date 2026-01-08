@@ -8,7 +8,7 @@ public class trap_trigger : MonoBehaviour
     [SerializeField] private string targetTag = "Player";
     [SerializeField] [Tooltip("작동할 함정")] private GameObject trapObject;
 
-    private bool ismoving = false;
+    //private bool ismoving = false;
 
     private void OnTriggerEnter(Collider other)
     {
