@@ -1,10 +1,18 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using CutSceneEngine;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Intro : MonoBehaviour
 {
+    [SerializeField]
+    float _introWait=3;
+
+
     [Header("Player Settings")]
     [SerializeField] GameObject _player;           // 플레이어 오브젝트
     [SerializeField] PlayerController_KSM _cont;   // 플레이어 컨트롤러
@@ -28,26 +36,47 @@ public class Intro : MonoBehaviour
     [SerializeField]
     float _rotation;
 
-    void Start()
-    {
-        // 페이드 이미지 초기화
-        if (_fadeImage != null)
-        {
-            Color c = _fadeImage.color;
-            c.a = 0;
-            _fadeImage.color = c;
-        }
+    CutSceneInterpreter interp;
 
-        StartCoroutine(StartIntro());
+    void load(TextAsset asset)
+    {
+        interp.LoadCutSceneScript(asset.text);
     }
 
+    void Start()
+    {
+        interp = gameObject.GetOrAddComponent<CutSceneInterpreter>();
+        StartCoroutine(IntroSeq());
+    }
+
+
+    IEnumerator IntroSeq()
+    {
+        
+        Managers_YGU.Resource.LoadAsync<TextAsset>("Intro1",load);
+        yield return new WaitForSeconds(_introWait);
+        var routine = StartCoroutine(interp.CoStartCutScene(null));
+
+        yield return routine;
+
+        routine = StartCoroutine(StartIntro());
+
+        yield return routine;
+
+        interp.InitInterpreter(true);
+
+        Managers_YGU.Resource.LoadAsync<TextAsset>("Intro2",load);
+        yield return new WaitForSeconds(2);
+        routine = StartCoroutine(interp.CoStartCutScene(() => SceneManager.LoadScene(_sceneName)));
+    }
+//Managers_YGU.Resource.LoadAsync<TextAsset>("Intro2",loadOuttro);
     IEnumerator StartIntro()
     {
         // 1. 초기 설정 (플레이어 컨트롤 비활성화 및 회전)
         _cont.enabled = false;
         _player.transform.rotation = Quaternion.Euler(0, -180, 0);
         
-        yield return null;
+        
 
         // 2. 애니메이션 실행 및 이동 시작
         _cont.anim.SetFloat("Speed", 2);
@@ -56,19 +85,14 @@ public class Intro : MonoBehaviour
         StartCoroutine(MoveTransform(_mainCamera, _camMoveDist, _camMoveTime,_player.transform));
 
         // 플레이어 이동과 카메라 이동을 동시에 실행
-        StartCoroutine(MoveTransform(_player.transform, _playerMoveDist, _playerMoveTime,null));
+        var r1 = StartCoroutine(MoveTransform(_player.transform, _playerMoveDist, _playerMoveTime,null));
         yield return new WaitForSeconds(_fadeDelay);
-        StartCoroutine(Fade(0,1,true));
-        
-        
-        // 두 이동이 모두 끝날 때까지 대기
- 
-        
+        var r2 = StartCoroutine(Fade(0,1,true));
 
+        yield return r1;
+        yield return r2;
         // 3. 이동 완료 후 설정
         _cont.anim.SetFloat("Speed", 0);
-
-        
     }
 
     // 이동을 담당하는 공통 루틴
@@ -88,10 +112,11 @@ public class Intro : MonoBehaviour
                 target.transform.LookAt(lookTar);
                 target.transform.Rotate(new Vector3(Mathf.Clamp(target.transform.eulerAngles.x - _rotation,_clampMin,_clampMax),0,0));
             }
-            elapsed += Time.deltaTime;
+            
             var pos = target.position;
             pos.z = Mathf.Lerp(start, targetPos, elapsed / time);
             target.position = pos;
+            elapsed += Time.deltaTime;
             yield return null;
         }
         
@@ -109,11 +134,18 @@ public class Intro : MonoBehaviour
             yield return null;
         }
         _fadeImage.color = tempColor;
-        if(load)
-        {
-            SceneManager.LoadScene(_sceneName);
-            _cont.enabled = true;
-        }
+        // if(load)
+        // {
+        //     SceneManager.LoadScene(_sceneName);
+        //     _cont.enabled = true;
+        // }
         
     }
 }
+
+/*
+
+
+        
+
+*/
