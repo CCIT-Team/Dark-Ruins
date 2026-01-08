@@ -117,7 +117,7 @@ public class Inventory :MonoBehaviour
             _dragItem = item.transform;
 
             _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-            _dragItem.localPosition = new Vector3(0, -0.1f, 0.4f);
+            _dragItem.localPosition = new Vector3(0, -0.3f, 1.7f);
             _dragItem.localRotation = Quaternion.identity;
 
             _drag = true;
@@ -164,7 +164,7 @@ public class Inventory :MonoBehaviour
                     }
                     _dragItem = t.transform;
                     _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-                    _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+                    _dragItem.localPosition = new Vector3(0, -0.3f, 1.7f);
                     _dragItem.localRotation = Quaternion.identity;
                 }    
             }
@@ -250,7 +250,7 @@ public class Inventory :MonoBehaviour
     public void ClickItem(int mainIndex)//무엇을 어떻게? 상호작용 어케함 우리? 일단 해두는데 트리거가 없는;;
     {
         _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-        _dragItem.localPosition =new Vector3(0,-0.3f,1.3f);
+        _dragItem.localPosition =new Vector3(0,-0.3f,1.7f);
         _dragItem.localRotation = Quaternion.identity;
         InventorySlot[mainIndex].Clears();
         //아무튼 저장해두었다가 드래그든 뭐든 옮긴다면 SetItem 호출해서 되면 거기로 옮겨가고 안되면 복귀
