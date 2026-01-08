@@ -81,9 +81,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _playerController.mouseXY(0, -_bandong);
             v2 -= 1;
-#if UNITY_EDITOR
-            Debug.Log($"내림:{v2}");
-#endif
+
         }
         e = false;
     }
@@ -142,13 +140,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     }
     public virtual void Fire()
     {
-#if UNITY_EDITOR
-        Debug.Log($"발사{v2}");
-#endif
+
         v = true;
         v2 +=1;
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, _fireLength)), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f)).GetPoint(_fireLength), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
