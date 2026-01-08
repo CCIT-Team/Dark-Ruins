@@ -14,9 +14,15 @@ namespace LYS_Work
         [SerializeField]
         private float _movRate=0.01f;
         private float _movTime=1f;
+        [SerializeField]
+        string _soundname;
+
+        Vector3 _initialPos;
+
         void Awake()
         {
             _toMove*=_movRate;
+            _initialPos = transform.position;
         }
         [ContextMenu("fuc")]
         public override void DetectPuzzleComplete(bool IsUp)
@@ -29,19 +35,37 @@ namespace LYS_Work
             {
                 _toMove *=-1;
             }
-            StartCoroutine(MoveRoutine());
+            StartCoroutine(MoveRoutine(IsUp));
         }
-        private IEnumerator MoveRoutine()
+        private IEnumerator MoveRoutine(bool isUp)
         {
-            while(_movTime >= 0)
+            if(_soundname is not null)
+            {
+                Managers_YGU.Sound.Play(_soundname, eSound.UI);
+
+            }
+            float acc = 0;
+
+            while(acc <= _movTime)
             {
                 yield return null;
-                _movTime -= _movRate;
+                acc += _movRate;
                 var pos = transform.position;
                 pos.y += _toMove;
                 transform.position = pos;
+
+                if((isUp == false) && pos.y < _initialPos.y)
+                {
+                    transform.position = _initialPos;
+                    break;
+                }
+
             }
-            _movTime = 1;
+
+            if(isUp==false)
+            {
+                transform.position = _initialPos;
+            }    
         }
     }
 }

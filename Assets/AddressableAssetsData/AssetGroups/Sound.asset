@@ -52,6 +52,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35bbd713b032e8042b6d24a9e18f9acb
+    m_Address: Door_Open
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 37ac29e01969ff541b88254340dc87f8
     m_Address: User_footstep
     m_ReadOnly: 0
