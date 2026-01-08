@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class arrow_move : MonoBehaviour
 {
-    [SerializeField] private float force_0 = 600f;
+    [SerializeField] private float force = 600f;
     private Rigidbody rb;
 
     void Start()
@@ -17,7 +17,7 @@ public class arrow_move : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        rb.AddForce(transform.up * force_0);
+        rb.AddForce(transform.up * force);
     }
 
     private void OnTriggerEnter(Collider other)

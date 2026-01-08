@@ -17,12 +17,12 @@ public class trap_touchDamage : MonoBehaviour
         if (trapType == eTrap.spike)
         {
             trapSound = "Trap_Thorn_Attack";
-            trapDamage = 10;
+            trapDamage = 20;
         }
         else if (trapType == eTrap.arrow)
         {
             trapSound = "Trap_Arrow_Attack";
-            trapDamage = 15;
+            trapDamage = 25;
         }
     }
 
