@@ -35465,7 +35465,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &799562895
 Transform:
   m_ObjectHideFlags: 0
@@ -35474,15 +35474,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 799562894}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.198, y: 0.136, z: 0.11}
-  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_LocalRotation: {x: -0, y: -0.000000014901165, z: 0.06162659, w: 0.99809927}
+  m_LocalPosition: {x: 0.333, y: 0.052, z: 0.042}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 277569845}
   - {fileID: 1138547099}
   m_Father: {fileID: 447210794}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 7.066}
 --- !u!95 &799562896
 Animator:
   serializedVersion: 5
@@ -43922,7 +43922,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.6324249, y: -0.571159, z: 0.5122072, w: 0.10705092}
   m_LocalPosition: {x: 4.6, y: 6.1, z: 8.8}
-  m_LocalScale: {x: 0.99999994, y: 0.99999994, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1014972122}
@@ -82991,7 +82991,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMode: 0
-  detectName: "\uC18C\uCD1D"
+  rifleVisualName: "\uC18C\uCD1D"
   hasRifle: 0
   hasGun: 1
   hasKnife: 1
@@ -97210,14 +97210,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1868660400}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6342447, y: 0.21751231, z: -0.6254617, w: 0.39902353}
-  m_LocalPosition: {x: 6.8244033, y: 12.958547, z: -0.118270874}
+  m_LocalRotation: {x: 0.51211286, y: 0.20196475, z: -0.4995973, w: 0.6688447}
+  m_LocalPosition: {x: 23.7, y: -15.5, z: -11.5}
   m_LocalScale: {x: 1, y: 0.99999994, z: 0.99999994}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1777999438}
   m_Father: {fileID: 1696748954}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 117.520004, y: 148.484, z: 87.058}
 --- !u!1001 &1870719321
 PrefabInstance:
   m_ObjectHideFlags: 0

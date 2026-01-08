@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic; // 리스트 사용을 위해 필요
+using System.Collections.Generic;
 
 public class WeaponManager_KSM : MonoBehaviour
 {
@@ -9,7 +9,7 @@ public class WeaponManager_KSM : MonoBehaviour
     public WeaponMode currentMode = WeaponMode.None;
 
     [Header("설정")]
-    [SerializeField] private string rifleVisualName = "소총"; // 찾을 아이템 이름
+    [SerializeField] private string rifleVisualName = "소총";
 
     [Header("소지 여부 (인벤토리 자동 체크)")]
     public bool hasRifle = false;
@@ -40,7 +40,6 @@ public class WeaponManager_KSM : MonoBehaviour
 
     public PlayerController_KSM playerController;
 
-    // [추가] CheckItem 함수를 쓰기 위해 인벤토리 스크립트 참조 필요
     private Inventory inventory;
 
     void Start()
@@ -48,7 +47,6 @@ public class WeaponManager_KSM : MonoBehaviour
         if (playerController == null)
             playerController = GetComponentInParent<PlayerController_KSM>();
 
-        // [추가] 씬에 있는 Inventory 스크립트를 찾아옵니다.
         inventory = FindObjectOfType<Inventory>();
 
         ConnectRifleVisuals();
@@ -62,7 +60,6 @@ public class WeaponManager_KSM : MonoBehaviour
 
     void Update()
     {
-        // 인벤토리 체크
         CheckInventoryForRifle();
 
         if (currentMode == WeaponMode.Knife && knifeScript != null && knifeScript.isAttacking)
@@ -92,18 +89,14 @@ public class WeaponManager_KSM : MonoBehaviour
             knifeObject.SetActive(false);
     }
 
-    // [변경된 핵심 함수] Inventory의 CheckItems<T>를 활용
     void CheckInventoryForRifle()
     {
         if (inventory == null) return;
 
-        // 1. 인벤토리에서 GunBase 타입을 가진 모든 아이템을 가져옵니다.
-        // (단수형 CheckItem<T>는 첫번째만 반환하므로, 권총이 앞에 있으면 소총을 못 찾을 수 있어 복수형 CheckItems를 씁니다)
         List<ItemBase> guns = inventory.CheckItems<GunBase>();
 
         bool found = false;
 
-        // 2. 가져온 총기 목록 중에 내가 찾는 이름(rifleVisualName)이 있는지 확인
         foreach (var gun in guns)
         {
             if (gun is Rifle) 
@@ -113,10 +106,8 @@ public class WeaponManager_KSM : MonoBehaviour
             }
         }
 
-        // 3. 결과 반영
         hasRifle = found;
 
-        // 4. 소총을 들고 있다가 버렸으면 맨손으로 전환
         if (!hasRifle && currentMode == WeaponMode.Rifle)
         {
             SetWeaponMode(WeaponMode.None);
