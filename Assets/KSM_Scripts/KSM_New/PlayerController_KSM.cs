@@ -57,7 +57,11 @@ public class PlayerController_KSM : CreatureController_KSM
 
         rb = GetComponent<Rigidbody>();
     }
-
+    public void mouseXY(float x=0, float y=0)
+    {
+        mouseX += x;
+        mouseY += y;
+    }
     public void StartWeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
     {
         if (currentWeaponTypeID == typeID) return;

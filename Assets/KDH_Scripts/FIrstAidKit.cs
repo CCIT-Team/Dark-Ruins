@@ -33,4 +33,12 @@ public class FirstAidKit : ItemBase
             DestroySelf();
         }
     }
+    public override void OnPickUp()
+    {
+        this.transform.localRotation= Quaternion.Euler(0f, 270f, 30f);
+    }
+    public override void OnDropped()
+    {
+        this.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+    }
 }

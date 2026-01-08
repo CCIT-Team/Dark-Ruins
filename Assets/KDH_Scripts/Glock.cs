@@ -15,6 +15,7 @@ public class Glock : GunBase
         _up = new Vector3(0, 0.0f, 0);
         _f = new Vector3(0f, 90f, 90f);
         _anim=_arm.GetComponent<Animator>();
+        _bandong = 1.2f;
     }
     public override void Fire()
     {
