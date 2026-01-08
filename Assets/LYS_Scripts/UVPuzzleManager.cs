@@ -69,7 +69,7 @@ public class UVPuzzleManager : MonoBehaviour
         {
             foreach(var target in activationTargets)
             {
-                target.DetectPuzzleComplete();
+                target.DetectPuzzleComplete(true);
             }
         }
     }

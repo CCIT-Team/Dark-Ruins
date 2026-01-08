@@ -8,7 +8,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
     protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0,v2=0;
-    protected float _fireCooltime=0,_reloadCooltime=0;
+    protected float _fireCooltime=0,_reloadCooltime=0,_bandong=0.7f;
     protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=2f;
     protected bool _zoomOuted = true, _zoomIng = false, e = false,v=false;
     
@@ -20,6 +20,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     protected Vector3 _up = new Vector3(0, 0, 0);
     protected Vector3 _f=new Vector3(0, 0,0);
     private ParticleSystem _particleSystem;
+    protected PlayerController_KSM _playerController;
     public float rate { get =>_fireCooltimeSet; }
     public void Use()
     {
@@ -39,6 +40,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         Debug.Log(this.GetType().Name);
         Debug.Log(_camera.transform.name);
 #endif
+        _playerController = GameObject.Find("Player").GetComponentInChildren<PlayerController_KSM>();
         //Managers_KSM.Input.OnKeysHeld += ItemUse;
     }
     public void FixedUpdate()
@@ -55,44 +57,17 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _reloadCooltime-=Time.fixedDeltaTime;
         }
-        if (_zoomIng == false)
-        {
-            if (_camera.fieldOfView >= 60)
-            {
-                _camera.fieldOfView = 60;
-                _zoomOuted = false;
-                return;
-            }
-
-            _camera.fieldOfView += 2;
-            return;
-        }
-        else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
-        {
-            _camera.fieldOfView -= 2;
-        }
-        else
-        {
-            _zoomOuted = true;
-            _camera.fieldOfView = 20;
-        }
-        if (v==false&&v2 > 0)
-        {
-
-            v2--;
-        }
-        e = false;
-    }
-    public override void ItemUse(List<KeyCode> keys)
-    {
-        e = true;
-        if (Input.GetKey(KeyCode.Mouse0)&&_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f && _loadedBullet>0)
+        if (Input.GetKey(KeyCode.Mouse0) && _loadedBullet > 0)
         {
 #if UNITY_EDITOR
             Debug.Log(_reloadCooltimeSet);
 #endif
-            _fireCooltime = _fireCooltimeSet;
-            Fire();
+            if (_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f)
+            {
+                _fireCooltime = _fireCooltimeSet;
+                Fire();
+            }
+
         }
         else
         {
@@ -106,6 +81,41 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
             //Fire();
         }
 #endif
+        if (_zoomIng == false)
+        {
+            if (_camera.fieldOfView >= 60)
+            {
+                _camera.fieldOfView = 60;
+                _zoomOuted = false;
+            }
+
+            else
+            {
+                _camera.fieldOfView += 2;
+            }
+
+        }
+        else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
+        {
+            _camera.fieldOfView -= 2;
+        }
+        else
+        {
+            _zoomOuted = true;
+            _camera.fieldOfView = 20;
+        }
+        if (v == false && v2 > 0)
+        {
+            _playerController.mouseXY(0, -_bandong);
+            v2 -= 1;
+
+        }
+        e = false;
+    }
+    public override void ItemUse(List<KeyCode> keys)
+    {
+        e = true;
+
         if (Input.GetKey(KeyCode.Mouse1))
         {
             Zoom(true);
@@ -134,18 +144,17 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     }
     public virtual void Fire()
     {
-#if UNITY_EDITOR
-        Debug.Log("발사");
-#endif
+
         v = true;
-        v2 ++;
+        v2 +=1;
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, _fireLength)), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(ray.origin + ray.direction * (Camera.main.nearClipPlane + 0.1f), ray.direction);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
         //Managers_YGU.Sound.Play("", Sound.Effect);
-
+        _playerController.mouseXY(0, _bandong);
         _uir.BulletUISet(true, _loadedBullet, HaveBullet());
     }
     public int HaveBullet()
@@ -196,7 +205,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
             Debug.Log("철컥4");
 #endif
-            Managers_YGU.Sound.Play("Gun_Empty", Sound.UI);
+            Managers_YGU.Sound.Play("Gun_Empty", eSound.UI);
             return;
         }
         else

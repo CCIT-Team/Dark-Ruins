@@ -11,11 +11,12 @@ public abstract class FiredBullet : MonoBehaviour
     protected bool _isFire;
     protected BulletsPool _pool;
     protected BulletsPool.Bullets _bullet;
-    protected const float _speed = 40.0f, _maxDistance=20.0f;
+    protected const float _speed = 10.0f, _maxDistance=20.0f;
     protected int _damage,_criticalDamage;
-
+    protected Rigidbody _rb;
     public virtual void Initialize(BulletsPool pool)
     {
+        _rb=GetComponent<Rigidbody>();
         _pool = pool;
     }
     public void FireSet(Vector3 position,Vector3 axis)
@@ -32,8 +33,9 @@ public abstract class FiredBullet : MonoBehaviour
             //이제 날아가는거 이벤트로 구독 박아버리면 될 예정
             //StartCoroutine(Fired());
             startPos = position;
-            this.gameObject.transform.position = startPos;
-            this.gameObject.transform.forward = _axis;
+            this.transform.forward = _axis;
+
+            this.transform.position = startPos;
         }
 
     }
@@ -74,7 +76,7 @@ public abstract class FiredBullet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.gameObject.transform.position += _axis * _speed* Time.fixedDeltaTime;
+        this.gameObject.transform.position += _axis * _speed * Time.fixedDeltaTime;
         if (_isFire==false||Vector3.Distance(startPos, this.gameObject.transform.position) > _maxDistance)
         {
             _isFire = false;

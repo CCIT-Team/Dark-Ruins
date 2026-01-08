@@ -63,7 +63,7 @@ public class Knife3_KSM : ItemBase, IWeapon_KSM
         bool isWeakPoint = other.GetComponent<WeakPoint_KSM>() != null;
 
         damageable.OnDamaged(damage, transform.root, isWeakPoint);
-        Managers_YGU.Sound.Play("Machete_Attack", Sound.UI);
+        Managers_YGU.Sound.Play("Machete_Attack",eSound.UI);
         hitTargets.Add(damageable);
     }
 }

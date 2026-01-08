@@ -17,6 +17,7 @@ public class Inventory :MonoBehaviour
     public static bool InventoryOpened = false;
     private Transform _inventoryView,_dragItem;
     private Camera cam;
+    private static Inventory _inventory;
     //private Inventory()
     //{
     //    Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
@@ -42,6 +43,7 @@ public class Inventory :MonoBehaviour
         _inventoryView = GameObject.Find("InventoryView").transform;
         cam = Camera.main;
         BindSlots();
+        _inventory = GameObject.Find("Player").GetComponent<Inventory>();
     }
 
     public void Sub()
@@ -83,10 +85,11 @@ public class Inventory :MonoBehaviour
         //단축키 및 아이템 사용
         ItemUse(keys);
     }
-    public void UsedItem()
+    public static void UsedItem()
     {
-        _drag = false;
-        _dragItem = null;
+
+        _inventory._drag = false;
+        _inventory._dragItem = null;
     }
     public void PickUp() //필드에서 줍기
     {
@@ -114,11 +117,12 @@ public class Inventory :MonoBehaviour
             _dragItem = item.transform;
 
             _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-            _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+            _dragItem.localPosition = new Vector3(0, -0.3f, 1.7f);
             _dragItem.localRotation = Quaternion.identity;
 
             _drag = true;
             item.OutFocused();
+
             StartCoroutine(SubCriber());
             //_dragItem.gameObject.SetActive(false);
             _dragItem.GetComponent<ItemBase>().Init();
@@ -131,6 +135,7 @@ public class Inventory :MonoBehaviour
     {
         if(_dragItem.CompareTag("Arms")==false)
         {
+            _dragCancel = false;
             return;
         }
         //_dragItem.GetComponent<ItemBase>().Unsubscribe();
@@ -161,7 +166,7 @@ public class Inventory :MonoBehaviour
                     }
                     _dragItem = t.transform;
                     _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-                    _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+                    _dragItem.localPosition = new Vector3(0, -0.3f, 1.7f);
                     _dragItem.localRotation = Quaternion.identity;
                 }    
             }
@@ -179,6 +184,7 @@ public class Inventory :MonoBehaviour
                 ClickItem(Inventory.InventorySlot[int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1))].MainIndex);
                 //ClickItem();
                 _drag = true;
+
                 StartCoroutine(SubCriber());
                 _dragItem.GetComponent<ItemBase>().Init();
                 _dragItem.GetComponent<ItemBase>().In = false;
@@ -213,11 +219,12 @@ public class Inventory :MonoBehaviour
     }
     IEnumerator SubCriber()
     {
+        _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
+        _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
         yield return new WaitForSeconds(1.0f);
         if(_dragItem !=null&&_dragItem.gameObject.activeSelf==true&&_dragCancel==false)
         {
-            _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-            _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
+
             //_dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
@@ -227,7 +234,7 @@ public class Inventory :MonoBehaviour
     {
         if(InventoryOpened==true)
         {
-            Managers_YGU.Sound.Play("Zipper_Close", Sound.UI);
+            Managers_YGU.Sound.Play("Zipper_Close", eSound.UI);
             InventoryOpened = false;
             _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 2.5f;
             //_inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
@@ -238,7 +245,7 @@ public class Inventory :MonoBehaviour
         }
         else
         {
-            Managers_YGU.Sound.Play("Zipper_Open", Sound.UI);
+            Managers_YGU.Sound.Play("Zipper_Open", eSound.UI);
             InventoryOpened = true;
             _inventoryView.gameObject.SetActive(false);
             Time.timeScale = 1.0f;
@@ -247,7 +254,7 @@ public class Inventory :MonoBehaviour
     public void ClickItem(int mainIndex)//무엇을 어떻게? 상호작용 어케함 우리? 일단 해두는데 트리거가 없는;;
     {
         _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-        _dragItem.localPosition =new Vector3(0,-0.3f,1.3f);
+        _dragItem.localPosition =new Vector3(0,-0.3f,1.7f);
         _dragItem.localRotation = Quaternion.identity;
         InventorySlot[mainIndex].Clears();
         //아무튼 저장해두었다가 드래그든 뭐든 옮긴다면 SetItem 호출해서 되면 거기로 옮겨가고 안되면 복귀

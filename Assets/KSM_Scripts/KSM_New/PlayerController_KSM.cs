@@ -13,7 +13,15 @@ public class PlayerController_KSM : CreatureController_KSM
     [Header("설정")]
     [SerializeField] private float mouseSpeed = 5f;
     [SerializeField] private Camera playerCamera;
-    [SerializeField] private LayerMask interactionLayer;
+
+    [Header("카메라 스무딩 설정")]
+    [SerializeField] private bool _useSmoothLook = false;
+    [SerializeField] private float smoothTime = 0.2f;
+
+    private float _currentInputX;
+    private float _currentInputY;
+    private float _inputXVelocity;
+    private float _inputYVelocity;
 
     [Header("이동 속도")]
     [SerializeField] private float moveSpeed = 7f;
@@ -56,14 +64,23 @@ public class PlayerController_KSM : CreatureController_KSM
         Cursor.visible = false;
 
         rb = GetComponent<Rigidbody>();
+
+        // 초기 각도 설정
+        Vector3 rot = transform.localEulerAngles;
+        mouseX = rot.y;
+        mouseY = 0;
+    }
+
+    public void mouseXY(float x = 0, float y = 0)
+    {
+        mouseX += x;
+        mouseY += y;
     }
 
     public void StartWeaponSwap(MonoBehaviour newWeaponScript, GameObject newWeaponObj, int typeID)
     {
         if (currentWeaponTypeID == typeID) return;
-
         if (swapCoroutine != null) StopCoroutine(swapCoroutine);
-
         swapCoroutine = StartCoroutine(Co_WeaponSwap(newWeaponScript, newWeaponObj, typeID));
     }
 
@@ -71,22 +88,11 @@ public class PlayerController_KSM : CreatureController_KSM
     {
         isSwapping = true;
         isFireReady = false;
-
-        if (currentWeaponObject != null)
-        {
-            currentWeaponObject.SetActive(false);
-        }
-
+        if (currentWeaponObject != null) currentWeaponObject.SetActive(false);
         currentWeaponContext = newWeaponScript;
         currentWeaponObject = newWeaponObj;
         currentWeaponTypeID = typeID;
-
-        if (currentWeaponObject != null)
-        {
-            currentWeaponObject.SetActive(true);
-            yield return null;
-        }
-
+        if (currentWeaponObject != null) { currentWeaponObject.SetActive(true); yield return null; }
         isSwapping = false;
         isFireReady = true;
         swapCoroutine = null;
@@ -94,6 +100,19 @@ public class PlayerController_KSM : CreatureController_KSM
 
     void Update()
     {
+        // M키 입력 체크
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            _useSmoothLook = !_useSmoothLook;
+            // 모드 전환 시 튀는 현상 방지를 위해 현재 입력값 초기화
+            _currentInputX = 0f;
+            _currentInputY = 0f;
+            _inputXVelocity = 0f;
+            _inputYVelocity = 0f;
+
+            Debug.Log($"부드러운 시점 모드: {_useSmoothLook}");
+        }
+
         MouseLook();
         HandleFootsteps();
     }
@@ -112,44 +131,28 @@ public class PlayerController_KSM : CreatureController_KSM
         {
             bool isRunning = targetVelocity.magnitude > moveSpeed + 0.5f;
             float currentInterval = isRunning ? runFootstepInterval : footstepInterval;
-
             footstepTimer -= Time.deltaTime;
-
             if (footstepTimer <= 0f)
             {
                 float randomPitch = UnityEngine.Random.Range(0.9f, 1.1f);
-
-                Managers_YGU.Sound.Play("User_footstep", Sound.UI, 0.5f, randomPitch);
-
+                Managers_YGU.Sound.Play("User_footstep", eSound.UI, 0.5f, randomPitch);
                 footstepTimer = currentInterval;
             }
         }
-        else
-        {
-            footstepTimer = 0f;
-        }
+        else footstepTimer = 0f;
     }
 
     void WeaponAttack()
     {
         if (!isFireReady || isSwapping || currentWeaponContext == null) return;
         if (currentWeaponObject != null && !currentWeaponObject.activeInHierarchy) return;
-
         if (weaponManager != null)
         {
             bool canPlayAnim = true;
-            if (currentWeaponContext is Knife3_KSM knife)
-            {
-                if (knife.isAttacking) canPlayAnim = false;
-            }
-
+            if (currentWeaponContext is Knife3_KSM knife && knife.isAttacking) canPlayAnim = false;
             if (canPlayAnim) weaponManager.PlayAttackAnimation();
         }
-
-        if (currentWeaponContext is IWeapon_KSM weapon)
-        {
-            weapon.Use();
-        }
+        if (currentWeaponContext is IWeapon_KSM weapon) weapon.Use();
     }
 
     void OnEnable()
@@ -170,40 +173,23 @@ public class PlayerController_KSM : CreatureController_KSM
         }
     }
 
-
     #region 퍼즐
     private Token pToken = null;
     [SerializeField]
     private Camera playerCam;
     private void DoPuzzle()
     {
-        Vector3 rayOrigin = playerCam.transform.position;
-        Vector3 rayDirection = playerCam.transform.forward;
+        Vector3 rayOrigin = playerCamera.transform.position;
+        Vector3 rayDirection = playerCamera.transform.forward;
         RaycastHit hit;
         RotatablePuzzleManager pmgr;
-        if (Physics.Raycast(rayOrigin, rayDirection, out hit, float.PositiveInfinity) == false)
-        {
-            return;
-        }
-
+        if (Physics.Raycast(rayOrigin, rayDirection, out hit, float.PositiveInfinity) == false) return;
         pmgr = hit.collider.GetComponentInParent<RotatablePuzzleManager>();
-        if (pmgr == null)
-        {
-            return;
-        }
-
-        if (pToken == null)
-        {
-            pmgr.DoPuzzle(null, 2, ref pToken);
-        }
-        else
-        {
-            pmgr.EndPuzzle(pToken);
-            pToken = null;
-        }
+        if (pmgr == null) return;
+        if (pToken == null) pmgr.DoPuzzle(null, 2, ref pToken);
+        else { pmgr.EndPuzzle(pToken); pToken = null; }
     }
     #endregion
-
 
     #region PlayerInputKeys
     private void HandleKeysPressed(KeyCode key)
@@ -216,7 +202,6 @@ public class PlayerController_KSM : CreatureController_KSM
     private void HandleKeysHeld(List<KeyCode> heldKeys)
     {
         float currentSpeed = heldKeys.Contains(KeyCode.LeftShift) ? runSpeed : moveSpeed;
-
         Vector3 direction = Vector3.zero;
         if (heldKeys.Contains(KeyCode.W)) direction += Vector3.forward;
         if (heldKeys.Contains(KeyCode.S)) direction += Vector3.back;
@@ -237,12 +222,30 @@ public class PlayerController_KSM : CreatureController_KSM
     }
     #endregion
 
-
     private void MouseLook()
     {
         if (playerCamera == null) return;
-        mouseY += Input.GetAxis("Mouse Y") * mouseSpeed;
-        mouseX += Input.GetAxis("Mouse X") * mouseSpeed;
+
+        float targetInputX = Input.GetAxis("Mouse X");
+        float targetInputY = Input.GetAxis("Mouse Y");
+
+        if (_useSmoothLook)
+        {
+            _currentInputX = Mathf.SmoothDamp(_currentInputX, targetInputX, ref _inputXVelocity, smoothTime);
+            _currentInputY = Mathf.SmoothDamp(_currentInputY, targetInputY, ref _inputYVelocity, smoothTime);
+        }
+        else
+        {
+            _currentInputX = targetInputX;
+            _currentInputY = targetInputY;
+
+            _inputXVelocity = 0f;
+            _inputYVelocity = 0f;
+        }
+
+        mouseX += _currentInputX * mouseSpeed;
+        mouseY += _currentInputY * mouseSpeed;
+
         mouseY = Mathf.Clamp(mouseY, -60f, 60f);
 
         transform.localEulerAngles = new Vector3(0, mouseX, 0);
@@ -257,25 +260,17 @@ public class PlayerController_KSM : CreatureController_KSM
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         base.OnDamaged(damage, attacker, false);
-        Managers_YGU.Sound.Play("User_Hit_Monster", Sound.UI);
+        Managers_YGU.Sound.Play("User_Hit_Monster", eSound.UI);
     }
 
     public void OnHealed(int damage)
     {
-        //base.OnDamaged(damage, this.transform, default);
-        if (currentHealth <= maxHealth)
-            currentHealth = damage;
+        if (currentHealth <= maxHealth) currentHealth = damage;
     }
 
-    public void Trapdamaged(int damage)
-    {
+    public void Trapdamaged(int damage) { }
 
-    }
-
-    public override void OnDead()
-    {
-        Debug.Log("유다희");
-    }
+    public override void OnDead() { Debug.Log("유다희"); }
 
     public void ApplyKnockback(Vector3 force, float duration)
     {
@@ -286,9 +281,7 @@ public class PlayerController_KSM : CreatureController_KSM
     {
         isKnockedBack = true;
         rb.AddForce(force, ForceMode.Impulse);
-
         yield return new WaitForSeconds(duration);
-
         isKnockedBack = false;
     }
 }

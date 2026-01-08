@@ -12,7 +12,7 @@ public class Rifle : GunBase
     protected override void Start()
     {
         base.Start();
-        _fireLength = 1.0f;
+        _fireLength = 1f;
         SetData();
         _up = new Vector3(0, 0f, 0);
         _f = new Vector3(0, 0, 0);
@@ -21,7 +21,7 @@ public class Rifle : GunBase
     public override void Fire()
     {
         _anim.Play("Rifle Fire", 0, 0f);
-        Managers_YGU.Sound.Play("Autogun_Shot", Sound.UI);
+        Managers_YGU.Sound.Play("Autogun_Shot", eSound.UI);
         base.Fire();
 
     }
@@ -31,7 +31,7 @@ public class Rifle : GunBase
         base.Reload(out ob);
         if (ob == true)
         {
-            Managers_YGU.Sound.Play("Autogun_Reload", Sound.UI);
+            Managers_YGU.Sound.Play("Autogun_Reload", eSound.UI);
             _anim.SetTrigger("reloading");
         }
     }
@@ -54,7 +54,7 @@ public class Rifle : GunBase
             return;
         }
         base.OnPickUp();
-        Managers_YGU.Sound.Play("Autogun_Equip", Sound.UI);
+        Managers_YGU.Sound.Play("Autogun_Equip", eSound.UI);
     }
 
     public override void OnDropped()

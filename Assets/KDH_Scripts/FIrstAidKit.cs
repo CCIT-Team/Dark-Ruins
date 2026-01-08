@@ -27,10 +27,20 @@ public class FirstAidKit : ItemBase
         if(Input.GetKey(KeyCode.Mouse1)&&_used==false)
         {
             _used = true;
-            Managers_YGU.Sound.Play("User_heal", Sound.UI);
+            Managers_YGU.Sound.Play("User_heal", eSound.UI);
             GetComponentInParent<PlayerController_KSM>().OnHealed(-_health);
-            GetComponentInParent<Inventory>().UsedItem();
+            Inventory.UsedItem();
             DestroySelf();
         }
+        DropItem();
+    }
+    public override void OnPickUp()
+    {
+        base.OnPickUp();
+        this.transform.localRotation= Quaternion.Euler(0f, 270f, 30f);
+    }
+    public override void OnDropped()
+    {
+        this.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
     }
 }

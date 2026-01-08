@@ -27,7 +27,7 @@ public class UVPuzzle : WeakPoint_KSM
 
     public override void SetDetectedByUV(bool detected)
     {
-        if(isDetected)
+        if(isDetected || (detected == false))
         {
             
             return;

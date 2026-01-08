@@ -23,7 +23,7 @@ public class ItemDrop : MonoBehaviour
             Destroy(item);
         }
         item.GetComponent<Collider>().enabled = true;
-        item.transform.localScale /= 0.3f;
+        //item.transform.localScale /= 0.3f;
         iB.SetData();
         iB._dropped = true;
         iB.Drop();

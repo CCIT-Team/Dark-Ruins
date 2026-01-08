@@ -1,3 +1,7 @@
-﻿ID,Name,Damage,TriggerType,Cooldown,Description
-1,SpikeTrap,20,Collision,3.5,닿으면 즉시 피해를 줍니다.
-2,ArrowTrap,25,Timer,-,단 한 번 화살을 쏩니다.
+﻿ID,Name,Value,Description,MAX,COUNT,RealName
+1,FlashlightItem_KSM,,유적 탐사에 필요한 손전등이다.,1,1,손전등
+2,FirstAidKit,30,생명을 책임지는 구급상자다.,1,1,구급상자다
+3,BatteryItem_KSM,,UV라이트를 사용할 수 있게 해주는 특수한 배터리이다.,1,1,배터리
+4,GlockAmmo,8,권총의 탄약이다.,32,32,권총탄
+5,RifleAmmo,6,소총의 탄환이다.,48,48,소총탄
+6,KeyItem,,고대의 유물이다. 제단에 제물로 바쳐 길을 열 수 있을 것 같다.,1,1,열쇠

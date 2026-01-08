@@ -46,9 +46,9 @@
   },
   {
     "ID": "6",
-    "Name": "Key",
+    "Name": "KeyItem",
     "Value": "",
-    "Description": "비밀의 열쇠 인 듯 하다...",
+    "Description": "고대의 유물이다. 제단에 제물로 바쳐 길을 열 수 있을 것 같다.",
     "MAX": "1",
     "COUNT": "1",
     "RealName": "열쇠"

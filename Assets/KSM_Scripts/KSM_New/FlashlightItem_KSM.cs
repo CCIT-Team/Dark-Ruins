@@ -136,16 +136,16 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
 
                 if (isUVLightActive) UpdateWeakPointsState();
 
-                Debug.Log($"배터리 교체 완료: {currentBattery}");
+                //Debug.Log($"배터리 교체 완료: {currentBattery}");
             }
             else
             {
-                Debug.LogWarning("배터리 아이템은 있는데 수량이 0임");
+                //Debug.LogWarning("배터리 아이템은 있는데 수량이 0임");
             }
         }
         else
         {
-            Debug.Log("배터리 없음");
+            //Debug.Log("배터리 없음");
         }
     }
 
@@ -157,7 +157,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
             return;
         }
 
-        Managers_YGU.Sound.Play("Flash_Switch", Sound.UI);
+        Managers_YGU.Sound.Play("Flash_Switch",eSound.UI);
         isUVLightActive = !isUVLightActive;
         regularLight.enabled = !isUVLightActive;
         uvLight.enabled = isUVLightActive;

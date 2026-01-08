@@ -33,7 +33,7 @@ public class MonsterAttackHitbox_KSM : MonoBehaviour
                 {
                     damageable.OnDamaged(damage, owner, false);
                     hitHistory.Add(other.gameObject);
-                    Managers_YGU.Sound.Play("User_Hit_Monster", Sound.UI);
+                    Managers_YGU.Sound.Play("User_Hit_Monster",eSound.UI);
                 }
             }
         }
