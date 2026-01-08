@@ -13,7 +13,7 @@ public class Inventory :MonoBehaviour
     public static Slot[] InventorySlot=new Slot[12];
     //private int _index, _inventoryCapacity; //나중에 쓰게 될 것
     public Action _itemUsing;
-    private bool _drag=false;
+    private bool _drag=false,_dragCancel=false;
     public static bool InventoryOpened = false;
     private Transform _inventoryView,_dragItem;
     private Camera cam;
@@ -123,19 +123,20 @@ public class Inventory :MonoBehaviour
             //_dragItem.gameObject.SetActive(false);
             _dragItem.GetComponent<ItemBase>().Init();
             _dragItem.GetComponent<ItemBase>().In = false;
-            //DragFalse();
+            DragFalse();
             _dragItem.gameObject.GetComponent<Collider>().enabled = false;
         }
     }
-    //private void DragFalse()
-    //{
-    //    if(_dragItem.CompareTag("Arms")==false)
-    //    {
-    //        return;
-    //    }
-    //    //_dragItem.GetComponent<ItemBase>().Unsubscribe();
-    //    _dragItem.gameObject.SetActive(false);
-    //}
+    private void DragFalse()
+    {
+        if(_dragItem.CompareTag("Arms")==false)
+        {
+            return;
+        }
+        //_dragItem.GetComponent<ItemBase>().Unsubscribe();
+        //_dragItem.gameObject.SetActive(false);
+        _dragCancel = true;
+    }
     public void Changer<T>(ItemBase item=default(ItemBase))
     {
         ItemBase t=default(ItemBase);
@@ -182,7 +183,7 @@ public class Inventory :MonoBehaviour
                 _dragItem.GetComponent<ItemBase>().Init();
                 _dragItem.GetComponent<ItemBase>().In = false;
                 //_dragItem.gameObject.SetActive(false);
-                //DragFalse();
+                DragFalse();
                 _dragItem.gameObject.GetComponent<Collider>().enabled = false;
                 return true;
             }
@@ -213,13 +214,14 @@ public class Inventory :MonoBehaviour
     IEnumerator SubCriber()
     {
         yield return new WaitForSeconds(1.0f);
-        if(_dragItem !=null&&_dragItem.gameObject.activeSelf==true)
+        if(_dragItem !=null&&_dragItem.gameObject.activeSelf==true&&_dragCancel==false)
         {
             _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
             _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
             //_dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
+        _dragCancel = false;
     }
     public void OpenOrCloseInventory()
     {

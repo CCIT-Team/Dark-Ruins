@@ -81,7 +81,6 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
             Camera.main.transform.forward -= new Vector3(0, 0, 0.1f);
             v2--;
         }
-        e = false;
     }
     public override void ItemUse(List<KeyCode> keys)
     {
@@ -244,6 +243,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 
     public override void OnDropped()
     {
+        e = false;
         _uir.BulletUISet(false);
     }
     private void OnDisable()
