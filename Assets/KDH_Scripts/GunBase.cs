@@ -7,7 +7,7 @@ using UnityEngine;
 public abstract class GunBase : ItemBase,IWeapon_KSM
 {
     [SerializeField]
-    protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0;
+    protected int _loadedBullet=0, _maxBullet=8, _haveBullet=0,v2=0;
     protected float _fireCooltime=0,_reloadCooltime=0;
     protected float _fireCooltimeSet=0.5f,_reloadCooltimeSet=2f;
     protected bool _zoomOuted = true, _zoomIng = false, e = false;
@@ -43,6 +43,10 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     }
     public void FixedUpdate()
     {
+        if(e==false)
+        {
+            return;
+        }
         if (_fireCooltime > 0)
         {
             _fireCooltime -= Time.fixedDeltaTime;
@@ -51,33 +55,33 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _reloadCooltime-=Time.fixedDeltaTime;
         }
-        if(e==true)
+        if (_zoomIng == false)
         {
-            if (_zoomIng == false && e == true)
+            if (_camera.fieldOfView >= 60)
             {
-                if (_camera.fieldOfView >= 60)
-                {
-                    _camera.fieldOfView = 60;
-                    _zoomOuted = false;
-                    return;
-                }
-
-                _camera.fieldOfView += 1;
+                _camera.fieldOfView = 60;
+                _zoomOuted = false;
                 return;
             }
-            else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
-            {
-                _camera.fieldOfView -= 1;
-            }
-            else
-            {
-                _zoomOuted = true;
-                _camera.fieldOfView = 20;
-            }
-            e = false;
+
+            _camera.fieldOfView += 2;
+            return;
         }
-
-
+        else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
+        {
+            _camera.fieldOfView -= 2;
+        }
+        else
+        {
+            _zoomOuted = true;
+            _camera.fieldOfView = 20;
+        }
+        if (v2 > 0)
+        {
+            Camera.main.transform.forward -= new Vector3(0, 0, 0.1f);
+            v2--;
+        }
+        e = false;
     }
     public override void ItemUse(List<KeyCode> keys)
     {
@@ -128,12 +132,14 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
         Debug.Log("발사");
 #endif
+        v2 ++;
         _loadedBullet--;
         _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, _fireLength)), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
         //Managers_YGU.Sound.Play("", Sound.Effect);
+        Camera.main.transform.forward += new Vector3(0,0,0.1f);
         _uir.BulletUISet(true, _loadedBullet, HaveBullet());
     }
     public int HaveBullet()

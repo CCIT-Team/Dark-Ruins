@@ -123,19 +123,19 @@ public class Inventory :MonoBehaviour
             //_dragItem.gameObject.SetActive(false);
             _dragItem.GetComponent<ItemBase>().Init();
             _dragItem.GetComponent<ItemBase>().In = false;
-            DragFalse();
+            //DragFalse();
             _dragItem.gameObject.GetComponent<Collider>().enabled = false;
         }
     }
-    private void DragFalse()
-    {
-        if(_dragItem.CompareTag("Arms")==false)
-        {
-            return;
-        }
-        //_dragItem.GetComponent<ItemBase>().Unsubscribe();
-        _dragItem.gameObject.SetActive(false);
-    }
+    //private void DragFalse()
+    //{
+    //    if(_dragItem.CompareTag("Arms")==false)
+    //    {
+    //        return;
+    //    }
+    //    //_dragItem.GetComponent<ItemBase>().Unsubscribe();
+    //    _dragItem.gameObject.SetActive(false);
+    //}
     public void Changer<T>(ItemBase item=default(ItemBase))
     {
         ItemBase t=default(ItemBase);
@@ -182,7 +182,7 @@ public class Inventory :MonoBehaviour
                 _dragItem.GetComponent<ItemBase>().Init();
                 _dragItem.GetComponent<ItemBase>().In = false;
                 //_dragItem.gameObject.SetActive(false);
-                DragFalse();
+                //DragFalse();
                 _dragItem.gameObject.GetComponent<Collider>().enabled = false;
                 return true;
             }
