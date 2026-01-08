@@ -12,13 +12,18 @@ public class trap_arrow : MonoBehaviour, ITrap
     {
         if(once)
         {
-            Managers_YGU.Sound.Play3D("Trap_Arrow_Activate", this.transform.position);
-            for(int i=0; i<transform.childCount; i++)
-            {
-                ob = transform.GetChild(i).gameObject;
-                ob.GetComponent<arrow_move>().ShootArrow();
-            }
+            ArrowAct();
             once = false;
+        }
+    }
+
+    private void ArrowAct()
+    {
+        Managers_YGU.Sound.Play3D("Trap_Arrow_Activate", this.transform.position);
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            ob = transform.GetChild(i).gameObject;
+            ob.GetComponent<arrow_move>().ShootArrow();
         }
     }
 
