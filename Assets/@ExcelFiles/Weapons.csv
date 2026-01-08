@@ -1,4 +1,4 @@
 ﻿ID,Name,Damage,AttackType,AttackSpeed,CriticalDamage,MaxAmmo,Description,,MAX,COUNT,RealName
 1,Glock,8,F,0.6,20,8,일반적인 권총이다. ,,1,1,권총
 2,Knife3_KSM,3,T,0.8,12,0,많이 사용한 정글도다.,,1,1,정글도
-3,Rifle,6,F,0.2,10,24,유적에서 얻은 소총이다.,,1,1,자동소총
+3,Rifle,6,F,0.2,10,24,유적에서 얻은 낡은 소총. 아직 잘 작동한다.,,1,1,자동소총
