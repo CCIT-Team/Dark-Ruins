@@ -29,7 +29,7 @@ public class FirstAidKit : ItemBase
             _used = true;
             Managers_YGU.Sound.Play("User_heal", eSound.UI);
             GetComponentInParent<PlayerController_KSM>().OnHealed(-_health);
-            GetComponentInParent<Inventory>().UsedItem();
+            Inventory.UsedItem();
             DestroySelf();
         }
     }

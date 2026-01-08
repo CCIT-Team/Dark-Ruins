@@ -17,6 +17,7 @@ public class Inventory :MonoBehaviour
     public static bool InventoryOpened = false;
     private Transform _inventoryView,_dragItem;
     private Camera cam;
+    private static Inventory _inventory;
     //private Inventory()
     //{
     //    Managers_KSM.Input.OnKeysHeld += OnKeyPressed;
@@ -42,6 +43,7 @@ public class Inventory :MonoBehaviour
         _inventoryView = GameObject.Find("InventoryView").transform;
         cam = Camera.main;
         BindSlots();
+        _inventory = GameObject.Find("Player").GetComponent<Inventory>();
     }
 
     public void Sub()
@@ -83,10 +85,11 @@ public class Inventory :MonoBehaviour
         //단축키 및 아이템 사용
         ItemUse(keys);
     }
-    public void UsedItem()
+    public static void UsedItem()
     {
-        _drag = false;
-        _dragItem = null;
+
+        _inventory._drag = false;
+        _inventory._dragItem = null;
     }
     public void PickUp() //필드에서 줍기
     {
@@ -114,7 +117,7 @@ public class Inventory :MonoBehaviour
             _dragItem = item.transform;
 
             _dragItem.SetParent(this.transform.Find("Main Camera"), false);
-            _dragItem.localPosition = new Vector3(0, -0.3f, 1.3f);
+            _dragItem.localPosition = new Vector3(0, -0.1f, 0.4f);
             _dragItem.localRotation = Quaternion.identity;
 
             _drag = true;
