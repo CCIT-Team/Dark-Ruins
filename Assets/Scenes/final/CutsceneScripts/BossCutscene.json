@@ -1,0 +1,23 @@
+{
+	"ToUse" : ["Subtitle","NoMoney","void"],
+	"Sequances" :
+	[
+		{
+			"HoldFor" : 1,
+			"Tasks":[
+				{
+					"target" : "void",
+					"type" : 2,
+					"arg" : ["NoMoney"],
+					"time" : 0
+				},
+				{
+					"target" : "NoMoney",
+					"type" : 3,
+					"arg" : ["0","31.29","0"],
+					"time" : 0
+				}
+			]
+		}
+	]
+}

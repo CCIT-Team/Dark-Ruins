@@ -1,0 +1,91 @@
+{
+	"ToUse" : ["Subtitle","Walking","void"],
+	"Sequances" :
+	[
+		{
+			"HoldFor" : 1,
+			"Tasks":[
+				{
+					"target" : "void",
+					"type" : 2,
+					"arg" : ["Walking"],
+					"time" : 0
+				},
+				{
+					"target" : "Walking",
+					"type" : 3,
+					"arg" : ["0","95.98","0"],
+					"time" : 0
+				}
+			]
+		},
+		{
+			"HoldFor" : 10,
+			"Tasks":[
+				{
+					"target" : "Subtitle",
+					"type" : 0,
+					"arg" : [" ......가까스로 빠져나왔군. 수차례 죽음의 위기를 넘겨야 했다."],
+					"time" : 5
+				},
+				{
+					"target" : "Walking",
+					"type" : 2,
+					"arg" : ["void"],
+					"time" : 0
+				}
+			]
+		},
+		{
+			"HoldFor" : 10,
+			"Tasks" :[
+				{
+					"target" : "Subtitle",
+					"type" : 1,
+					"arg" : [""],
+					"time" : 0
+				},
+				{
+					"target" : "Subtitle",
+					"type" : 0,
+					"arg" : [" 이 정도의 가치라면, 당면한 문제는 해결할 수 있을 것이다."],
+					"time" : 5
+				}
+			]
+		},
+		{
+			"HoldFor" : 10,
+			"Tasks" :[
+				{
+					"target" : "Subtitle",
+					"type" : 1,
+					"arg" : [""],
+					"time" : 0
+				},
+				{
+					"target" : "Subtitle",
+					"type" : 0,
+					"arg" : [" ...살아 돌아왔으니, 그것으로 충분하다."],
+					"time" : 5
+				}
+			]
+		},
+		{
+			"HoldFor" : 1,
+			"Tasks" :[
+				{
+					"target" : "Subtitle",
+					"type" : 1,
+					"arg" : [""],
+					"time" : 0
+				},
+				{
+					"target" : "void",
+					"type" : 2,
+					"arg" : ["Walking"],
+					"time" : 0
+				}
+			]
+		}
+	]
+}
