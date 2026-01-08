@@ -12,7 +12,7 @@ public class Rifle : GunBase
     protected override void Start()
     {
         base.Start();
-        _fireLength = 1.0f;
+        _fireLength = 1f;
         SetData();
         _up = new Vector3(0, 0f, 0);
         _f = new Vector3(0, 0, 0);
