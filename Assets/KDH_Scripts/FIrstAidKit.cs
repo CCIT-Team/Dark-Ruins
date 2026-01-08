@@ -32,9 +32,11 @@ public class FirstAidKit : ItemBase
             Inventory.UsedItem();
             DestroySelf();
         }
+        DropItem();
     }
     public override void OnPickUp()
     {
+        base.OnPickUp();
         this.transform.localRotation= Quaternion.Euler(0f, 270f, 30f);
     }
     public override void OnDropped()
