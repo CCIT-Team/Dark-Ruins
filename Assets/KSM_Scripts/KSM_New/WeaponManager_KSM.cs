@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class WeaponManager_KSM : MonoBehaviour
 {
@@ -39,10 +40,14 @@ public class WeaponManager_KSM : MonoBehaviour
 
     public PlayerController_KSM playerController;
 
+    private Inventory inventory;
+
     void Start()
     {
         if (playerController == null)
             playerController = GetComponentInParent<PlayerController_KSM>();
+
+        inventory = FindObjectOfType<Inventory>();
 
         ConnectRifleVisuals();
 
@@ -61,10 +66,7 @@ public class WeaponManager_KSM : MonoBehaviour
             return;
 
         if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
             if (hasRifle) SetWeaponMode(WeaponMode.Rifle);
-            else Debug.Log("인벤토리에 소총이 없습니다.");
-        }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
             if (hasGun) SetWeaponMode(WeaponMode.Gun);
@@ -89,21 +91,18 @@ public class WeaponManager_KSM : MonoBehaviour
 
     void CheckInventoryForRifle()
     {
-        if (Inventory.InventorySlot == null) return;
+        if (inventory == null) return;
+
+        List<ItemBase> guns = inventory.CheckItems<GunBase>();
 
         bool found = false;
 
-        for (int i = 0; i < Inventory.InventorySlot.Length; i++)
+        foreach (var gun in guns)
         {
-            Slot slot = Inventory.InventorySlot[i];
-
-            if (slot != null && slot.Item != null)
+            if (gun is Rifle) 
             {
-                if (slot.Item.name.Contains(rifleVisualName))
-                {
-                    found = true;
-                    break;
-                }
+                found = true;
+                break;
             }
         }
 
@@ -126,7 +125,6 @@ public class WeaponManager_KSM : MonoBehaviour
                 rifleObject = gun.gameObject;
                 rifleScript = gun;
                 rifleAnim = gun.GetComponent<Animator>();
-                Debug.Log($"[WeaponManager] 비주얼 오브젝트 '{gun.name}' 연결됨.");
                 return;
             }
         }
