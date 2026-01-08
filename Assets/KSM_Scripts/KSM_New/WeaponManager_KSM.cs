@@ -7,10 +7,10 @@ public class WeaponManager_KSM : MonoBehaviour
     [Header("현재 상태")]
     public WeaponMode currentMode = WeaponMode.None;
 
-    [Header("획득 총 이름")]
-    [SerializeField] private string detectName = "소총";
+    [Header("설정")]
+    [SerializeField] private string rifleVisualName = "소총";
 
-    [Header("소지 여부")]
+    [Header("소지 여부 (인벤토리 자동 체크)")]
     public bool hasRifle = false;
     public bool hasGun = true;
     public bool hasKnife = true;
@@ -44,7 +44,7 @@ public class WeaponManager_KSM : MonoBehaviour
         if (playerController == null)
             playerController = GetComponentInParent<PlayerController_KSM>();
 
-        FindRifleGlobal();
+        ConnectRifleVisuals();
 
         if (rifleObject != null) rifleObject.SetActive(false);
         if (gunObject != null) gunObject.SetActive(false);
@@ -55,10 +55,7 @@ public class WeaponManager_KSM : MonoBehaviour
 
     void Update()
     {
-        if (hasRifle == false)
-        {
-            FindRifleGlobal();
-        }
+        CheckInventoryForRifle();
 
         if (currentMode == WeaponMode.Knife && knifeScript != null && knifeScript.isAttacking)
             return;
@@ -66,6 +63,7 @@ public class WeaponManager_KSM : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (hasRifle) SetWeaponMode(WeaponMode.Rifle);
+            else Debug.Log("인벤토리에 소총이 없습니다.");
         }
 
         if (Input.GetKeyDown(KeyCode.Alpha2))
@@ -89,23 +87,50 @@ public class WeaponManager_KSM : MonoBehaviour
             knifeObject.SetActive(false);
     }
 
-    void FindRifleGlobal()
+    void CheckInventoryForRifle()
+    {
+        if (Inventory.InventorySlot == null) return;
+
+        bool found = false;
+
+        for (int i = 0; i < Inventory.InventorySlot.Length; i++)
+        {
+            Slot slot = Inventory.InventorySlot[i];
+
+            if (slot != null && slot.Item != null)
+            {
+                if (slot.Item.name.Contains(rifleVisualName))
+                {
+                    found = true;
+                    break;
+                }
+            }
+        }
+
+        hasRifle = found;
+
+        if (!hasRifle && currentMode == WeaponMode.Rifle)
+        {
+            SetWeaponMode(WeaponMode.None);
+        }
+    }
+
+    void ConnectRifleVisuals()
     {
         GunBase[] allGuns = transform.root.GetComponentsInChildren<GunBase>(true);
 
         foreach (var gun in allGuns)
         {
-            if (gun.name.Contains(detectName))
+            if (gun.name.Contains(rifleVisualName))
             {
-                hasRifle = true;
+                rifleObject = gun.gameObject;
+                rifleScript = gun;
+                rifleAnim = gun.GetComponent<Animator>();
+                Debug.Log($"[WeaponManager] 비주얼 오브젝트 '{gun.name}' 연결됨.");
                 return;
             }
         }
     }
-
-    public void AcquireRifle() { hasRifle = true; }
-    public void AcquireGun() { hasGun = true; }
-    public void AcquireKnife() { hasKnife = true; }
 
     void SetWeaponMode(WeaponMode mode)
     {
