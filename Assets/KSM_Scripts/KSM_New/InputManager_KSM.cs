@@ -26,6 +26,7 @@ public class InputManager_KSM
         KeyCode.R,
         KeyCode.Mouse0,
         KeyCode.Escape,
+        KeyCode.Q
     };
     #endregion
 

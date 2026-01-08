@@ -19,8 +19,16 @@ namespace LYS_Work
             _toMove*=_movRate;
         }
         [ContextMenu("fuc")]
-        public override void DetectPuzzleComplete()
+        public override void DetectPuzzleComplete(bool IsUp)
         {
+            if(IsUp && _toMove < 0)
+            {
+                _toMove *=-1;
+            }
+            else if(IsUp==false && _toMove > 0)
+            {
+                _toMove *=-1;
+            }
             StartCoroutine(MoveRoutine());
         }
         private IEnumerator MoveRoutine()

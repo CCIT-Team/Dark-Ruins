@@ -11,7 +11,7 @@ namespace LYS_Work
         private string keyname;
         [SerializeField]
         ItemPuzzleCompletedDetector[] targets;
-        public event Action OnPuzzleCompletedAction;
+        public event Action<bool> OnPuzzleCompletedAction;
         private bool _completed = false;
         void Start()
         {
@@ -24,7 +24,7 @@ namespace LYS_Work
         {
             if(!_completed && collision.gameObject.name == keyname)
             {
-                OnPuzzleCompletedAction?.Invoke();
+                OnPuzzleCompletedAction?.Invoke(true);
                 _completed = true;
                 Destroy(collision.gameObject);
             }
