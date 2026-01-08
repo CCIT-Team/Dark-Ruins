@@ -1,5 +1,5 @@
 {
-	"ToUse" : ["Subtitle","NoMoney","void"],
+	"ToUse" : ["Subtitle","Walking","void"],
 	"Sequances" :
 	[
 		{
@@ -8,28 +8,28 @@
 				{
 					"target" : "void",
 					"type" : 2,
-					"arg" : ["NoMoney"],
+					"arg" : ["Walking"],
 					"time" : 0
 				},
 				{
-					"target" : "NoMoney",
+					"target" : "Walking",
 					"type" : 3,
-					"arg" : ["0","31.29","0"],
+					"arg" : ["0","95.98","0"],
 					"time" : 0
 				}
 			]
 		},
 		{
-			"HoldFor" : 7,
+			"HoldFor" : 10,
 			"Tasks":[
 				{
 					"target" : "Subtitle",
 					"type" : 0,
-					"arg" : ["수중에 남은 것은 낡은 정글도와 소형 손전등 하나뿐."],
-					"time" : 6
+					"arg" : [" ......가까스로 빠져나왔군. 수차례 죽음의 위기를 넘겨야 했다."],
+					"time" : 5
 				},
 				{
-					"target" : "NoMoney",
+					"target" : "Walking",
 					"type" : 2,
 					"arg" : ["void"],
 					"time" : 0
@@ -37,7 +37,7 @@
 			]
 		},
 		{
-			"HoldFor" : 7,
+			"HoldFor" : 10,
 			"Tasks" :[
 				{
 					"target" : "Subtitle",
@@ -48,8 +48,25 @@
 				{
 					"target" : "Subtitle",
 					"type" : 0,
-					"arg" : ["무모한 선택임을 알고 있지만, 더 이상 물러설 곳이 없다."],
-					"time" : 6
+					"arg" : [" 이 정도의 가치라면, 당면한 문제는 해결할 수 있을 것이다."],
+					"time" : 5
+				}
+			]
+		},
+		{
+			"HoldFor" : 10,
+			"Tasks" :[
+				{
+					"target" : "Subtitle",
+					"type" : 1,
+					"arg" : [""],
+					"time" : 0
+				},
+				{
+					"target" : "Subtitle",
+					"type" : 0,
+					"arg" : [" ...살아 돌아왔으니, 그것으로 충분하다."],
+					"time" : 5
 				}
 			]
 		},
@@ -65,7 +82,7 @@
 				{
 					"target" : "void",
 					"type" : 2,
-					"arg" : ["NoMoney"],
+					"arg" : ["Walking"],
 					"time" : 0
 				}
 			]
