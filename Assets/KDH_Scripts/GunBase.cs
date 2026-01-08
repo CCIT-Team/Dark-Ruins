@@ -57,7 +57,30 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         {
             _reloadCooltime-=Time.fixedDeltaTime;
         }
+        if (Input.GetKey(KeyCode.Mouse0) && _loadedBullet > 0)
+        {
+#if UNITY_EDITOR
+            Debug.Log(_reloadCooltimeSet);
+#endif
+            if (_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f)
+            {
+                _fireCooltime = _fireCooltimeSet;
+                Fire();
+            }
 
+        }
+        else
+        {
+            v = false;
+        }
+#if UNITY_EDITOR
+        if (_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f && Input.GetKey(KeyCode.Mouse1))
+        {
+            _fireCooltime = _fireCooltimeSet;
+            _loadedBullet = _maxBullet;
+            //Fire();
+        }
+#endif
         if (_zoomIng == false)
         {
             if (_camera.fieldOfView >= 60)
@@ -66,7 +89,11 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
                 _zoomOuted = false;
             }
 
-            _camera.fieldOfView += 2;
+            else
+            {
+                _camera.fieldOfView += 2;
+            }
+
         }
         else if (_camera.fieldOfView >= 20 && _zoomOuted == false)
         {
@@ -88,30 +115,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
     public override void ItemUse(List<KeyCode> keys)
     {
         e = true;
-        if (Input.GetKey(KeyCode.Mouse0) && _loadedBullet > 0)
-        {
-#if UNITY_EDITOR
-            Debug.Log(_reloadCooltimeSet);
-#endif
-            if(_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f )
-            {
-                _fireCooltime = _fireCooltimeSet;
-                Fire();
-            }
 
-        }
-        else
-        {
-            v= false;
-        }
-#if UNITY_EDITOR
-        if (_fireCooltime <= 0.0f && _reloadCooltime <= 0.0f && Input.GetKey(KeyCode.Mouse1))
-        {
-            _fireCooltime = _fireCooltimeSet;
-            _loadedBullet = _maxBullet;
-            //Fire();
-        }
-#endif
         if (Input.GetKey(KeyCode.Mouse1))
         {
             Zoom(true);
@@ -144,7 +148,8 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         v = true;
         v2 +=1;
         _loadedBullet--;
-        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(Camera.main.transform.position + Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f)).direction * (Camera.main.nearClipPlane + 0.1f), Camera.main.transform.forward);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
+        Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        _bulletsPool.Summon(_bullet).GetComponent<FiredBullet>().FireSet(ray.origin + ray.direction * (Camera.main.nearClipPlane + 0.1f), ray.direction);//위치기준 나중에 하고 활성화나 기타등등 부분 저기서 추가
         _particleSystem.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
