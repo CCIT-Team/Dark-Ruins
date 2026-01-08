@@ -132,11 +132,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: b05a87df75a11604d82ca060b5455ea9
-    m_Address: Zipper_Open
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b670a54e8ecc0ad4db2a2595abd55ba6
     m_Address: Monster_Mummy_Hit
     m_ReadOnly: 0
@@ -162,6 +157,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf60fd05fc0afa2458af585aba01a379
+    m_Address: Zipper_Close
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c46f41e944b029140b319989e47d5be3
     m_Address: Flash_Switch
     m_ReadOnly: 0
@@ -182,13 +182,13 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: da9b5973a4e8f0c44a3ac7dde9438f77
-    m_Address: Zipper_Close
+  - m_GUID: e283aa63d0cf0c645a54ad2c5dba390e
+    m_Address: Monster_Boss_Attack
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e283aa63d0cf0c645a54ad2c5dba390e
-    m_Address: Monster_Boss_Attack
+  - m_GUID: e3d888a2f4d14e84f9fd7d0f3e3bdce3
+    m_Address: Zipper_Open
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
