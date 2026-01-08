@@ -24630,7 +24630,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4591518168527383859, guid: db2d2485ab8584b57afc24085ddb3013, type: 3}
       propertyPath: targets.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4591518168527383859, guid: db2d2485ab8584b57afc24085ddb3013, type: 3}
       propertyPath: targets.Array.data[0]
@@ -26253,7 +26253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4591518168527383859, guid: db2d2485ab8584b57afc24085ddb3013, type: 3}
       propertyPath: targets.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4591518168527383859, guid: db2d2485ab8584b57afc24085ddb3013, type: 3}
       propertyPath: targets.Array.data[0]
