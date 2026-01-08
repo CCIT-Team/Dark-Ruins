@@ -1,4 +1,3 @@
 ﻿ID,Name,Damage,TriggerType,Cooldown,Description
-1,SpikeTrap,20,Collision,3,닿으면 즉시 피해를 줍니다.
-2,FireTrap,35,Timer,5,주기적으로 불꽃을 분사합니다.
-3,PoisonGasTrap,10,AreaEnter,2,범위 내 플레이어에게 지속 피해를 줍니다.
+1,SpikeTrap,20,Collision,3.5,닿으면 즉시 피해를 줍니다.
+2,ArrowTrap,25,Collision,-,한 번 화살을 발사합니다.
