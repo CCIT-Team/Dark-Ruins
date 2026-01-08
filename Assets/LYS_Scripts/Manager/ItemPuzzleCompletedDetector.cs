@@ -7,6 +7,6 @@ namespace LYS_Work
 {
     public abstract class ItemPuzzleCompletedDetector : MonoBehaviour
     {
-        public abstract void DetectPuzzleComplete();
+        public abstract void DetectPuzzleComplete(bool option);
     }
 }
