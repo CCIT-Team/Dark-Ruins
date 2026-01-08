@@ -1,0 +1,27 @@
+#Dungeon_Wall_5x5.obj
+#Saturday, 13 May 2017
+#21:29:40
+#-------
+
+#Dungeon_Wall_5x5
+#-------
+g Dungeon_Wall_5x5
+v 2.5 0 0
+v -2.5 5 0
+v -2.5 0 0
+v 2.5 5 0
+
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+vn 0 0 1
+
+vt 0 0
+vt 1 1
+vt 1 0
+vt 0 1
+
+usemtl Default_PrototypeMat
+usemap Default_PrototypeMat
+f 1/1/1 2/2/2 3/3/3
+f 4/4/4 2/2/2 1/1/1

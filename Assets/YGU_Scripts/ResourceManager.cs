@@ -8,10 +8,10 @@ using Object = UnityEngine.Object;
 
 public class ResourceManager
 {
-    //·ÎµåÇÑ ¸®¼Ò½ºµé
+    //ë¡œë“œí•œ ë¦¬ì†ŒìŠ¤ë“¤
     Dictionary<string, Object> resourceList = new Dictionary<string, Object>();
 
-    //public T Load<T>(string key) where T : Object //·ÎµåÇß´ø ¸®¼Ò½ºÀÎÁö È®ÀÎ
+    //public T Load<T>(string key) where T : Object //ë¡œë“œí–ˆë˜ ë¦¬ì†ŒìŠ¤ì¸ì§€ í™•ì¸
     //{
     //    if (resourceList.TryGetValue(key, out Object resource))
     //        return resource as T;

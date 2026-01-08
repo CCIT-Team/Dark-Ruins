@@ -1,0 +1,22 @@
+mtllib ./Floor_5x5.mtl
+g pb-Plane-1025384
+v 2.5 0 -2.5
+v 2.5 0 2.5
+v -2.5 0 -2.5
+v -2.5 0 2.5
+
+vn 0 1 0
+vn 0 1 0
+vn 0 1 0
+vn 0 1 0
+
+vt 0 0
+vt 0 1
+vt 1 0
+vt 1 1
+
+g Default_Prototype
+usemtl Default_Prototype
+usemap Default_Prototype
+f 2/2/2 1/1/1 3/3/3
+f 4/4/4 2/2/2 3/3/3

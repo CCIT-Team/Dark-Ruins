@@ -1,37 +1,56 @@
 [
   {
     "ID": "1",
-    "Name": "Potion",
-    "Type": "Consume",
-    "Value": "50",
-    "Description": "체력을 50 회복합니다."
+    "Name": "FlashlightItem_KSM",
+    "Value": "",
+    "Description": "유적 탐사에 필요한 손전등이다.",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "손전등"
   },
   {
     "ID": "2",
-    "Name": "Elixir",
-    "Type": "Consume",
-    "Value": "150",
-    "Description": "마나를 150 회복합니다."
+    "Name": "FirstAidKit",
+    "Value": "30",
+    "Description": "생명을 책임지는 구급상자다.",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "구급상자다"
   },
   {
     "ID": "3",
-    "Name": "IronSword",
-    "Type": "Weapon",
-    "Value": "300",
-    "Description": "기본 근접 무기입니다."
+    "Name": "BatteryItem_KSM",
+    "Value": "",
+    "Description": "UV라이트를 사용할 수 있게 해주는 특수한 배터리이다.",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "배터리"
   },
   {
     "ID": "4",
-    "Name": "FireWand",
-    "Type": "Weapon",
-    "Value": "500",
-    "Description": "화염 속성 마법 지팡이입니다."
+    "Name": "GlockAmmo",
+    "Value": "8",
+    "Description": "권총의 탄약이다.",
+    "MAX": "32",
+    "COUNT": "32",
+    "RealName": "권총탄"
   },
   {
     "ID": "5",
-    "Name": "LeatherArmor",
-    "Type": "Armor",
-    "Value": "250",
-    "Description": "가벼운 방어구입니다."
+    "Name": "RifleAmmo",
+    "Value": "6",
+    "Description": "소총의 탄환이다.",
+    "MAX": "48",
+    "COUNT": "48",
+    "RealName": "소총탄"
+  },
+  {
+    "ID": "6",
+    "Name": "Key",
+    "Value": "",
+    "Description": "비밀의 열쇠 인 듯 하다...",
+    "MAX": "1",
+    "COUNT": "1",
+    "RealName": "열쇠"
   }
 ]

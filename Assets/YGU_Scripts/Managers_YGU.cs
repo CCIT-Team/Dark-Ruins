@@ -7,15 +7,10 @@ public class Managers_YGU : MonoBehaviour
     static Managers_YGU s_instance;
     static Managers_YGU Instance { get { Init(); return s_instance; } }
 
-    //[Header("Resources")]
-    //public List<GameObject> effectPrefabs;      //¿Ã∆Â∆Æ «¡∏Æ∆’
-
     SoundManager _sound = new SoundManager();
-    //EffectManager _effect = new EffectManager();
     ResourceManager _resource = new ResourceManager();
 
     public static SoundManager Sound { get { return Instance?._sound; } }
-    //public static EffectManager Effect { get { return Instance?._effect; } }
     public static ResourceManager Resource { get { return Instance?._resource; } }
 
     public static void Init()
@@ -32,14 +27,12 @@ public class Managers_YGU : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers_YGU>();
             s_instance._sound.Init();
-            //s_instance._effect.Init(s_instance.effectPrefabs);
         }
     }
 
     public static void Clear()
     {
         Sound.Clear();
-        //Effect.Clear();
     }
 
     private void Start()

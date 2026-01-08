@@ -1,0 +1,215 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Sound
+  m_EditorClassIdentifier: 
+  m_GroupName: Sound
+  m_Data:
+    m_SerializedData: []
+  m_GUID: b430c33676a000048994aeb0c5b851e6
+  m_SerializeEntries:
+  - m_GUID: 06f7b70a8e4efb247ab67e8e19c3d876
+    m_Address: Flash_Noise
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0cf3342fbaff1d24ba893a2deeb11b6a
+    m_Address: Barrel_Explosion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 15f0a8169caf21949b3cec7780c81f45
+    m_Address: Monster_Boss_Running
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 271a4ee25ea06124099a8d7c432b1273
+    m_Address: Autogun_Reload
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 273ffdca3219e7c4ba9594621fa4c51c
+    m_Address: Monster_Ghost_Default
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2bf7021c0d88f12408ef1ab14886f755
+    m_Address: Trap_Arrow_Activate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 35121d671185b4b1489da7dd0cf1f6f3
+    m_Address: Bgm_Boss
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 37ac29e01969ff541b88254340dc87f8
+    m_Address: User_footstep
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d4ef7516a431934681038a3dc391e55
+    m_Address: Machete_Swing
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4d6281aa604094f04839cffa502096c0
+    m_Address: Handgun_Shot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4f358b2bd7b279b4984d117b4790938d
+    m_Address: Monster_Mummy_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 57a532b671d4ced4ab53ea374b107a47
+    m_Address: Trap_Arrow_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5af4f665f58a7e84894c272d71a487a2
+    m_Address: Gun_Empty
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a39ba789208642ea9fda609aea157b6
+    m_Address: User_Hit_Trap
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7a9f9d51726225d4e8f8aa34a5de2901
+    m_Address: Monster_Boss_Death
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7cbd6cd765888ff418d01d98bd1ce9c2
+    m_Address: Trap_Thorn_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 85d2d7125d577ef4d9b2e70e37a1e030
+    m_Address: Autogun_Equip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9158afb6966d445db9caf1dccf7acbcc
+    m_Address: Handgun_Equip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9578423e54c136747b1828dd44f7ffe3
+    m_Address: Monster_Ghost_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 974d29bf2383b6542b4edd3b530600b3
+    m_Address: Door_Open
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 98219064e72b0c1488c312cd33278407
+    m_Address: Machete_Equip
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a9ebdbc9ddb94cb41ba0fac12f1b3b4e
+    m_Address: Monster_Mummy_Death
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ad43264a31dc4e5438bb21a5dc7d35db
+    m_Address: Autogun_Shot
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b05a87df75a11604d82ca060b5455ea9
+    m_Address: Zipper_Open
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b670a54e8ecc0ad4db2a2595abd55ba6
+    m_Address: Monster_Mummy_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b7dbfc90ac4bb7345a26a2a27ee6dac0
+    m_Address: Machete_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b99675f3ac2e38f468ac1d4af552d88f
+    m_Address: Monster_Ghost_Death
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b99b3e2019347a24cacb9609451cb5ea
+    m_Address: Monster_Ghost_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb7a2d799a5e8c645a0d1ca53792368e
+    m_Address: Monster_Boss_Hit
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c46f41e944b029140b319989e47d5be3
+    m_Address: Flash_Switch
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: caeef931b1b271c43968e38d04443286
+    m_Address: User_heal
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ce4794fed83573d4eb7278ea9fb03fe6
+    m_Address: Monster_Mummy_Default
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d2df6d71031986846adf9ffc57a0d9ee
+    m_Address: Trap_Thorn_Activate
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: da9b5973a4e8f0c44a3ac7dde9438f77
+    m_Address: Zipper_Close
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e283aa63d0cf0c645a54ad2c5dba390e
+    m_Address: Monster_Boss_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e5198250a6a57408bb36e14bc4a322c4
+    m_Address: Handgun_Reload
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ed042c87951ed40268592d7ca7a2de59
+    m_Address: User_Hit_Monster
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f5346a2a957c66f4ab91c14d42e3c759
+    m_Address: Monster_User_Attack
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 6ba7cbcd10bcf764792d380679c61ff2, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3c54b8c901ce0404c9a09280c08002bd, type: 2}
+    - {fileID: 11400000, guid: e4b8f2c1f7a9d3e4aaeb206efa16e0f2, type: 2}

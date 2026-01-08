@@ -1,0 +1,13 @@
+http://www.InfinityPBR.com
+
+Thank you for purchasing or updating the Dungeon Plus Pack PBR!
+
+For the latest demo walk through, including instructions on how to use the “Customizable Files”, please view the videos at https://www.infinitypbr.com/?pack=dungeon
+
+The download from the Asset Store only contains the “Game Ready” files. These are everything you need to start building right away.  If you’d like to customize the textures or mix your own custom music, please go to http://www.InfinityPBR.com and register your purchase.
+
+Then, click the “Downloads” link and download the Customizable Files & other available downloads.
+
+Please note:  I recommend you create textures in a brand new project.  The .sbsar materials are heavy, and can slow down your project as Unity likes to rebuild them a lot.  Please create a new project for texture customization.
+
+Please let me know if you have any questions on the forum, and I’ll be glad to help out.  Thanks!!

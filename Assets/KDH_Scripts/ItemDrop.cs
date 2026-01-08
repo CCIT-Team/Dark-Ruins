@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class NewBehaviourScript : MonoBehaviour
+public class ItemDrop : MonoBehaviour
 {
     [SerializeField]
     public GameObject _dropItem;
-    private void OnDisable()
+    public void DeathDrop()
     {
         if (gameObject.scene == null || !gameObject.scene.isLoaded)
             return;
@@ -24,6 +24,7 @@ public class NewBehaviourScript : MonoBehaviour
         }
         item.GetComponent<Collider>().enabled = true;
         item.transform.localScale /= 0.3f;
+        iB.SetData();
         iB._dropped = true;
         iB.Drop();
         

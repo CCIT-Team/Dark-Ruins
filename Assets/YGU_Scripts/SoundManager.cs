@@ -17,9 +17,9 @@ public class SoundManager
     private AudioSource[] _audioSources = new AudioSource[(int)eSound.Max];
     private Dictionary<string, AudioClip> _audioClips = new Dictionary<string, AudioClip>();
 
-    private GameObject _soundRoot = null; //»ç¿îµå Àç»ı±â
+    private GameObject _soundRoot = null; //ì‚¬ìš´ë“œ ì¬ìƒê¸°
 
-    public void Init() //»ı¼ºÀÚ
+    public void Init() //ìƒì„±ì
     {
         if (_soundRoot == null)
         {
@@ -29,16 +29,14 @@ public class SoundManager
                 _soundRoot = new GameObject { name = "@SoundRoot" };
                 UnityEngine.Object.DontDestroyOnLoad(_soundRoot);
 
-
-
                 string[] soundTypeNames = System.Enum.GetNames(typeof(eSound));
+              
                 for (int count = 0; count < soundTypeNames.Length - 1; count++)
                 {
                     GameObject go = new GameObject { name = soundTypeNames[count] };
                     _audioSources[count] = go.AddComponent<AudioSource>();
                     go.transform.parent = _soundRoot.transform;
                 }
-
                 _audioSources[(int)eSound.Bgm].loop = true;
             }
         }
@@ -51,7 +49,7 @@ public class SoundManager
         _audioClips.Clear();
     }
 
-    public void Play(string key, eSound type, float volume = 1.0f, float pitch = 1.0f) //»ç¿îµå Àç»ı
+    public void Play(string key, eSound type, float volume = 1.0f, float pitch = 1.0f) //ì‚¬ìš´ë“œ ì¬ìƒ
     {
         AudioSource audioSource = _audioSources[(int)type];
 
@@ -69,6 +67,7 @@ public class SoundManager
                 audioSource.Play();
             });
         }
+
         else if (type == eSound.UI)
         {
             LoadAudioClip(key, (audioClip) =>
@@ -80,7 +79,7 @@ public class SoundManager
         }
     }
 
-    public void Play3D(string key, Vector3 position, float volume = 1.0f, float pitch = 1.0f) //¸Ê¿¡¼­ »ç¿îµå Àç»ı
+    public void Play3D(string key, Vector3 position, float volume = 1.0f, float pitch = 1.0f) //ë§µì—ì„œ ì‚¬ìš´ë“œ ì¬ìƒ
     {
         LoadAudioClip(key, (audioClip) =>
         {
@@ -110,7 +109,7 @@ public class SoundManager
         audioSource.Stop();
     }
 
-    private void LoadAudioClip(string key, Action<AudioClip> callback) //Å¬¸³°¡Á®¿À±â
+    private void LoadAudioClip(string key, Action<AudioClip> callback) //í´ë¦½ê°€ì ¸ì˜¤ê¸°
     {
         AudioClip audioClip = null;
         if (_audioClips.TryGetValue(key, out audioClip))

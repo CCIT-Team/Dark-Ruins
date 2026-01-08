@@ -5,80 +5,104 @@ using UnityEngine.AI;
 
 public class MonsterController_KSM : CreatureController_KSM
 {
-    [Header("æ‡¡° Ω√∞¢»≠ (∏”∆º∏ÆæÛ ±≥√º)")]
-    public Renderer weakPointRenderer;
-    public Material highlightedMaterial;
-    private Material normalMaterial;
-    private bool isCurrentlyHighlighted = false;
+    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
+    public State currentState;
 
-    [Header("∏ÛΩ∫≈Õ AI π¸¿ß")]
-    public float patrolRadius = 7f;
-    public float chaseDistance = 10f;
-    public float attackDistance = 2f;
-    public float lostDistance = 15f;
-    public float proximityRadius = 5f;
-    public float viewAngle = 90f;
+    [Header("ÏÇ¨Ïö¥Îìú ÏÑ§Ï†ï")]
+    [SerializeField] protected string attackSound;
+    [SerializeField] protected string hitSound;
+    [SerializeField] protected string deathSound;
+    [SerializeField] protected string idleSound;
 
-    [Header("ƒ›∂Û¿Ã¥ı º≥¡§")]
+    [Header("Í±∞Î¶¨ ÏÑ§Ï†ï")]
+    protected float patrolRadius = 7f;
+    protected float attackDistance = 3f;
+    protected float proximityRadius = 5f;
+    protected float viewAngle = 90f;
+
+    [Header("ÌöåÏ†Ñ ÏÑ§Ï†ï")]
+    [SerializeField] protected float rotationSpeed = 5f;
+
+    [Header("Í≥µÍ≤© ÌûàÌä∏Î∞ïÏä§ Ïó∞Í≤∞")]
+    [SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
+
+    [Header("ÌîºÍ≤© Î™®ÏÖò Î∞úÎèô Ï≤¥Î†• Íµ¨Í∞Ñ")]
+    [SerializeField] protected List<int> hitReactionThresholds = new List<int>();
+
+    [Header("ÏΩúÎùºÏù¥Îçî Î∞è Î†àÏù¥Ïñ¥")]
     public SphereCollider detectionCollider;
     public LayerMask obstacleMask;
+    public List<Collider> hitColliders = new List<Collider>();
+    public List<Collider> weakPointColliders = new List<Collider>();
 
-    public Collider weakPointCollider;
-    public Collider hitCollider;
-
-    [Header("∏ÛΩ∫≈Õ Ω∫≈» (Base Ω∫≈»ø° √ﬂ∞°)")]
+    [Header("ÏïΩÏ†ê Îç∞ÎØ∏ÏßÄ Î∞∞Ïàò")]
     [SerializeField] private float weakPointMultiplier = 2f;
 
-    private Transform target;
-    private Vector3 patrolOrigin;
+    protected Rigidbody rb;
+    protected Transform target;
+    protected Vector3 patrolOrigin;
 
-    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE }
-    public State currentState;
+    private bool isCurrentlyHighlighted = false;
+    protected bool isAttackAnimationFinished = false;
 
     protected override void Awake()
     {
         base.Awake();
         nmAgent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>();
+
+        if (nmAgent != null)
+        {
+            nmAgent.updatePosition = true;
+            nmAgent.updateRotation = true;
+        }
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+        }
     }
 
     protected override void Start()
     {
         base.Start();
-
         patrolOrigin = transform.position;
-        nmAgent.stoppingDistance = attackDistance;
 
-        if (weakPointRenderer != null)
+        if (nmAgent != null) nmAgent.stoppingDistance = attackDistance;
+
+        if (attackHitbox != null)
         {
-            normalMaterial = weakPointRenderer.material;
+            attackHitbox.Initialize(attackDamage, transform);
+            attackHitbox.gameObject.SetActive(false);
         }
 
         ChangeState(State.IDLE);
     }
 
-    private void OnEnable()
+    protected virtual void Update()
     {
-        Flashlight2_KSM.OnUVLightToggled += HandleUVLightToggle;
-    }
-
-    private void OnDisable()
-    {
-        Flashlight2_KSM.OnUVLightToggled -= HandleUVLightToggle;
-    }
-
-    private void HandleUVLightToggle(bool isUvOn)
-    {
-        if (weakPointRenderer == null) return;
-
-        if (isUvOn && !isCurrentlyHighlighted)
+        if (anim != null && nmAgent != null && currentState != State.ATTACK)
         {
-            weakPointRenderer.material = highlightedMaterial;
-            isCurrentlyHighlighted = true;
+            anim.SetFloat("speed", nmAgent.velocity.magnitude);
         }
-        else if (!isUvOn && isCurrentlyHighlighted)
+    }
+
+    protected void SmoothLookAt(Vector3 targetPos)
+    {
+        Vector3 direction = (targetPos - transform.position).normalized;
+        direction.y = 0;
+        if (direction != Vector3.zero)
         {
-            weakPointRenderer.material = normalMaterial;
-            isCurrentlyHighlighted = false;
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+        }
+    }
+
+    protected void PlaySound(string soundKey)
+    {
+        if (!string.IsNullOrEmpty(soundKey))
+        {
+            Managers_YGU.Sound.Play3D(soundKey, transform.position);
         }
     }
 
@@ -87,60 +111,90 @@ public class MonsterController_KSM : CreatureController_KSM
         if (currentState == State.DIE) return;
 
         int finalDamage = damage;
+        if (isWeakPoint && isCurrentlyHighlighted)
+        {
+            finalDamage = (int)(damage * weakPointMultiplier);
+        }
 
-        if (isWeakPoint)
-        {
-            if (isCurrentlyHighlighted)
-            {
-                finalDamage = (int)(damage * weakPointMultiplier);
-                Debug.Log("UV»∞º∫»≠ æ‡¡° ««∞› " + finalDamage);
-            }
-            else
-            {
-                Debug.Log("UV∫Ò»∞º∫»≠ æ‡¡° ««∞›: " + finalDamage);
-            }
-        }
-        else
-        {
-            Debug.Log("¿œπ› ««∞› µ•πÃ¡ˆ: " + finalDamage);
-        }
+        int prevHealth = currentHealth;
 
         base.OnDamaged(finalDamage, attacker, isWeakPoint);
 
+        bool triggerHitAnim = false;
+        foreach (int threshold in hitReactionThresholds)
+        {
+            if (prevHealth > threshold && currentHealth <= threshold)
+            {
+                triggerHitAnim = true;
+                break;
+            }
+        }
+
+        if (triggerHitAnim)
+        {
+            if (anim != null)
+            {
+                if (isWeakPoint) anim.SetTrigger("weakness attacked");
+                else anim.SetTrigger("attacked");
+                Debug.Log("Ïä§ÌÑ¥");
+            }
+        }
+
+        if (Random.Range(0, 3) == 0)
+            PlaySound(hitSound);
+
         if (currentHealth > 0)
         {
-            if (target == null && attacker != null)
+            if (target == null)
             {
-                target = attacker;
+                GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+                if (playerObj != null)
+                {
+                    target = playerObj.transform;
+                }
             }
-            if (currentState != State.CHASE && currentState != State.ATTACK)
+
+            if (currentState != State.DIE)
             {
                 ChangeState(State.CHASE);
             }
         }
     }
 
+    public void NotifyWeakPointExposed() { isCurrentlyHighlighted = true; }
+    public void NotifyWeakPointHidden() { isCurrentlyHighlighted = false; }
+
     public override void OnDead()
     {
+        if (TryGetComponent<ItemDrop>(out ItemDrop ID) == true)
+        {
+            ID.DeathDrop();
+        }
+        if (anim != null) anim.SetTrigger("dead");
+        PlaySound(deathSound);
         ChangeState(State.DIE);
     }
 
-    private void ChangeState(State newState)
+    protected void ChangeState(State newState)
     {
         if (currentState == State.DIE) return;
-
         StopAllCoroutines();
-        currentState = newState;
 
+        if (anim != null) anim.ResetTrigger("attack");
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+        if (nmAgent != null && nmAgent.isOnNavMesh)
+        {
+            nmAgent.isStopped = false;
+            nmAgent.updateRotation = true;
+        }
+
+        currentState = newState;
         StartCoroutine(currentState.ToString());
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (!other.CompareTag("Player") || target != null || currentState == State.DIE)
-        {
-            return;
-        }
+        if (!other.CompareTag("Player") || target != null || currentState == State.DIE) return;
 
         float distance = Vector3.Distance(transform.position, other.transform.position);
 
@@ -148,52 +202,40 @@ public class MonsterController_KSM : CreatureController_KSM
         {
             target = other.transform;
             ChangeState(State.CHASE);
-            Debug.Log("±Ÿ√≥ ∞®¡ˆ");
             return;
         }
 
-        Vector3 selfPos = transform.position;
-        Vector3 playerPos = other.transform.position;
-        selfPos.y = 0;
-        playerPos.y = 0;
-
-        Vector3 directionToPlayer = (playerPos - selfPos).normalized;
-
-        float angle = Vector3.Angle(transform.forward, directionToPlayer);
+        Vector3 direction = (other.transform.position - transform.position).normalized;
+        float angle = Vector3.Angle(transform.forward, direction);
 
         if (angle < viewAngle / 2f)
         {
-            Vector3 rayStartPoint = transform.position + Vector3.up * 1f;
-            Vector3 directionToPlayerWithHeight = (other.transform.position - rayStartPoint).normalized;
-
-            if (!Physics.Raycast(rayStartPoint, directionToPlayerWithHeight, distance, obstacleMask))
+            if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
             {
                 target = other.transform;
                 ChangeState(State.CHASE);
-                Debug.Log("ø¯∞≈∏Æ Ω√æﬂ∞¢ ∞®¡ˆ");
             }
         }
     }
 
-    public IEnumerator IDLE()
+    public virtual IEnumerator IDLE()
     {
-        //anim.SetTrigger("Idle");
-        nmAgent.isStopped = true;
+        if (nmAgent) nmAgent.isStopped = true;
+
+        if (Random.Range(0, 3) == 0)
+            PlaySound(idleSound);
 
         yield return new WaitForSeconds(Random.Range(2f, 4f));
-
         ChangeState(State.PATROL);
     }
 
-    public IEnumerator PATROL()
+    public virtual IEnumerator PATROL()
     {
-        //anim.SetTrigger("Patrol");
-        nmAgent.isStopped = false;
+        if (nmAgent) nmAgent.isStopped = false;
 
-        Vector3 randomPos = Random.insideUnitSphere * patrolRadius;
-        randomPos += patrolOrigin;
-
+        Vector3 randomPos = Random.insideUnitSphere * patrolRadius + patrolOrigin;
         NavMeshHit hit;
+
         if (NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1))
         {
             nmAgent.SetDestination(hit.position);
@@ -204,18 +246,16 @@ public class MonsterController_KSM : CreatureController_KSM
             yield break;
         }
 
-        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance && !nmAgent.isPathStale))
+        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance))
         {
             yield return null;
         }
-
         ChangeState(State.IDLE);
     }
 
-    public IEnumerator CHASE()
+    public virtual IEnumerator CHASE()
     {
-        //anim.SetTrigger("Chase");
-        nmAgent.isStopped = false;
+        if (nmAgent) nmAgent.isStopped = false;
 
         while (target != null)
         {
@@ -225,56 +265,56 @@ public class MonsterController_KSM : CreatureController_KSM
             if (distance <= attackDistance)
             {
                 ChangeState(State.ATTACK);
-
-                yield break;
-            }
-            else if (distance > lostDistance)
-            {
-                target = null;
-                ChangeState(State.PATROL);
-
                 yield break;
             }
 
             yield return new WaitForSeconds(0.2f);
         }
 
-        if (target == null)
-        {
-            ChangeState(State.PATROL);
-        }
+        if (target == null) ChangeState(State.PATROL);
     }
 
-    public IEnumerator ATTACK()
+    public virtual IEnumerator ATTACK()
     {
-        nmAgent.isStopped = true;
-
-        if (target != null)
+        if (nmAgent)
         {
-            transform.LookAt(target.position);
+            nmAgent.isStopped = true;
+            nmAgent.velocity = Vector3.zero;
+            nmAgent.updateRotation = false;
         }
 
-        //anim.SetTrigger("Attack");
+        isAttackAnimationFinished = false;
 
-        yield return new WaitForSeconds(0.5f);
+        if (anim != null)
+        {
+            anim.ResetTrigger("attack");
+            anim.SetTrigger("attack");
+            anim.SetFloat("speed", 0f);
+        }
+
+        if (Random.Range(0, 3) == 0)
+            PlaySound(attackSound);
+
+        float lookTimer = 0f;
+        while (lookTimer < 0.5f && !isAttackAnimationFinished)
+        {
+            if (target != null) SmoothLookAt(target.position);
+            lookTimer += Time.deltaTime;
+            yield return null;
+        }
+
+        while (!isAttackAnimationFinished)
+        {
+            yield return null;
+        }
+
+        if (nmAgent) nmAgent.updateRotation = true;
 
         if (target != null)
         {
             float distance = Vector3.Distance(transform.position, target.position);
-
-            if (distance <= attackDistance)
-            {
-                ChangeState(State.ATTACK);
-            }
-            else if (distance <= lostDistance)
-            {
-                ChangeState(State.CHASE);
-            }
-            else
-            {
-                target = null;
-                ChangeState(State.PATROL);
-            }
+            if (distance <= attackDistance) ChangeState(State.ATTACK);
+            else ChangeState(State.CHASE);
         }
         else
         {
@@ -282,17 +322,29 @@ public class MonsterController_KSM : CreatureController_KSM
         }
     }
 
-    public IEnumerator DIE()
+    public void AE_EnableHitbox()
     {
-        nmAgent.isStopped = true;
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
+    }
 
-        //anim.SetTrigger("Die");
+    public void AE_DisableHitbox()
+    {
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+    }
 
-        if (hitCollider != null) hitCollider.enabled = false;
+    public void AE_AttackEnd()
+    {
+        isAttackAnimationFinished = true;
+    }
+
+    public virtual IEnumerator DIE()
+    {
+        if (nmAgent) nmAgent.isStopped = true;
+        foreach (Collider col in hitColliders) if (col != null) col.enabled = false;
+        foreach (Collider col in weakPointColliders) if (col != null) col.enabled = false;
         if (detectionCollider != null) detectionCollider.enabled = false;
-
+        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
         yield return new WaitForSeconds(4f);
-
         Destroy(gameObject);
     }
 }

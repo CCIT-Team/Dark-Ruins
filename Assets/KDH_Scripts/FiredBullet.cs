@@ -1,15 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class FiredBullet : MonoBehaviour
+public abstract class FiredBullet : MonoBehaviour
 {
+
     public Vector3 _axis, startPos;
-    private bool _isFire;
-    private BulletsPool _pool;
-    private const float _speed = 10.0f, _maxDistance=20.0f;
-    public void Initialize(BulletsPool pool)
+    protected bool _isFire;
+    protected BulletsPool _pool;
+    protected BulletsPool.Bullets _bullet;
+    protected const float _speed = 40.0f, _maxDistance=20.0f;
+    protected int _damage,_criticalDamage;
+
+    public virtual void Initialize(BulletsPool pool)
     {
         _pool = pool;
     }
@@ -32,37 +37,48 @@ public class FiredBullet : MonoBehaviour
         }
 
     }
-
-    private void OnTriggerEnter(Collider collider)
+    private void OnTriggerEnter(Collider other)
     {
-        if (collider.gameObject.CompareTag("Monster"))
+#if UNITY_EDITOR
+        Debug.Log(other.transform.name);
+#endif
+        if (other.isTrigger==true)
         {
-            Destroy(collider.gameObject);
+            if (other.gameObject.layer == LayerMask.NameToLayer("WeakPoint"))
+            {
+#if UNITY_EDITOR
+                Debug.Log("ÂïÈû");
+#endif
+                other.GetComponentInParent<IDamageable_KSM>().OnDamaged(_criticalDamage, transform.root, true);
+            }
+            else
+            {
+                return;
+            }
         }
+        else
+        {
+            IDamageable_KSM damageable = other.GetComponentInParent<IDamageable_KSM>();
+            if (damageable != null)
+            {
+                damageable.OnDamaged(_damage, transform.root, false);
+            }
+            else
+            {
+                return;
+            }
+        }
+
         _isFire = false;
     }
-    /*IEnumerator Fired()
-    {
-        this.gameObject.transform.forward = _axis;
-        Vector3 startPos = transform.position;
-        while (_isFire)
-        {
-            this.gameObject.transform.position += _axis * _speed * Time.deltaTime;
-            if (Vector3.Distance(startPos, this.gameObject.transform.position) > _maxDistance)
-            {
-                _isFire = false;
-            }
-            yield return null;
-        }
-        _pool.Return(this.gameObject);
-    }*/
+
     private void FixedUpdate()
     {
-        this.gameObject.transform.position += _axis * _speed * Time.fixedDeltaTime;
+        this.gameObject.transform.position += _axis * _speed* Time.fixedDeltaTime;
         if (_isFire==false||Vector3.Distance(startPos, this.gameObject.transform.position) > _maxDistance)
         {
             _isFire = false;
-            _pool.Return(this.gameObject);
+            _pool.Return(this.gameObject,_bullet);
         }
     }
 }
