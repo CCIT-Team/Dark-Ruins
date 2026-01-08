@@ -6,9 +6,11 @@ using UnityEngine;
 
 public class trap_spike : MonoBehaviour, ITrap
 {
-    private float moveDistance = 1f; //함정이 움직일 거리
+    private float moveDistance = 1.5f; //함정이 움직일 거리
     private float moveDurationUp = 0.1f; //함정이 올라오는 시간
-    private float moveDurationDown = 0.5f; //함정이 내려가는 시간
+    private float moveDurationDown = 0.4f; //함정이 내려가는 시간
+    private float stayTime = 2f; //함정 유지 시간
+    private float coolTime = 3.5f; //함정 대기 시간
 
     private bool ismoving = false;
 
@@ -22,53 +24,8 @@ public class trap_spike : MonoBehaviour, ITrap
 
     void ITrap.DeactivateTrap()
     {
-        //StartCoroutine(MoveDown());
+        //별일 없음
     }
-
-    //Up Down 각각
-    //private IEnumerator MoveUp()
-    //{
-    //    ismoving = true;
-
-    //    Vector3 startPos = this.transform.position;
-    //    Vector3 endPos = startPos + new Vector3(0, moveDistance, 0);
-
-    //    float movingTime = 0f;
-
-    //    while (movingTime < moveDurationUp)
-    //    {
-    //        movingTime += Time.deltaTime;
-
-    //        this.transform.position = Vector3.Lerp(startPos, endPos, (movingTime / moveDurationUp));
-
-    //        yield return null;
-    //    }
-
-    //    this.transform.position = endPos;
-    //    ismoving = false;
-    //}
-
-    //private IEnumerator MoveDown()
-    //{
-    //    ismoving = true;
-
-    //    Vector3 startPos = this.transform.position;
-    //    Vector3 endPos = startPos - new Vector3(0, moveDistance, 0);
-
-    //    float movingTime = 0f;
-
-    //    while (movingTime < moveDurationDown)
-    //    {
-    //        movingTime += Time.deltaTime;
-
-    //        this.transform.position = Vector3.Lerp(startPos, endPos, movingTime / moveDurationDown);
-
-    //        yield return null;
-    //    }
-
-    //    this.transform.position = endPos;
-    //    ismoving = false;
-    //}
 
     private IEnumerator MoveSpike()
     {
@@ -81,11 +38,11 @@ public class trap_spike : MonoBehaviour, ITrap
 
         StartCoroutine(Moving(startPos, endPos, moveDurationUp));
 
-        yield return new WaitForSeconds(moveDurationUp + 2f);
+        yield return new WaitForSeconds(moveDurationUp + stayTime);
 
         StartCoroutine(Moving(endPos, startPos, moveDurationDown));
 
-        yield return new WaitForSeconds(moveDurationDown);
+        yield return new WaitForSeconds(moveDurationDown + coolTime);
 
         ismoving = false;
     }
