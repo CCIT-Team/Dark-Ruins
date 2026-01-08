@@ -5,346 +5,369 @@ using UnityEngine.AI;
 
 public class MonsterController_KSM : CreatureController_KSM
 {
-    public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
-    public State currentState;
+	public enum State { IDLE, PATROL, CHASE, ATTACK, DIE, CHARGE }
+	public State currentState;
 
-    [Header("사운드 설정")]
-    [SerializeField] protected string attackSound;
-    [SerializeField] protected string hitSound;
-    [SerializeField] protected string deathSound;
-    [SerializeField] protected string idleSound;
+	[Header("사운드 설정")]
+	[SerializeField] protected string attackSound;
+	[SerializeField] protected string hitSound;
+	[SerializeField] protected string deathSound;
+	[SerializeField] protected string idleSound;
 
-    [Header("거리 설정")]
-    protected float patrolRadius = 7f;
-    protected float attackDistance = 3f;
-    protected float proximityRadius = 5f;
-    protected float viewAngle = 90f;
+	[Header("거리 설정")]
+	protected float patrolRadius = 7f;
+	protected float attackDistance = 3f;
+	protected float proximityRadius = 5f;
+	protected float viewAngle = 90f;
 
-    [Header("회전 설정")]
-    [SerializeField] protected float rotationSpeed = 5f;
+	[Header("회전 설정")]
+	[SerializeField] protected float rotationSpeed = 5f;
 
-    [Header("공격 히트박스 연결")]
-    [SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
+	[Header("공격 히트박스 연결")]
+	[SerializeField] protected MonsterAttackHitbox_KSM attackHitbox;
 
-    [Header("피격 모션 발동 체력 구간")]
-    [SerializeField] protected List<int> hitReactionThresholds = new List<int>();
+	[Header("피격 모션 발동 체력 구간")]
+	[SerializeField] protected List<int> hitReactionThresholds = new List<int>();
 
-    [Header("콜라이더 및 레이어")]
-    public SphereCollider detectionCollider;
-    public LayerMask obstacleMask;
-    public List<Collider> hitColliders = new List<Collider>();
-    public List<Collider> weakPointColliders = new List<Collider>();
+	[Header("콜라이더 및 레이어")]
+	public SphereCollider detectionCollider;
+	public LayerMask obstacleMask;
+	public List<Collider> hitColliders = new List<Collider>();
+	public List<Collider> weakPointColliders = new List<Collider>();
 
-    [Header("약점 데미지 배수")]
-    [SerializeField] private float weakPointMultiplier = 2f;
+	[Header("약점 데미지 배수")]
+	[SerializeField] private float weakPointMultiplier = 2f;
 
-    protected Rigidbody rb;
-    protected Transform target;
-    protected Vector3 patrolOrigin;
+	protected Rigidbody rb;
+	protected Transform target;
+	protected Vector3 patrolOrigin;
 
-    private bool isCurrentlyHighlighted = false;
-    protected bool isAttackAnimationFinished = false;
+	private bool isCurrentlyHighlighted = false;
+	protected bool isAttackAnimationFinished = false;
 
-    protected override void Awake()
-    {
-        base.Awake();
-        nmAgent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>();
+	protected override void Awake()
+	{
+		base.Awake();
+		nmAgent = GetComponent<NavMeshAgent>();
+		rb = GetComponent<Rigidbody>();
 
-        if (nmAgent != null)
-        {
-            nmAgent.updatePosition = true;
-            nmAgent.updateRotation = true;
-        }
+		if (nmAgent != null)
+		{
+			nmAgent.updatePosition = true;
+			nmAgent.updateRotation = true;
+		}
 
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-        }
-    }
+		if (rb != null)
+		{
+			rb.isKinematic = true;
+		}
+	}
 
-    protected override void Start()
-    {
-        base.Start();
-        patrolOrigin = transform.position;
+	protected override void Start()
+	{
+		base.Start();
+		patrolOrigin = transform.position;
 
-        if (nmAgent != null) nmAgent.stoppingDistance = attackDistance;
+		if (nmAgent != null) nmAgent.stoppingDistance = attackDistance;
 
-        if (attackHitbox != null)
-        {
-            attackHitbox.Initialize(attackDamage, transform);
-            attackHitbox.gameObject.SetActive(false);
-        }
+		if (attackHitbox != null)
+		{
+			attackHitbox.Initialize(attackDamage, transform);
+			attackHitbox.gameObject.SetActive(false);
+		}
 
-        ChangeState(State.IDLE);
-    }
+		ChangeState(State.IDLE);
+	}
 
-    protected virtual void Update()
-    {
-        if (anim != null && nmAgent != null && currentState != State.ATTACK)
-        {
-            anim.SetFloat("speed", nmAgent.velocity.magnitude);
-        }
-    }
+	protected virtual void Update()
+	{
+		if (anim != null && nmAgent != null && currentState != State.ATTACK)
+		{
+			anim.SetFloat("speed", nmAgent.velocity.magnitude);
+		}
+	}
 
-    protected void SmoothLookAt(Vector3 targetPos)
-    {
-        Vector3 direction = (targetPos - transform.position).normalized;
-        direction.y = 0;
-        if (direction != Vector3.zero)
-        {
-            Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
-        }
-    }
+	protected void SmoothLookAt(Vector3 targetPos)
+	{
+		Vector3 direction = (targetPos - transform.position).normalized;
+		direction.y = 0;
+		if (direction != Vector3.zero)
+		{
+			Quaternion lookRotation = Quaternion.LookRotation(direction);
+			transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
+		}
+	}
 
-    protected void PlaySound(string soundKey)
-    {
-        if (!string.IsNullOrEmpty(soundKey))
-        {
-            Managers_YGU.Sound.Play3D(soundKey, transform.position);
-        }
-    }
+	protected void PlaySound(string soundKey)
+	{
+		if (!string.IsNullOrEmpty(soundKey))
+		{
+			Managers_YGU.Sound.Play3D(soundKey, transform.position);
+		}
+	}
 
-    public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
-    {
-        if (currentState == State.DIE) return;
+	public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
+	{
+		if (currentState == State.DIE) return;
 
-        int finalDamage = damage;
-        if (isWeakPoint && isCurrentlyHighlighted)
-        {
-            finalDamage = (int)(damage * weakPointMultiplier);
-        }
+		int finalDamage = damage;
 
-        int prevHealth = currentHealth;
+		if (isWeakPoint)
+		{
+			if (isCurrentlyHighlighted)
+			{
+				Debug.Log($"<color=red><b>[약점 피격!]</b></color> 약점 부위 적중 & 약점 노출 상태(O). (데미지 {weakPointMultiplier}배 적용)");
+			}
+			else
+			{
+				Debug.Log($"<color=yellow><b>[약점 피격]</b></color> 약점 부위는 맞췄으나, 현재 약점 노출 상태가 아님(X). (기본 데미지 적용)");
+			}
+		}
+		else
+		{
+			Debug.Log($"<color=white>[일반 피격]</color> 일반 부위 적중.");
+		}
 
-        base.OnDamaged(finalDamage, attacker, isWeakPoint);
+		if (isWeakPoint && isCurrentlyHighlighted)
+		{
+			finalDamage = (int)(damage * weakPointMultiplier);
+		}
 
-        bool triggerHitAnim = false;
-        foreach (int threshold in hitReactionThresholds)
-        {
-            if (prevHealth > threshold && currentHealth <= threshold)
-            {
-                triggerHitAnim = true;
-                break;
-            }
-        }
+		int prevHealth = currentHealth;
 
-        if (triggerHitAnim)
-        {
-            if (anim != null)
-            {
-                if (isWeakPoint) anim.SetTrigger("weakness attacked");
-                else anim.SetTrigger("attacked");
-                Debug.Log("스턴");
-            }
-        }
+		base.OnDamaged(finalDamage, attacker, isWeakPoint);
 
-        if (Random.Range(0, 3) == 0)
-            PlaySound(hitSound);
+		bool triggerHitAnim = false;
+		foreach (int threshold in hitReactionThresholds)
+		{
+			if (prevHealth > threshold && currentHealth <= threshold)
+			{
+				triggerHitAnim = true;
+				break;
+			}
+		}
 
-        if (currentHealth > 0)
-        {
-            if (target == null)
-            {
-                GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-                if (playerObj != null)
-                {
-                    target = playerObj.transform;
-                }
-            }
+		if (triggerHitAnim)
+		{
+			if (anim != null)
+			{
+				if (isWeakPoint) anim.SetTrigger("weakness attacked");
+				else anim.SetTrigger("attacked");
+				Debug.Log("스턴");
+			}
+		}
 
-            if (currentState != State.DIE)
-            {
-                ChangeState(State.CHASE);
-            }
-        }
-    }
+		if (Random.Range(0, 3) == 0)
+			PlaySound(hitSound);
 
-    public void NotifyWeakPointExposed() { isCurrentlyHighlighted = true; }
-    public void NotifyWeakPointHidden() { isCurrentlyHighlighted = false; }
+		if (currentHealth > 0)
+		{
+			if (target == null)
+			{
+				GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+				if (playerObj != null)
+				{
+					target = playerObj.transform;
+				}
+			}
 
-    public override void OnDead()
-    {
-        if (TryGetComponent<ItemDrop>(out ItemDrop ID) == true)
-        {
-            ID.DeathDrop();
-        }
-        if (anim != null) anim.SetTrigger("dead");
-        PlaySound(deathSound);
-        ChangeState(State.DIE);
-    }
+			if (currentState != State.DIE)
+			{
+				ChangeState(State.CHASE);
+			}
+		}
+	}
 
-    protected void ChangeState(State newState)
-    {
-        if (currentState == State.DIE) return;
-        StopAllCoroutines();
+	public void NotifyWeakPointExposed()
+	{
+		isCurrentlyHighlighted = true;
+	}
+	public void NotifyWeakPointHidden()
+	{
+		isCurrentlyHighlighted = false;
+	}
 
-        if (anim != null) anim.ResetTrigger("attack");
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
-        if (nmAgent != null && nmAgent.isOnNavMesh)
-        {
-            nmAgent.isStopped = false;
-            nmAgent.updateRotation = true;
-        }
+	public override void OnDead()
+	{
+		if (TryGetComponent<ItemDrop>(out ItemDrop ID) == true)
+		{
+			ID.DeathDrop();
+		}
+		if (anim != null) anim.SetTrigger("dead");
+		PlaySound(deathSound);
+		ChangeState(State.DIE);
+	}
 
-        currentState = newState;
-        StartCoroutine(currentState.ToString());
-    }
+	protected void ChangeState(State newState)
+	{
+		if (currentState == State.DIE) return;
+		StopAllCoroutines();
 
-    private void OnTriggerStay(Collider other)
-    {
-        if (!other.CompareTag("Player") || target != null || currentState == State.DIE) return;
+		if (anim != null) anim.ResetTrigger("attack");
+		if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+		if (nmAgent != null && nmAgent.isOnNavMesh)
+		{
+			nmAgent.isStopped = false;
+			nmAgent.updateRotation = true;
+		}
 
-        float distance = Vector3.Distance(transform.position, other.transform.position);
+		currentState = newState;
+		StartCoroutine(currentState.ToString());
+	}
 
-        if (distance <= proximityRadius)
-        {
-            target = other.transform;
-            ChangeState(State.CHASE);
-            return;
-        }
+	private void OnTriggerStay(Collider other)
+	{
+		if (!other.CompareTag("Player") || target != null || currentState == State.DIE) return;
 
-        Vector3 direction = (other.transform.position - transform.position).normalized;
-        float angle = Vector3.Angle(transform.forward, direction);
+		float distance = Vector3.Distance(transform.position, other.transform.position);
 
-        if (angle < viewAngle / 2f)
-        {
-            if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
-            {
-                target = other.transform;
-                ChangeState(State.CHASE);
-            }
-        }
-    }
+		if (distance <= proximityRadius)
+		{
+			target = other.transform;
+			ChangeState(State.CHASE);
+			return;
+		}
 
-    public virtual IEnumerator IDLE()
-    {
-        if (nmAgent) nmAgent.isStopped = true;
+		Vector3 direction = (other.transform.position - transform.position).normalized;
+		float angle = Vector3.Angle(transform.forward, direction);
 
-        if (Random.Range(0, 3) == 0)
-            PlaySound(idleSound);
+		if (angle < viewAngle / 2f)
+		{
+			if (!Physics.Raycast(transform.position + Vector3.up, direction, distance, obstacleMask))
+			{
+				target = other.transform;
+				ChangeState(State.CHASE);
+			}
+		}
+	}
 
-        yield return new WaitForSeconds(Random.Range(2f, 4f));
-        ChangeState(State.PATROL);
-    }
+	public virtual IEnumerator IDLE()
+	{
+		if (nmAgent) nmAgent.isStopped = true;
 
-    public virtual IEnumerator PATROL()
-    {
-        if (nmAgent) nmAgent.isStopped = false;
+		if (Random.Range(0, 3) == 0)
+			PlaySound(idleSound);
 
-        Vector3 randomPos = Random.insideUnitSphere * patrolRadius + patrolOrigin;
-        NavMeshHit hit;
+		yield return new WaitForSeconds(Random.Range(2f, 4f));
+		ChangeState(State.PATROL);
+	}
 
-        if (NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1))
-        {
-            nmAgent.SetDestination(hit.position);
-        }
-        else
-        {
-            ChangeState(State.IDLE);
-            yield break;
-        }
+	public virtual IEnumerator PATROL()
+	{
+		if (nmAgent) nmAgent.isStopped = false;
 
-        while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance))
-        {
-            yield return null;
-        }
-        ChangeState(State.IDLE);
-    }
+		Vector3 randomPos = Random.insideUnitSphere * patrolRadius + patrolOrigin;
+		NavMeshHit hit;
 
-    public virtual IEnumerator CHASE()
-    {
-        if (nmAgent) nmAgent.isStopped = false;
+		if (NavMesh.SamplePosition(randomPos, out hit, patrolRadius, 1))
+		{
+			nmAgent.SetDestination(hit.position);
+		}
+		else
+		{
+			ChangeState(State.IDLE);
+			yield break;
+		}
 
-        while (target != null)
-        {
-            nmAgent.SetDestination(target.position);
-            float distance = Vector3.Distance(transform.position, target.position);
+		while (nmAgent.pathPending || (nmAgent.remainingDistance > nmAgent.stoppingDistance))
+		{
+			yield return null;
+		}
+		ChangeState(State.IDLE);
+	}
 
-            if (distance <= attackDistance)
-            {
-                ChangeState(State.ATTACK);
-                yield break;
-            }
+	public virtual IEnumerator CHASE()
+	{
+		if (nmAgent) nmAgent.isStopped = false;
 
-            yield return new WaitForSeconds(0.2f);
-        }
+		while (target != null)
+		{
+			nmAgent.SetDestination(target.position);
+			float distance = Vector3.Distance(transform.position, target.position);
 
-        if (target == null) ChangeState(State.PATROL);
-    }
+			if (distance <= attackDistance)
+			{
+				ChangeState(State.ATTACK);
+				yield break;
+			}
 
-    public virtual IEnumerator ATTACK()
-    {
-        if (nmAgent)
-        {
-            nmAgent.isStopped = true;
-            nmAgent.velocity = Vector3.zero;
-            nmAgent.updateRotation = false;
-        }
+			yield return new WaitForSeconds(0.2f);
+		}
 
-        isAttackAnimationFinished = false;
+		if (target == null) ChangeState(State.PATROL);
+	}
 
-        if (anim != null)
-        {
-            anim.ResetTrigger("attack");
-            anim.SetTrigger("attack");
-            anim.SetFloat("speed", 0f);
-        }
+	public virtual IEnumerator ATTACK()
+	{
+		if (nmAgent)
+		{
+			nmAgent.isStopped = true;
+			nmAgent.velocity = Vector3.zero;
+			nmAgent.updateRotation = false;
+		}
 
-        if (Random.Range(0, 3) == 0)
-            PlaySound(attackSound);
+		isAttackAnimationFinished = false;
 
-        float lookTimer = 0f;
-        while (lookTimer < 0.5f && !isAttackAnimationFinished)
-        {
-            if (target != null) SmoothLookAt(target.position);
-            lookTimer += Time.deltaTime;
-            yield return null;
-        }
+		if (anim != null)
+		{
+			anim.ResetTrigger("attack");
+			anim.SetTrigger("attack");
+			anim.SetFloat("speed", 0f);
+		}
 
-        while (!isAttackAnimationFinished)
-        {
-            yield return null;
-        }
+		if (Random.Range(0, 3) == 0)
+			PlaySound(attackSound);
 
-        if (nmAgent) nmAgent.updateRotation = true;
+		float lookTimer = 0f;
+		while (lookTimer < 0.5f && !isAttackAnimationFinished)
+		{
+			if (target != null) SmoothLookAt(target.position);
+			lookTimer += Time.deltaTime;
+			yield return null;
+		}
 
-        if (target != null)
-        {
-            float distance = Vector3.Distance(transform.position, target.position);
-            if (distance <= attackDistance) ChangeState(State.ATTACK);
-            else ChangeState(State.CHASE);
-        }
-        else
-        {
-            ChangeState(State.PATROL);
-        }
-    }
+		while (!isAttackAnimationFinished)
+		{
+			yield return null;
+		}
 
-    public void AE_EnableHitbox()
-    {
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
-    }
+		if (nmAgent) nmAgent.updateRotation = true;
 
-    public void AE_DisableHitbox()
-    {
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
-    }
+		if (target != null)
+		{
+			float distance = Vector3.Distance(transform.position, target.position);
+			if (distance <= attackDistance) ChangeState(State.ATTACK);
+			else ChangeState(State.CHASE);
+		}
+		else
+		{
+			ChangeState(State.PATROL);
+		}
+	}
 
-    public void AE_AttackEnd()
-    {
-        isAttackAnimationFinished = true;
-    }
+	public void AE_EnableHitbox()
+	{
+		if (attackHitbox != null) attackHitbox.gameObject.SetActive(true);
+	}
 
-    public virtual IEnumerator DIE()
-    {
-        if (nmAgent) nmAgent.isStopped = true;
-        foreach (Collider col in hitColliders) if (col != null) col.enabled = false;
-        foreach (Collider col in weakPointColliders) if (col != null) col.enabled = false;
-        if (detectionCollider != null) detectionCollider.enabled = false;
-        if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
-        yield return new WaitForSeconds(4f);
-        Destroy(gameObject);
-    }
+	public void AE_DisableHitbox()
+	{
+		if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+	}
+
+	public void AE_AttackEnd()
+	{
+		isAttackAnimationFinished = true;
+	}
+
+	public virtual IEnumerator DIE()
+	{
+		if (nmAgent) nmAgent.isStopped = true;
+		foreach (Collider col in hitColliders) if (col != null) col.enabled = false;
+		foreach (Collider col in weakPointColliders) if (col != null) col.enabled = false;
+		if (detectionCollider != null) detectionCollider.enabled = false;
+		if (attackHitbox != null) attackHitbox.gameObject.SetActive(false);
+		yield return new WaitForSeconds(4f);
+		Destroy(gameObject);
+	}
 }
