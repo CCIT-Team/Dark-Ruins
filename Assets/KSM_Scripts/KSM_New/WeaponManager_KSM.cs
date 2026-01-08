@@ -173,7 +173,7 @@ public class WeaponManager_KSM : MonoBehaviour
             playerController.StartWeaponSwap(nextWeaponScript, nextWeaponVisual, typeID);
 
         if (!string.IsNullOrEmpty(equipSoundKey) && Managers_YGU.Sound != null)
-            Managers_YGU.Sound.Play(equipSoundKey, Sound.UI);
+            Managers_YGU.Sound.Play(equipSoundKey,eSound.UI);
     }
 
     public void PlayAttackAnimation()
@@ -182,7 +182,7 @@ public class WeaponManager_KSM : MonoBehaviour
         {
             case WeaponMode.Rifle: if (rifleAnim) rifleAnim.Play(rifleFireClip, -1, 0f); break;
             case WeaponMode.Gun: if (gunAnim) gunAnim.Play(gunFireClip, -1, 0f); break;
-            case WeaponMode.Knife: if (knifeAnim) { knifeAnim.SetTrigger("slash"); Managers_YGU.Sound.Play("Machete_Swing", Sound.UI); } break;
+            case WeaponMode.Knife: if (knifeAnim) { knifeAnim.SetTrigger("slash"); Managers_YGU.Sound.Play("Machete_Swing",eSound.UI); } break;
         }
     }
     public void PlayReloadAnimation()

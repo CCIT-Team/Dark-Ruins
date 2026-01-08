@@ -157,7 +157,7 @@ public class FlashlightItem_KSM : MonoBehaviour, IEquipment_KSM
             return;
         }
 
-        Managers_YGU.Sound.Play("Flash_Switch", Sound.UI);
+        Managers_YGU.Sound.Play("Flash_Switch",eSound.UI);
         isUVLightActive = !isUVLightActive;
         regularLight.enabled = !isUVLightActive;
         uvLight.enabled = isUVLightActive;

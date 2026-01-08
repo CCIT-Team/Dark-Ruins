@@ -123,7 +123,7 @@ public class PlayerController_KSM : CreatureController_KSM
             {
                 float randomPitch = UnityEngine.Random.Range(0.9f, 1.1f);
 
-                Managers_YGU.Sound.Play("User_footstep", Sound.UI, 0.5f, randomPitch);
+                Managers_YGU.Sound.Play("User_footstep",eSound.UI, 0.5f, randomPitch);
 
                 footstepTimer = currentInterval;
             }
@@ -261,7 +261,7 @@ public class PlayerController_KSM : CreatureController_KSM
     public override void OnDamaged(int damage, Transform attacker, bool isWeakPoint)
     {
         base.OnDamaged(damage, attacker, false);
-        Managers_YGU.Sound.Play("User_Hit_Monster", Sound.UI);
+        Managers_YGU.Sound.Play("User_Hit_Monster",eSound.UI);
     }
 
     public void OnHealed(int damage)
