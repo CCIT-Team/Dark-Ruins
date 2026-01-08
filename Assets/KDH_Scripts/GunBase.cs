@@ -78,7 +78,6 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         }
         if (v==false&&v2 > 0)
         {
-            Camera.main.transform.localRotation *= Quaternion.Euler(0f, -1f, 0f);
 
             v2--;
         }
@@ -146,7 +145,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
         _particleSystem.Simulate(0f, true, true);
         _particleSystem.Play();
         //Managers_YGU.Sound.Play("", Sound.Effect);
-        Camera.main.transform.localRotation *= Quaternion.Euler(0f, 1f, 0f);
+
         _uir.BulletUISet(true, _loadedBullet, HaveBullet());
     }
     public int HaveBullet()

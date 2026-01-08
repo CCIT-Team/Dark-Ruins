@@ -16097,7 +16097,7 @@ GameObject:
   - component: {fileID: 616000963}
   - component: {fileID: 616000964}
   m_Layer: 16
-  m_Name: "\uC18C\uCD1D"
+  m_Name: 0
   m_TagString: Arms
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16791,6 +16791,7 @@ MonoBehaviour:
   _loadedBullet: 0
   _maxBullet: 8
   _haveBullet: 0
+  v2: 0
   _camera: {fileID: 7184850340137320702}
   _uir: {fileID: 443741712618527319}
   _arm: {fileID: 284224308062467730}
@@ -25882,6 +25883,7 @@ MonoBehaviour:
   _loadedBullet: 0
   _maxBullet: 8
   _haveBullet: 0
+  v2: 0
   _camera: {fileID: 7184850340137320702}
   _uir: {fileID: 443741712618527319}
   _arm: {fileID: 39032805000670512}
@@ -58188,7 +58190,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3872441101308563631, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
       propertyPath: m_Name
-      value: "\uAE00\uB85D (1)"
+      value: "\uAE00\uB85D"
       objectReference: {fileID: 0}
     - target: {fileID: 6103944317441239150, guid: 6d5494e7643fc4744b44439f7cbb97bd, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -93645,12 +93647,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentMode: 0
-  rifleScript: {fileID: 0}
-  gunScript: {fileID: 0}
-  knifeScript: {fileID: 4192357834230388038}
+  rifleVisualName: "\uC18C\uCD1D"
+  hasRifle: 0
+  hasGun: 1
+  hasKnife: 1
   rifleObject: {fileID: 284224308062467730}
   gunObject: {fileID: 39032805000670512}
   knifeObject: {fileID: 2839978537431518606}
+  rifleScript: {fileID: 0}
+  gunScript: {fileID: 0}
+  knifeScript: {fileID: 4192357834230388038}
   rifleAnim: {fileID: 0}
   gunAnim: {fileID: 0}
   knifeAnim: {fileID: 763548550553005956}
