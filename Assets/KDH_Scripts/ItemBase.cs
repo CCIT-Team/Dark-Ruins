@@ -88,6 +88,7 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     public virtual void OnPickUp()
     {
         //아이템이 주웠을 경우 발동할 로직이 있다면 여기에
+        _dropped = false;
     }
     protected void Dropped()
     {
@@ -114,6 +115,21 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     }
     public virtual void Init()
     {
+
+    }
+    protected virtual void DropItem()
+    {
+
+        if(Input.GetKeyDown(KeyCode.Q)&&_dropped==false)
+        {
+            Vector3 v = this.transform.position;
+            transform.SetParent(null, false);
+            this.transform.position = v;
+            GetComponent<Collider>().enabled = true;
+            Inventory.UsedItem();
+            _dropped = true;
+
+        }
 
     }
 }
