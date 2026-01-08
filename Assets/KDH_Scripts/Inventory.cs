@@ -122,6 +122,7 @@ public class Inventory :MonoBehaviour
 
             _drag = true;
             item.OutFocused();
+
             StartCoroutine(SubCriber());
             //_dragItem.gameObject.SetActive(false);
             _dragItem.GetComponent<ItemBase>().Init();
@@ -134,6 +135,7 @@ public class Inventory :MonoBehaviour
     {
         if(_dragItem.CompareTag("Arms")==false)
         {
+            _dragCancel = false;
             return;
         }
         //_dragItem.GetComponent<ItemBase>().Unsubscribe();
@@ -182,6 +184,7 @@ public class Inventory :MonoBehaviour
                 ClickItem(Inventory.InventorySlot[int.Parse(slot.transform.name.Substring(slot.transform.name.LastIndexOf('_') + 1))].MainIndex);
                 //ClickItem();
                 _drag = true;
+
                 StartCoroutine(SubCriber());
                 _dragItem.GetComponent<ItemBase>().Init();
                 _dragItem.GetComponent<ItemBase>().In = false;
@@ -216,11 +219,12 @@ public class Inventory :MonoBehaviour
     }
     IEnumerator SubCriber()
     {
+        _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
+        _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
         yield return new WaitForSeconds(1.0f);
         if(_dragItem !=null&&_dragItem.gameObject.activeSelf==true&&_dragCancel==false)
         {
-            _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-            _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
+
             //_dragItem.GetComponent<ItemBase>().Unsubscribe();
             _dragItem.GetComponent<ItemBase>().Subscribe();
         }
