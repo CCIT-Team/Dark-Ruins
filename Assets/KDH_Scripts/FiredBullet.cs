@@ -11,7 +11,7 @@ public abstract class FiredBullet : MonoBehaviour
     protected bool _isFire;
     protected BulletsPool _pool;
     protected BulletsPool.Bullets _bullet;
-    protected const float _speed = 40.0f, _maxDistance=20.0f;
+    protected const float _speed = 10.0f, _maxDistance=20.0f;
     protected int _damage,_criticalDamage;
 
     public virtual void Initialize(BulletsPool pool)
