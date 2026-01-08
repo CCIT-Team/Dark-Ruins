@@ -14927,7 +14927,7 @@ GameObject:
   - component: {fileID: 4179813254157513657}
   - component: {fileID: 5450663166501700692}
   m_Layer: 2
-  m_Name: Mummy_1 (1)
+  m_Name: Mummy_1
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
