@@ -18,9 +18,24 @@ public class KeyItem : ItemBase
     {
         if(keys.Contains(KeyCode.Mouse0))
         {
-            Drop();
+            DropItem();
+            transform.position = gameObject.transform.parent.position;
             transform.SetParent(null);
         }
+    }
+
+
+    public override void DropItem()
+    {
+        _rb.useGravity = true;
+        _rb.isKinematic = false;
+    }
+
+
+    public override void OnPickUp()
+    {
+        _rb.useGravity = false;
+        _rb.isKinematic = true;
     }
 
 }
