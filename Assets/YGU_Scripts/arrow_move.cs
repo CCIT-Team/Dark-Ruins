@@ -14,8 +14,6 @@ public class arrow_move : MonoBehaviour
 
     public void ShootArrow()
     {
-        Debug.Log("화살 발사!");
-
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
@@ -26,6 +24,10 @@ public class arrow_move : MonoBehaviour
     {
         if (other.CompareTag("Wall"))
         {
+            if (this.gameObject.name == "ArrowDamage")
+            {
+                Destroy(this.gameObject);
+            }
             rb.velocity = Vector3.zero;
         }
     }

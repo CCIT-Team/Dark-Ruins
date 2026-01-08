@@ -77,6 +77,8 @@ public class trap_spike : MonoBehaviour, ITrap
         Vector3 startPos = this.transform.position;
         Vector3 endPos = startPos + new Vector3(0, moveDistance, 0);
 
+        Managers_YGU.Sound.Play3D("Trap_Thorn_Activate", this.transform.position);
+
         StartCoroutine(Moving(startPos, endPos, moveDurationUp));
 
         yield return new WaitForSeconds(moveDurationUp + 2f);

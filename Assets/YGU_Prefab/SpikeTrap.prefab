@@ -237,7 +237,7 @@ GameObject:
   - component: {fileID: 4734399845343870282}
   - component: {fileID: 1303864919248490615}
   - component: {fileID: 4339003664000896758}
-  - component: {fileID: 3980612061444469484}
+  - component: {fileID: 230516094844692198}
   m_Layer: 0
   m_Name: Thorn
   m_TagString: Untagged
@@ -267,7 +267,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4326715002359448691}
-  m_Mesh: {fileID: 7722797094005017668, guid: 7d9fd415149239744a0b5cf353e225aa, type: 3}
+  m_Mesh: {fileID: 7722797094005017668, guid: 031146cf203367547aeeb737bf28a45e, type: 3}
 --- !u!23 &1303864919248490615
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -288,7 +288,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8990f9c709194154c850d94a926782b0, type: 2}
+  - {fileID: 2100000, guid: 92bd3241b1efd5c4484e9e03b68e69ec, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -331,7 +331,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.08932806, y: 0.08499013, z: 0.10537832}
   m_Center: {x: -0.00011302531, y: 0.0012561304, z: 0.05078891}
---- !u!114 &3980612061444469484
+--- !u!114 &230516094844692198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -343,7 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6940cf14c8dff6b4dbd40d5c4e11fe26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TrapDamage: 10
+  trapType: 0
+  trapDamage: 0
+  trapSound: 
   targetTag: Player
 --- !u!1 &4795945432964418506
 GameObject:
@@ -354,7 +356,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7677791572116183686}
-  - component: {fileID: 2717464090061315670}
+  - component: {fileID: 7128181972651469308}
   m_Layer: 0
   m_Name: Spike
   m_TagString: Untagged
@@ -378,7 +380,7 @@ Transform:
   - {fileID: 8081006301858639510}
   m_Father: {fileID: 2951640405367027632}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2717464090061315670
+--- !u!114 &7128181972651469308
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -415,7 +417,7 @@ Transform:
   m_GameObject: {fileID: 8986535854980487053}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -31.75, y: 0, z: -3.74}
+  m_LocalPosition: {x: -32.82204, y: 0, z: -1.1215906}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

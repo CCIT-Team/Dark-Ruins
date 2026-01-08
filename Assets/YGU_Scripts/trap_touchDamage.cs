@@ -4,15 +4,32 @@ using UnityEngine;
 
 public class trap_touchDamage : MonoBehaviour
 {
-    [Header("함정 대미지")]
-    [SerializeField] private int TrapDamage = 10;
+    private enum eTrap { spike, arrow };
+
+    [Header("함정 설정")]
+    [SerializeField] eTrap trapType;
+    [SerializeField] private int trapDamage;
+    [SerializeField] private string trapSound;
     [SerializeField] private string targetTag = "Player";
+
+    private void Start()
+    {
+        if (trapType == eTrap.spike)
+        {
+            trapSound = "Trap_Thorn_Attack";
+            trapDamage = 10;
+        }
+        else if (trapType == eTrap.arrow)
+        {
+            trapSound = "Trap_Arrow_Attack";
+            trapDamage = 15;
+        }
+    }
 
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag(targetTag))
         {
-            Debug.Log("플레이어가 아닌데?");
             return;
         }
 
@@ -20,11 +37,12 @@ public class trap_touchDamage : MonoBehaviour
 
         if (DM == null)
         {
-            Debug.Log("피해를 못받는데?");
             return;
         }
-        Debug.Log("아파아파아파");
-        DM.OnDamaged(TrapDamage, this.transform, false);
-        //DM.Trapdamaged(TrapDamage);
+
+        Managers_YGU.Sound.Play("User_Hit_Trap", eSound.UI);
+        Managers_YGU.Sound.Play(trapSound, eSound.UI);
+
+        DM.OnDamaged(trapDamage, this.transform, false);
     }
 }
