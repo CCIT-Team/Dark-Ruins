@@ -8,11 +8,9 @@ public class trap_trigger : MonoBehaviour
     [SerializeField] private string targetTag = "Player";
     [SerializeField] [Tooltip("작동할 함정")] private GameObject trapObject;
 
-    //private bool ismoving = false;
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag(targetTag) /*&& !ismoving*/)
+        if (other.CompareTag(targetTag))
         {
             trapObject.GetComponent<ITrap>().ActivateTrap();
         }
@@ -20,7 +18,7 @@ public class trap_trigger : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag(targetTag) /*&& !ismoving*/)
+        if (other.CompareTag(targetTag))
         {
             trapObject.GetComponent<ITrap>().DeactivateTrap();
         }
