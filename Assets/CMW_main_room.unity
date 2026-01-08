@@ -4919,6 +4919,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mummy_1 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 5450663166501700692, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
+      propertyPath: maxHealth
+      value: 80
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16062,6 +16066,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mummy_1 (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 4698640480339659126, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
+      propertyPath: maxHealth
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 8338560856808304819, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
       propertyPath: m_LocalPosition.x
       value: 87.2
@@ -22675,6 +22683,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1831436140}
     m_Modifications:
+    - target: {fileID: 1687269715258626959, guid: 4a3960e8e5fdae14cb2e6d693dcd3c1e, type: 3}
+      propertyPath: maxHealth
+      value: 350
+      objectReference: {fileID: 0}
     - target: {fileID: 3742827047744305294, guid: 4a3960e8e5fdae14cb2e6d693dcd3c1e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 109.2
@@ -23515,6 +23527,10 @@ PrefabInstance:
     - target: {fileID: 2977752686245413144, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
       propertyPath: m_Name
       value: Mummy_1 (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4698640480339659126, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
+      propertyPath: maxHealth
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8338560856808304819, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
       propertyPath: m_LocalPosition.x
@@ -30976,6 +30992,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mummy_1 (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 5450663166501700692, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
+      propertyPath: maxHealth
+      value: 80
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -35836,6 +35856,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mummy_1 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5450663166501700692, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
+      propertyPath: maxHealth
+      value: 80
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -37452,6 +37476,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mummy_1 (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 5287235051226858420, guid: 7009b0f1b66a2ee47bb1f4177b862c58, type: 3}
+      propertyPath: maxHealth
+      value: 80
+      objectReference: {fileID: 0}
     - target: {fileID: 8177336068635727972, guid: 7009b0f1b66a2ee47bb1f4177b862c58, type: 3}
       propertyPath: m_LocalPosition.x
       value: 66.80922
@@ -38182,6 +38210,10 @@ PrefabInstance:
     - target: {fileID: 2977752686245413144, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
       propertyPath: m_Name
       value: Mummy_1 (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4698640480339659126, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
+      propertyPath: maxHealth
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8338560856808304819, guid: d8b9f1eff375f8343ad1f4e91b4fa023, type: 3}
       propertyPath: m_LocalPosition.x
@@ -41380,6 +41412,10 @@ PrefabInstance:
     - target: {fileID: 2066689072535282045, guid: 7009b0f1b66a2ee47bb1f4177b862c58, type: 3}
       propertyPath: m_Name
       value: Mummy_1 (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5287235051226858420, guid: 7009b0f1b66a2ee47bb1f4177b862c58, type: 3}
+      propertyPath: maxHealth
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 8177336068635727972, guid: 7009b0f1b66a2ee47bb1f4177b862c58, type: 3}
       propertyPath: m_LocalPosition.x
@@ -46114,6 +46150,10 @@ PrefabInstance:
     - target: {fileID: 1149675541663681226, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
       propertyPath: m_Name
       value: Mummy_1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5450663166501700692, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
+      propertyPath: maxHealth
+      value: 80
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
