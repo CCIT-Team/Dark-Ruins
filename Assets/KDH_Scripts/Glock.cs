@@ -20,7 +20,7 @@ public class Glock : GunBase
     public override void Fire()
     {
         _anim.Play("gun shot", 0, 0f);
-        Managers_YGU.Sound.Play("Handgun_Shot",Sound.UI);
+        Managers_YGU.Sound.Play("Handgun_Shot",eSound.UI);
         base.Fire();
     }
 
@@ -29,7 +29,7 @@ public class Glock : GunBase
         base.Reload(out ob);
         if(ob==true)
         {
-            Managers_YGU.Sound.Play("Handgun_Reload", Sound.UI);
+            Managers_YGU.Sound.Play("Handgun_Reload", eSound.UI);
             _anim.SetTrigger("reloading");
         }
     }
@@ -48,7 +48,7 @@ public class Glock : GunBase
             return;
         }
         base.OnPickUp();
-        Managers_YGU.Sound.Play("Handgun_Equip",Sound.UI);
+        Managers_YGU.Sound.Play("Handgun_Equip",eSound.UI);
     }
 
     public override void OnDropped()

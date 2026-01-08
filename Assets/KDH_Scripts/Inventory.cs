@@ -227,7 +227,7 @@ public class Inventory :MonoBehaviour
     {
         if(InventoryOpened==true)
         {
-            Managers_YGU.Sound.Play("Zipper_Close", Sound.UI);
+            Managers_YGU.Sound.Play("Zipper_Close", eSound.UI);
             InventoryOpened = false;
             _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 2.5f;
             //_inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
@@ -238,7 +238,7 @@ public class Inventory :MonoBehaviour
         }
         else
         {
-            Managers_YGU.Sound.Play("Zipper_Open", Sound.UI);
+            Managers_YGU.Sound.Play("Zipper_Open", eSound.UI);
             InventoryOpened = true;
             _inventoryView.gameObject.SetActive(false);
             Time.timeScale = 1.0f;

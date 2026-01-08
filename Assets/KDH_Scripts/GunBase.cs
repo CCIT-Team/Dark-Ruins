@@ -204,7 +204,7 @@ public abstract class GunBase : ItemBase,IWeapon_KSM
 #if UNITY_EDITOR
             Debug.Log("Ã¶ÄÀ4");
 #endif
-            Managers_YGU.Sound.Play("Gun_Empty", Sound.UI);
+            Managers_YGU.Sound.Play("Gun_Empty", eSound.UI);
             return;
         }
         else
