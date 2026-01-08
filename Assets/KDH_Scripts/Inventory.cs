@@ -232,7 +232,7 @@ public class Inventory :MonoBehaviour
         {
             Managers_YGU.Sound.Play("Zipper_Close", eSound.UI);
             InventoryOpened = false;
-            _inventoryView.position = new Vector3(0,0.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 0.8f;
+            _inventoryView.position = new Vector3(0,1.5f,0)+this.gameObject.transform.position+this.gameObject.transform.forward * 2.5f;
             //_inventoryView.transform.forward = cam.transform.position - _inventoryView.transform.position;
             _inventoryView.transform.rotation = Quaternion.LookRotation(cam.transform.position - _inventoryView.transform.position) * Quaternion.Euler(0f, 40f, 0f);
 
