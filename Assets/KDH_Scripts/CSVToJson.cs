@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -43,11 +44,12 @@ public class CSVToJson
             string outputPath = Path.Combine(jsonFolderPath, fileName);
             File.WriteAllText(outputPath, json);
 
-            Debug.Log($"{fileName} º¯È¯ ¿Ï·á");
+            Debug.Log($"{fileName} ï¿½ï¿½È¯ ï¿½Ï·ï¿½");
         }
 
         AssetDatabase.Refresh();
         
-        Debug.Log("¸ðµç CSV º¯È¯ ¿Ï·á");
+        Debug.Log("ï¿½ï¿½ï¿½ CSV ï¿½ï¿½È¯ ï¿½Ï·ï¿½");
     }
 }
+#endif

@@ -265,7 +265,7 @@ public class PlayerController_KSM : CreatureController_KSM
 
     public void OnHealed(int damage)
     {
-        if (currentHealth <= maxHealth) currentHealth = damage;
+        if (currentHealth <= maxHealth) currentHealth -= damage;
     }
 
     public void Trapdamaged(int damage) { }

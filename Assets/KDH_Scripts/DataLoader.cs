@@ -9,13 +9,20 @@ public class DataLoader
     public static DataLoader Instance => _instance;
     private Dictionary<string, Dictionary<string, object>> _dataCache = new Dictionary<string, Dictionary<string, object>>();
 
-    [InitializeOnLoadMethod]
+    //[InitializeOnLoadMethod]
+    private static bool _loaded=false;
     private static void Load()
     {
+        if(_loaded==true)
+        {
+            return;
+        }
         LoadAll();
+        _loaded=true;
     }
-
+#if UNITY_EDITOR
     [MenuItem("Tools/SetData")]
+    #endif
     public static void LoadAll()
     {
         _instance._dataCache.Clear();
@@ -42,13 +49,14 @@ public class DataLoader
             catch (System.Exception e)
             {
 #if UNITY_EDITOR
-                Debug.LogError($"{file} ÆÄ½Ì ½ÇÆÐ: {e.Message}");
+                Debug.LogError($"{file} ï¿½Ä½ï¿½ ï¿½ï¿½ï¿½ï¿½: {e.Message}");
 #endif
             }
         }
     }
-    public Dictionary<string, object> FindByName(string name) //DataLoader.FindByName(name) ÇÏ¸é °ª ³ª¿È
+    public Dictionary<string, object> FindByName(string name) //DataLoader.FindByName(name) ï¿½Ï¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
+        Load();
         if (_instance._dataCache.TryGetValue(name, out var value))
             return value;
 
@@ -56,6 +64,7 @@ public class DataLoader
     }
     public void SetByName(string set,string name, object value)
     {
+        Load();
         _instance._dataCache[set][name] = value;
     }
 }

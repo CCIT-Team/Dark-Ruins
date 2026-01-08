@@ -1,9 +1,10 @@
+#if UNITY_EDITOR
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-//¾ÆÁ÷ ¹Ì¿Ï¼º ±â´É
+//ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¿Ï¼ï¿½ ï¿½ï¿½ï¿½
 public class UISetScene : EditorWindow
 {
     private Component uiScene;
@@ -11,7 +12,7 @@ public class UISetScene : EditorWindow
     private Vector2 scrollPos;
     private Dictionary<GameObject, bool> originalActiveStates;
 
-    [MenuItem("Tools/UI¿¡¼­ ¹öÆ°µéÀ» ²ô°í ÄÑº¸ÀÚ")]
+    [MenuItem("Tools/UIï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ñºï¿½ï¿½ï¿½")]
     public static void ShowWindow()
     {
         GetWindow<UISetScene>("UISetScene");
@@ -19,17 +20,17 @@ public class UISetScene : EditorWindow
 
     private void OnGUI()
     {
-        GUILayout.Label("¾À UI Á¦¾î", EditorStyles.boldLabel);
+        GUILayout.Label("ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½", EditorStyles.boldLabel);
 
-        // ¿øº» ¾À »óÅÂ ÀúÀå / µÇµ¹¸®±â ¹öÆ°
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ / ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("ÇöÀç UI »óÅÂ ÀúÀå"))
+        if (GUILayout.Button("ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½"))
         {
             SaveUIActiveStates();
         }
 
         GUI.enabled = originalActiveStates != null;
-        if (GUILayout.Button("ÀúÀåµÈ »óÅÂ·Î µÇµ¹¸®±â"))
+        if (GUILayout.Button("ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½Çµï¿½ï¿½ï¿½ï¿½ï¿½"))
         {
             RestoreUIActiveStates();
         }
@@ -38,14 +39,14 @@ public class UISetScene : EditorWindow
 
         GUILayout.Space(10);
 
-        if (GUILayout.Button("UIScene Ã£±â / ¹ÙÀÎµù"))
+        if (GUILayout.Button("UIScene Ã£ï¿½ï¿½ / ï¿½ï¿½ï¿½Îµï¿½"))
         {
             FindUIScene();
         }
 
         GUILayout.Space(10);
 
-        // UIScene protected ¸Þ¼­µå ¹öÆ° Ç¥½Ã
+        // UIScene protected ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Ç¥ï¿½ï¿½
         if (sceneMethods != null)
         {
             foreach (var method in sceneMethods)
@@ -61,14 +62,14 @@ public class UISetScene : EditorWindow
     {
         if (uiScene == null)
         {
-            Debug.LogWarning("UISceneÀÌ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.");
+            Debug.LogWarning("UISceneï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
         GameObject root = GameObject.Find("@UI_Root");
         if (root == null)
         {
-            Debug.LogWarning("@UI_Root ¿ÀºêÁ§Æ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("@UI_Root ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
@@ -79,14 +80,14 @@ public class UISetScene : EditorWindow
             originalActiveStates[child.gameObject] = child.gameObject.activeSelf;
         }
 
-        Debug.Log($"UI È°¼ºÈ­ »óÅÂ {originalActiveStates.Count}°³ ÀúÀå ¿Ï·á");
+        Debug.Log($"UI È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ {originalActiveStates.Count}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½");
     }
 
     private void RestoreUIActiveStates()
     {
         if (originalActiveStates == null)
         {
-            Debug.LogWarning("ÀúÀåµÈ UI »óÅÂ°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             return;
         }
 
@@ -96,16 +97,16 @@ public class UISetScene : EditorWindow
                 kvp.Key.SetActive(kvp.Value);
         }
 
-        Debug.Log("ÀúÀåµÈ È°¼ºÈ­ »óÅÂ·Î º¹¿ø ¿Ï·á!");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½!");
     }
 
-    // Init È£Ãâ (ÇÊ¿äÇÏ¸é)
+    // Init È£ï¿½ï¿½ (ï¿½Ê¿ï¿½ï¿½Ï¸ï¿½)
     private void FindUIScene()
     {
         GameObject root = GameObject.Find("@UI_Root");
         if (root == null)
         {
-            Debug.LogWarning("@UI_Root ¿ÀºêÁ§Æ®¸¦ Ã£À» ¼ö ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("@UI_Root ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             uiScene = null;
             sceneMethods = null;
             return;
@@ -114,15 +115,15 @@ public class UISetScene : EditorWindow
         uiScene = root.GetComponent<UIScene>();
         if (uiScene == null)
         {
-            Debug.LogWarning("@UI_Root¿¡ UIScene ÄÄÆ÷³ÍÆ®°¡ ¾ø½À´Ï´Ù.");
+            Debug.LogWarning("@UI_Rootï¿½ï¿½ UIScene ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
             sceneMethods = null;
             return;
         }
 
-        // ÇÊ¿äÇÑ ¹ÙÀÎµù¸¸ ¼öÇà
+        // ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         var uiType = uiScene.GetType();
 
-        // GameObjects Enum ¹ÙÀÎµù
+        // GameObjects Enum ï¿½ï¿½ï¿½Îµï¿½
         var bindObjectMethod = uiType.GetMethod("BindObject", BindingFlags.NonPublic | BindingFlags.Instance);
         if (bindObjectMethod != null)
         {
@@ -131,7 +132,7 @@ public class UISetScene : EditorWindow
                 bindObjectMethod.Invoke(uiScene, new object[] { gameObjectsEnum });
         }
 
-        // Buttons Enum ¹ÙÀÎµù
+        // Buttons Enum ï¿½ï¿½ï¿½Îµï¿½
         var bindButtonMethod = uiType.GetMethod("BindButton", BindingFlags.NonPublic | BindingFlags.Instance);
         if (bindButtonMethod != null)
         {
@@ -140,7 +141,7 @@ public class UISetScene : EditorWindow
                 bindButtonMethod.Invoke(uiScene, new object[] { buttonsEnum });
         }
 
-        // Texts Enum ¹ÙÀÎµù
+        // Texts Enum ï¿½ï¿½ï¿½Îµï¿½
         var bindTextMethod = uiType.GetMethod("BindText", BindingFlags.NonPublic | BindingFlags.Instance);
         if (bindTextMethod != null)
         {
@@ -150,16 +151,16 @@ public class UISetScene : EditorWindow
         }
 
 
-        // ¿©±â¼­ protected ¸Þ¼­µå¸¸ °¡Á®¿À°í Finalize/MemberwiseClone Á¦¿Ü
+        // ï¿½ï¿½ï¿½â¼­ protected ï¿½Þ¼ï¿½ï¿½å¸¸ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Finalize/MemberwiseClone ï¿½ï¿½ï¿½ï¿½
         sceneMethods = uiScene.GetType()
             .GetMethods(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly)
             .Where(m => m.IsFamily                  // protected
-                        && m.DeclaringType == uiScene.GetType()) // ºÎ¸ð Å¬·¡½º³ª System.Object Á¦¿Ü
+                        && m.DeclaringType == uiScene.GetType()) // ï¿½Î¸ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ System.Object ï¿½ï¿½ï¿½ï¿½
             .ToArray();
 
 
 
-        Debug.Log($"UIScene [{uiScene.GetType().Name}] Ã£À½. (protected ¸Þ¼­µå {sceneMethods.Length}°³)");
+        Debug.Log($"UIScene [{uiScene.GetType().Name}] Ã£ï¿½ï¿½. (protected ï¿½Þ¼ï¿½ï¿½ï¿½ {sceneMethods.Length}ï¿½ï¿½)");
     }
 
 
@@ -173,7 +174,7 @@ public class UISetScene : EditorWindow
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                // ±âº»Çü Å¸ÀÔ¿¡ µû¸¥ ÀÓ½Ã °ª »ý¼º
+                // ï¿½âº»ï¿½ï¿½ Å¸ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 if (parameters[i].ParameterType == typeof(int)) args[i] = 0;
                 else if (parameters[i].ParameterType == typeof(float)) args[i] = 0f;
                 else if (parameters[i].ParameterType == typeof(string)) args[i] = "";
@@ -181,11 +182,12 @@ public class UISetScene : EditorWindow
             }
 
             method.Invoke(uiScene, args);
-            Debug.Log($"Protected ¸Þ¼­µå È£ÃâµÊ: {method.Name}");
+            Debug.Log($"Protected ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½: {method.Name}");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"¸Þ¼­µå ½ÇÇà ½ÇÆÐ: {e.Message}");
+            Debug.LogError($"ï¿½Þ¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: {e.Message}");
         }
     }
 }
+#endif

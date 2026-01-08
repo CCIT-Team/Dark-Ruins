@@ -2,11 +2,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.IO.LowLevel.Unsafe;
-using UnityEditor.SearchService;
+//using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public abstract class ItemBase : MonoBehaviour,IDrawOutLine
 {
@@ -59,7 +59,7 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
             Inventory.InventoryOpened = false;
             _dropped = false;
 #if UNITY_EDITOR
-            Debug.Log("ÀÌ°Å³ªÅ¸³µ¿ò");
+            Debug.Log("ï¿½Ì°Å³ï¿½Å¸ï¿½ï¿½ï¿½ï¿½");
 #endif
         }
     }
@@ -71,7 +71,7 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
         }
         Unsubscribe();
     }
-    public virtual void SetData() //´õ µé°í ¿Ã µ¥ÀÌÅÍ ÀÖÀ¸¸é ¿©±â¼­ override¶û base ¾²±â
+    public virtual void SetData() //ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¼­ overrideï¿½ï¿½ base ï¿½ï¿½ï¿½ï¿½
     {
         var data=DataLoader.Instance.FindByName(this.GetType().Name);
         if (data==null)
@@ -89,7 +89,7 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
 
     public void Subscribe()
     {
-        //Å°ÀÔ·Â ±¸µ¶ ¹× Ãë¼Ò ±â´É
+        //Å°ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         Managers_KSM.Input.OnKeysHeld -= ItemUse;
         Managers_KSM.Input.OnKeysHeld += ItemUse;
         PickUp();
@@ -99,15 +99,15 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
         Managers_KSM.Input.OnKeysHeld -= ItemUse;
         OnDropped();
     }
-    //public abstract void ItemUse(Å°ÀÔ·Â);
+    //public abstract void ItemUse(Å°ï¿½Ô·ï¿½);
     protected void PickUp()
     {
-        //GetItem(); //´ëÃæ ³ªÁß¿¡ ÁÝ±â Ãß°¡ÇÒ¶§ ´ëÀÔ
+        //GetItem(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½Ý±ï¿½ ï¿½ß°ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½ï¿½
         OnPickUp();
     }
     public virtual void OnPickUp()
     {
-        //¾ÆÀÌÅÛÀÌ ÁÖ¿üÀ» °æ¿ì ¹ßµ¿ÇÒ ·ÎÁ÷ÀÌ ÀÖ´Ù¸é ¿©±â¿¡
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ßµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ï¿½â¿¡
         _dropped = false;
     }
     protected void Dropped()
@@ -125,7 +125,7 @@ public abstract class ItemBase : MonoBehaviour,IDrawOutLine
     public void OnFocused()
     {
 #if UNITY_EDITOR
-        Debug.Log($"{name} ·¹ÀÌ·Î ¼±ÅÃµÊ");
+        Debug.Log($"{name} ï¿½ï¿½ï¿½Ì·ï¿½ ï¿½ï¿½ï¿½Ãµï¿½");
 #endif
         OutLine.enabled = true;
     }

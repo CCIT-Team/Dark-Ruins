@@ -6,12 +6,12 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Utils;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 public class Inventory :MonoBehaviour
 {
     public static Slot[] InventorySlot=new Slot[12];
-    //private int _index, _inventoryCapacity; //³ªÁß¿¡ ¾²°Ô µÉ °Í
+    //private int _index, _inventoryCapacity; //ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½
     public Action _itemUsing;
     private bool _drag=false,_dragCancel=false;
     public static bool InventoryOpened = false;
@@ -82,7 +82,7 @@ public class Inventory :MonoBehaviour
 
             }
         }
-        //´ÜÃàÅ° ¹× ¾ÆÀÌÅÛ »ç¿ë
+        //ï¿½ï¿½ï¿½ï¿½Å° ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         ItemUse(keys);
     }
     public static void UsedItem()
@@ -91,15 +91,15 @@ public class Inventory :MonoBehaviour
         _inventory._drag = false;
         _inventory._dragItem = null;
     }
-    public void PickUp() //ÇÊµå¿¡¼­ ÁÝ±â
+    public void PickUp() //ï¿½Êµå¿¡ï¿½ï¿½ ï¿½Ý±ï¿½
     {
 #if UNITY_EDITOR
-        Debug.Log("½ú¿ò");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½");
 #endif
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit,4.0f, 1 << LayerMask.NameToLayer("Item")) &&hit.transform.TryGetComponent<ItemBase>(out ItemBase item))
         {
 #if UNITY_EDITOR
-            Debug.Log("ÁÖ¿ï ¼ö ÀÖ¿ò");
+            Debug.Log("ï¿½Ö¿ï¿½ ï¿½ï¿½ ï¿½Ö¿ï¿½");
 #endif
             if(item is BulletItem || item is GunBase)
             {
@@ -174,9 +174,9 @@ public class Inventory :MonoBehaviour
     }
     private bool DragItem() 
     {
-        if (_drag==false) //ÀÎº¥Åä¸®¿¡¼­ ²¨³»±â
+        if (_drag==false) //ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
-            //¹Ù´Ú¿¡¼­ ÁÝ±âµµ? ¾Æ´Ï´Ù, ºÐÇÒÇÏÀÚ
+            //ï¿½Ù´Ú¿ï¿½ï¿½ï¿½ ï¿½Ý±âµµ? ï¿½Æ´Ï´ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (Physics.Raycast(cam.transform.position, cam.transform.forward, out RaycastHit hit,8f, 1 << LayerMask.NameToLayer("Slot")) && hit.transform.TryGetComponent<Slot>(out Slot slot)&&slot.Item is not null)
             {
                 _dragItem = slot.Item.transform;
@@ -194,7 +194,7 @@ public class Inventory :MonoBehaviour
                 return true;
             }
         }
-        else //ÀÎº¥Åä¸®¿¡ Áý¾î³Ö±â
+        else //ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö±ï¿½
         {
 #if UNITY_EDITOR
             Debug.DrawRay(
@@ -251,15 +251,15 @@ public class Inventory :MonoBehaviour
             Time.timeScale = 1.0f;
         }
     }
-    public void ClickItem(int mainIndex)//¹«¾ùÀ» ¾î¶»°Ô? »óÈ£ÀÛ¿ë ¾îÄÉÇÔ ¿ì¸®? ÀÏ´Ü ÇØµÎ´Âµ¥ Æ®¸®°Å°¡ ¾ø´Â;;
+    public void ClickItem(int mainIndex)//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½î¶»ï¿½ï¿½? ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ì¸®? ï¿½Ï´ï¿½ ï¿½ØµÎ´Âµï¿½ Æ®ï¿½ï¿½ï¿½Å°ï¿½ ï¿½ï¿½ï¿½ï¿½;;
     {
         _dragItem.SetParent(this.transform.Find("Main Camera"), false);
         _dragItem.localPosition =new Vector3(0,-0.3f,1.7f);
         _dragItem.localRotation = Quaternion.identity;
         InventorySlot[mainIndex].Clears();
-        //¾Æ¹«Æ° ÀúÀåÇØµÎ¾ú´Ù°¡ µå·¡±×µç ¹¹µç ¿Å±ä´Ù¸é SetItem È£ÃâÇØ¼­ µÇ¸é °Å±â·Î ¿Å°Ü°¡°í ¾ÈµÇ¸é º¹±Í
+        //ï¿½Æ¹ï¿½Æ° ï¿½ï¿½ï¿½ï¿½ï¿½ØµÎ¾ï¿½ï¿½Ù°ï¿½ ï¿½å·¡ï¿½×µï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½Ù¸ï¿½ SetItem È£ï¿½ï¿½ï¿½Ø¼ï¿½ ï¿½Ç¸ï¿½ ï¿½Å±ï¿½ï¿½ ï¿½Å°Ü°ï¿½ï¿½ï¿½ ï¿½ÈµÇ¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     }
-    public bool SetItem(int mainIndex,ItemBase item,bool xy=true) //Á÷Á¢ ¼öÁýÀÌ³ª ±×·±°Å ¿Ü·Îµµ È¹µæ °æ·Î ÀÖÀ»±îºÁ »©µÒ, ÀÏ´Ü °¡·ÎÇü¸¸
+    public bool SetItem(int mainIndex,ItemBase item,bool xy=true) //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½ ï¿½×·ï¿½ï¿½ï¿½ ï¿½Ü·Îµï¿½ È¹ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         if(item is default(ItemBase))
         {
@@ -298,7 +298,7 @@ public class Inventory :MonoBehaviour
 
         return true;
     }
-    private bool Check(int mainIndex, ItemBase item,bool xy) //bool xyÀÇ °æ¿ì true¸é ¤Ñ false¸é ¤Ó¸ð¾ç
+    private bool Check(int mainIndex, ItemBase item,bool xy) //bool xyï¿½ï¿½ ï¿½ï¿½ï¿½ trueï¿½ï¿½ ï¿½ï¿½ falseï¿½ï¿½ ï¿½Ó¸ï¿½ï¿½
     {
         if (xy==true)
         {
