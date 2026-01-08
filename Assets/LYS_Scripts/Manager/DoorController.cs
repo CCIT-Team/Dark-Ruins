@@ -41,6 +41,7 @@ namespace LYS_Work
                 pos.y += _toMove;
                 transform.position = pos;
             }
+            _movTime = 1;
         }
     }
 }
