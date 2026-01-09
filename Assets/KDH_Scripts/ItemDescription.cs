@@ -6,7 +6,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Utils;
 
-public class LookPlayer : UIPopup
+public class ItemDescription : UIPopup
 {
     enum GameObjects
     {
@@ -34,16 +34,16 @@ public class LookPlayer : UIPopup
         string s= $"{data["RealName"]}\n";
         if(item is IWeapon_KSM)
         {
-            s += $"°ø°İ·Â {data["Damage"]} / ¾àÁ¡ {data["CriticalDamage"]}\n" +
-                $"°ø°İ ¼Óµµ {data["AttackSpeed"]}\n";
+            s += $"ê³µê²©ë ¥ {data["Damage"]} / ì•½ì  {data["CriticalDamage"]}\n" +
+                $"ê³µê²© ì†ë„ {data["AttackSpeed"]}\n";
             if (item is GunBase)
             {
-                s += $"ÅºÃ¢ {((GunBase)item).GetAmmos}/{data["MaxAmmo"]}\n";
+                s += $"íƒ„ì°½ {((GunBase)item).GetAmmos}/{data["MaxAmmo"]}\n";
             }
         }
         else
         {
-            s += $"°³¼ö {item.Count}/{data["MAX"]}\n";
+            s += $"ê°œìˆ˜ {item.Count}/{data["MAX"]}\n";
         }
         s += $"{data["Description"]}";
         GetObject((int)GameObjects.Canvas).GetChild<TextMeshProUGUI>("Text").text = s;

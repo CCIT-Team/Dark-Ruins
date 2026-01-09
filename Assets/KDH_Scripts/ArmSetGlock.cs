@@ -18,7 +18,7 @@ public class ArmSetGlock : MonoBehaviour
             return;
         }
         g.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-        g.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_gl.GetComponent<ItemBase>());
+        g.GetChild<Transform>("UI_Root").GetComponent<ItemDescription>().On(_gl.GetComponent<ItemBase>());
     }
     private void OnDisable()
     {

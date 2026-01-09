@@ -18,7 +18,7 @@ public class ArmSetRifle : MonoBehaviour
             return;
         }
         g.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-        g.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_rf.GetComponent<ItemBase>());
+        g.GetChild<Transform>("UI_Root").GetComponent<ItemDescription>().On(_rf.GetComponent<ItemBase>());
     }
     private void OnDisable()
     {
