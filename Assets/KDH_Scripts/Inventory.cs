@@ -220,7 +220,7 @@ public class Inventory :MonoBehaviour
     IEnumerator SubCriber()
     {
         _inventoryView.gameObject.GetChild<Transform>("UI_Root").gameObject.SetActive(true);
-        _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<LookPlayer>().On(_dragItem.GetComponent<ItemBase>());
+        _inventoryView.gameObject.GetChild<Transform>("UI_Root").GetComponent<ItemDescription>().On(_dragItem.GetComponent<ItemBase>());
         yield return new WaitForSeconds(1.0f);
         if(_dragItem !=null&&_dragItem.gameObject.activeSelf==true&&_dragCancel==false)
         {
