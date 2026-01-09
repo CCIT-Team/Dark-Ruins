@@ -4933,6 +4933,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 64943021859823692, guid: 497af0d884ff53e44bf1b0f9180c9f52, type: 3}
   m_PrefabInstance: {fileID: 232442683}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &232920286 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 118272, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+  m_PrefabInstance: {fileID: 2029822872}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &232920290
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 232920286}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7276869, y: 1.3111084, z: 0.72776717}
+  m_Center: {x: -0.0000019073486, y: 0, z: 0}
 --- !u!4 &236061144 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8990899897019182610, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
@@ -15976,6 +16002,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6001464368331178103, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
   m_PrefabInstance: {fileID: 736136066}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &740178587 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 137030, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+  m_PrefabInstance: {fileID: 2029822872}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &740178591
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740178587}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.65, y: 1.4987392, z: 0.65}
+  m_Center: {x: -0.0000009536743, y: 0.00034987926, z: 0}
 --- !u!1001 &740826401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20911,6 +20963,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dungeon_Wall_5x1 (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 3193495934994456238, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 6001464368331178103, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17
@@ -20951,10 +21007,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8515304104552042941, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8515304104552042941, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1330452104}
   m_SourcePrefab: {fileID: 100100000, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
 --- !u!4 &975318110 stripped
 Transform:
@@ -29489,6 +29552,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5112370640589216947, guid: 7952ddada94d33244bcb46bde56a90c5, type: 3}
   m_PrefabInstance: {fileID: 1328276459}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1330452100 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8515304104552042941, guid: c7d9c1d29d4f32345b33f6b7d4d2c3de, type: 3}
+  m_PrefabInstance: {fileID: 975318109}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1330452104
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1330452100}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 5, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &1330564699
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33916,6 +34005,32 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5112370640589216947, guid: 7952ddada94d33244bcb46bde56a90c5, type: 3}
   m_PrefabInstance: {fileID: 1507123604}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1507235589 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8313192092023904366, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
+  m_PrefabInstance: {fileID: 1519743246}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1507235593
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1507235589}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 0}
+  m_Center: {x: 0, y: 0.5, z: 0}
 --- !u!1001 &1508955615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -34496,6 +34611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dungeon_Wall_1x1 (63)
       objectReference: {fileID: 0}
+    - target: {fileID: 8313192092023904366, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     - target: {fileID: 8990899897019182610, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.500001
@@ -34539,7 +34658,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8313192092023904366, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1507235593}
   m_SourcePrefab: {fileID: 100100000, guid: b9cf11dd11eba814797b742919708ce2, type: 3}
 --- !u!4 &1519743247 stripped
 Transform:
@@ -45277,9 +45399,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 353723038}
     m_Modifications:
+    - target: {fileID: 118272, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
+    - target: {fileID: 137030, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      propertyPath: m_TagString
+      value: Wall
+      objectReference: {fileID: 0}
     - target: {fileID: 167526, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
       propertyPath: m_Name
       value: Dungeon_Pillar008 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 167526, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    - target: {fileID: 195668, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      propertyPath: m_TagString
+      value: Wall
       objectReference: {fileID: 0}
     - target: {fileID: 428522, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
       propertyPath: m_LocalScale.x
@@ -45340,7 +45478,13 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 118272, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 232920290}
+    - targetCorrespondingSourceObject: {fileID: 137030, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 740178591}
   m_SourcePrefab: {fileID: 100100000, guid: 0b68050cdb71a4621b45e512057a8b26, type: 3}
 --- !u!4 &2029822873 stripped
 Transform:
